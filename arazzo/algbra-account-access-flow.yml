@@ -1,0 +1,56 @@
+arazzo: 1.0.1
+info:
+  title: Algbra OBIE account-access and read
+  version: 1.0.0
+  description: >-
+    Create an OBIE account-access consent, confirm it is authorised, then read the
+    customer's accounts, balances and transactions through Algbra's UK Open Banking
+    (AIS) dedicated interface. All operationIds are verified against the harvested spec.
+sourceDescriptions:
+- name: algbraAis
+  url: ../openapi/algbra-account-transaction-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: accountAccessAndRead
+  summary: Consent, confirm authorisation, list accounts, read balances and transactions.
+  inputs:
+    type: object
+    properties:
+      permissions:
+        type: array
+        items: {type: string}
+        default: [ReadAccountsDetail, ReadBalances, ReadTransactionsDetail]
+  steps:
+  - stepId: createConsent
+    operationId: CreateAccountAccessConsents
+    requestBody:
+      contentType: application/json
+      payload:
+        Data: {Permissions: $inputs.permissions}
+        Risk: {}
+    outputs:
+      consentId: $response.body#/Data/ConsentId
+  - stepId: confirmConsent
+    operationId: GetAccountAccessConsentsConsentId
+    parameters:
+    - name: ConsentId
+      in: path
+      value: $steps.createConsent.outputs.consentId
+    successCriteria:
+    - condition: $response.body#/Data/Status == "Authorised"
+  - stepId: listAccounts
+    operationId: GetAccounts
+    outputs:
+      accountId: $response.body#/Data/Account/0/AccountId
+  - stepId: getBalances
+    operationId: GetAccountsAccountIdBalances
+    parameters:
+    - name: AccountId
+      in: path
+      value: $steps.listAccounts.outputs.accountId
+  - stepId: getTransactions
+    operationId: GetAccountsAccountIdTransactions
+    parameters:
+    - name: AccountId
+      in: path
+      value: $steps.listAccounts.outputs.accountId

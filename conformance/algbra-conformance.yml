@@ -1,0 +1,40 @@
+generated: '2026-07-23'
+method: derived
+source: openapi/algbra-account-transaction-api-openapi.yml
+note: >-
+  Standards conformance for Algbra's UK Open Banking dedicated interface (AIS/PIS/CBPII),
+  delivered via Tell Money (Tell Connect). Derived from the harvested OBIE AIS Swagger 2.0
+  spec and Algbra's published Open Banking security model; enriched from the OBIE
+  Read/Write Standard v3.1.8 the interface conforms to.
+standards:
+- id: obie-read-write-v3.1.8
+  conforms: true
+  evidence: Algbra-branded OBIE AIS spec (basePath /algbra/open-banking/v3.1/aisp); PIS/CBPII documented under OBIE R/W v3.1.8.
+- id: oauth2
+  conforms: true
+  evidence: securityDefinitions PSUOAuth2Security (accessCode) + TPPOAuth2Security (client credentials).
+- id: oidc
+  conforms: true
+  evidence: OIDC token/authorize endpoints under secure.tell.systems/algbra/auth/oidc; response_type 'code id_token'.
+- id: fapi
+  conforms: true
+  evidence: FAPI-grade profile - x-fapi-interaction-id / x-fapi-financial-id / x-fapi-customer-ip-address headers, PS256 signing, mTLS.
+- id: psd2
+  conforms: true
+  evidence: Non-CMA9 ASPSP meeting PSD2 access-to-account (AIS/PIS/CBPII) with SCA; EMI FRN 952360.
+- id: mutual-tls
+  conforms: true
+  evidence: OBIE OBWAC transport + OBSEAL signing (eIDAS) certificates for the dedicated interface.
+- id: dcr-v3.2
+  conforms: true
+  evidence: OBIE Dynamic Client Registration v3.2 (POST /register) documented for TPP onboarding.
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: Errors use the OBIE OBErrorResponse1 envelope (Code/Id/Message/Errors[]), not application/problem+json.
+- id: pagination
+  conforms: true
+  evidence: OBIE Links (Self/First/Prev/Next/Last) + Meta (TotalPages) pagination envelope.
+- id: fhir-r4
+  conforms: false
+- id: scim
+  conforms: false

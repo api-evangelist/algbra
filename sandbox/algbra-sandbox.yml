@@ -1,0 +1,22 @@
+generated: '2026-07-23'
+method: searched
+source: https://developer.algbralabs.com/partner-banking/getting-started/api-hosts
+note: >-
+  Algbra Labs publishes a separate sandbox host for the first-party Partner Banking
+  (BaaS) API. No public test cards / magic identifiers were retrievable because the
+  hosts are IP-whitelisted and mTLS-gated; only the documented test/live host
+  separation is captured here (nothing fabricated).
+environments:
+- name: sandbox
+  api: Partner Banking (BaaS)
+  host: https://sandbox.horizon-link.algbralabs.com
+  access: IP-whitelisted; API keys + mTLS + payload signing (issued at partner onboarding)
+- name: production
+  api: Partner Banking (BaaS)
+  host: https://horizon-link.algbralabs.com
+open_banking:
+  note: >-
+    The OBIE dedicated interface (secure.tell.systems/algbra/open-banking/v3.1/*)
+    is exercised via the OBIE onboarding/DCR flow with OBWAC/OBSEAL eIDAS
+    certificates rather than a public self-serve sandbox with magic test values.
+test_values: []

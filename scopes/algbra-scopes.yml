@@ -1,0 +1,40 @@
+generated: '2026-07-23'
+method: searched
+source: openapi/algbra-account-transaction-api-openapi.yml
+docs: https://developer.algbralabs.com/open-banking-uk/introduction
+note: >-
+  OAuth2 schemes/scope 'accounts' derived from the harvested AIS spec; the additional
+  OBIE scopes (openid, payments, fundsconfirmations) are documented in Algbra's Open
+  Banking security model and the OBIE Read/Write Standard for the PIS/CBPII surfaces,
+  which are not separately specified.
+schemes:
+- name: PSUOAuth2Security
+  source: openapi/algbra-account-transaction-api-openapi.yml
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://secure.tell.systems/algbra/auth/oidc/authorize
+    tokenUrl: https://secure.tell.systems/algbra/auth/oidc/token
+  description: PSU authorization-code flow requiring SCA with the ASPSP.
+- name: TPPOAuth2Security
+  source: openapi/algbra-account-transaction-api-openapi.yml
+  flows:
+  - flow: clientCredentials
+    tokenUrl: https://secure.tell.systems/algbra/auth/oidc/token
+  description: TPP client-credentials authorisation flow with the ASPSP.
+scopes:
+- scope: accounts
+  description: Read access to accounts, balances, beneficiaries and transactions (AIS).
+  flows: [authorizationCode, clientCredentials]
+  sources: [openapi/algbra-account-transaction-api-openapi.yml]
+- scope: openid
+  description: OpenID Connect authentication (id_token) as part of the FAPI flow.
+  flows: [authorizationCode]
+  sources: [docs]
+- scope: payments
+  description: Initiate payments on the customer's behalf (PIS) - documented, not separately specified.
+  flows: [authorizationCode, clientCredentials]
+  sources: [docs]
+- scope: fundsconfirmations
+  description: Confirm availability of funds (CBPII) - documented, not separately specified.
+  flows: [clientCredentials]
+  sources: [docs]

@@ -1,0 +1,21 @@
+generated: '2026-07-23'
+method: searched
+source: https://developer.algbralabs.com/partner-banking/concepts/webhooks
+spec_type: Webhooks
+note: >-
+  Algbra Labs' first-party Partner Banking (BaaS) API documents a webhooks surface for
+  asynchronous event notifications to partners. No AsyncAPI document is published; this
+  captures the documented webhook surface. Event payload catalog is behind partner
+  onboarding (IP-whitelisted docs), so specific event names/schemas are not enumerated
+  here rather than fabricated.
+transport: https-callback
+delivery:
+  security: signed payloads (payload signing) over IP-whitelisted partner endpoints
+  note: Same signing model as the Partner Banking API (API keys + mTLS + payload signing).
+event_domains:
+- onboarding / compliance checks
+- accounts (primary & virtual)
+- payments (internal / inbound / outbound / automated)
+- transactions & activity feeds
+- card issuing
+docs: https://developer.algbralabs.com/partner-banking/concepts/webhooks

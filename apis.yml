@@ -139,7 +139,44 @@ apis:
     url: https://developer.algbralabs.com/partner-banking/getting-started/api-hosts
   - type: Documentation
     url: https://developer.algbralabs.com/partner-banking/concepts/webhooks
+  - type: Webhooks
+    url: asyncapi/algbra-partner-banking-webhooks.yml
 common:
+- type: AgenticAccess
+  url: agentic-access/algbra-agentic-access.yml
+- type: DomainSecurity
+  url: security/algbra-domain-security.yml
+- type: OAuthScopes
+  url: scopes/algbra-scopes.yml
+- type: Authentication
+  url: authentication/algbra-authentication.yml
+- type: Conventions
+  url: conventions/algbra-conventions.yml
+- type: Idempotency
+  url: conventions/algbra-conventions.yml
+- type: Conformance
+  url: conformance/algbra-conformance.yml
+- type: ErrorCatalog
+  url: errors/algbra-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/algbra-lifecycle.yml
+- type: DataModel
+  url: data-model/algbra-data-model.yml
+- type: Sandbox
+  url: sandbox/algbra-sandbox.yml
+- type: Overlay
+  url: overlays/algbra-account-transaction-api-overlay.yaml
+- type: LLMsTxt
+  url: llms/algbra-llms.txt
+- type: AgentSkill
+  url: skills/_index.yml
+- type: Arazzo
+  name: Algbra OBIE account-access and read
+  url: arazzo/algbra-account-access-flow.yml
+- type: Security
+  url: https://www.algbra.com/responsible-disclosure/
+- type: GettingStarted
+  url: https://developer.algbralabs.com/partner-banking/getting-started
 - type: Website
   url: https://www.algbra.com/
 - type: DeveloperPortal

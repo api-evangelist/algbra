@@ -1,0 +1,39 @@
+generated: '2026-07-23'
+method: derived
+source: openapi/algbra-account-transaction-api-openapi.yml
+note: >-
+  Cross-cutting request/response semantics for Algbra's OBIE Open Banking dedicated
+  interface. Derived from the harvested AIS spec and the OBIE Read/Write Standard
+  v3.1.8 the interface conforms to.
+authentication:
+  style: FAPI OAuth2/OIDC + mutual-TLS
+  flows: [authorizationCode (PSU/SCA), client_credentials (TPP)]
+  token_endpoint: https://secure.tell.systems/algbra/auth/oidc/token
+  certificates: OBIE OBWAC (transport/mTLS) + OBSEAL (PS256 signing), eIDAS
+  request_signing: PS256 signed request objects (JWS)
+  ref: authentication/algbra-authentication.yml
+idempotency:
+  supported: true
+  header: x-idempotency-key
+  scope: OBIE Payment Initiation (PIS) payment-order creation
+  retention: OBIE mandates >= 24h idempotency-key retention on payment-order endpoints
+  note: >-
+    Mandated by the OBIE Read/Write Standard for payment-order POSTs on Algbra's PIS
+    surface (scope 'payments'). The AIS read surface in the harvested spec does not
+    use idempotency keys.
+pagination:
+  style: link-based (OBIE)
+  response_fields: {Links: [Self, First, Prev, Next, Last], Meta: [TotalPages, FirstAvailableDateTime, LastAvailableDateTime]}
+  query_params: [fromBookingDateTime, toBookingDateTime, fromStatementDateTime, toStatementDateTime]
+request_tracing:
+  header: x-fapi-interaction-id
+  note: FAPI interaction id echoed on responses for correlation; also x-fapi-financial-id, x-fapi-customer-ip-address, x-fapi-customer-last-logged-time.
+versioning:
+  style: uri-path
+  ref: lifecycle/algbra-lifecycle.yml
+error_envelope:
+  shape: 'OBErrorResponse1 { Code, Id, Message, Errors[] { ErrorCode (UK.OBIE.*), Message, Path, Url } }'
+  ref: errors/algbra-problem-types.yml
+rate_limits:
+  signaling: 429 Too Many Requests (OBErrorResponse1)
+  note: OBIE ASPSPs apply per-TPP throttling; no public numeric limits published for the gated interface.

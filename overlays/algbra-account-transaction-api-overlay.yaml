@@ -1,0 +1,20 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Algbra Account & Transaction Information API
+  version: 1.0.0
+extends: openapi/algbra-account-transaction-api-openapi.yml
+actions:
+- target: $.info
+  update:
+    x-apievangelist-provider: algbra
+    x-apievangelist-standard: OBIE Read/Write Standard v3.1.8
+    x-apievangelist-profile: FAPI
+    x-apievangelist-delivery: Tell Money (Tell Connect) for Algbra FS UK Limited (FCA EMI FRN 952360)
+    x-apievangelist-auth: OAuth2/OIDC + mutual-TLS (OBWAC/OBSEAL eIDAS) + PS256 signing + PSD2 SCA
+    x-apievangelist-error-envelope: OBErrorResponse1 (not RFC 9457)
+    x-apievangelist-pagination: OBIE Links + Meta
+- target: $.info
+  update:
+    x-apievangelist-rating-notes: >-
+      Read-only AIS surface (8 operations); PIS ('payments') and CBPII
+      ('fundsconfirmations') surfaces documented but not separately specified.

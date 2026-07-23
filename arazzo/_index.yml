@@ -1,0 +1,7 @@
+generated: '2026-07-23'
+method: derived
+workflows:
+- file: algbra-account-access-flow.yml
+  workflowId: accountAccessAndRead
+  title: Algbra OBIE account-access and read
+  summary: Create an account-access consent, confirm authorisation, list accounts, read balances and transactions.

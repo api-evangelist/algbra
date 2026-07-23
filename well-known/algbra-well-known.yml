@@ -1,0 +1,28 @@
+generated: '2026-07-23'
+method: searched
+note: >-
+  No public /.well-known/ discovery documents were served. Algbra's OBIE dedicated
+  interface (secure.tell.systems) and Partner Banking host (horizon-link.algbralabs.com)
+  are IP-whitelisted and eIDAS/mTLS-gated, so their OIDC/oauth-authorization-server
+  discovery documents are not reachable from a public network (curl exit / HTTP 000).
+  The docs host (developer.algbralabs.com) 307-redirects /.well-known/* to /home/...
+  which 404s. Absence recorded as valid data; nothing fabricated.
+hosts:
+- host: https://secure.tell.systems/algbra
+  documents:
+  - {path: /.well-known/openid-configuration, status: '000', note: mTLS/IP-gated, no public response}
+  - {path: /.well-known/oauth-authorization-server, status: '000'}
+  - {path: /auth/oidc/.well-known/openid-configuration, status: '000'}
+  - {path: /.well-known/security.txt, status: '000'}
+- host: https://developer.algbralabs.com
+  documents:
+  - {path: /.well-known/security.txt, status: '307', note: redirects to /home/... which 404s}
+  - {path: /.well-known/openid-configuration, status: '307'}
+  - {path: /.well-known/oauth-authorization-server, status: '307'}
+- host: https://horizon-link.algbralabs.com
+  documents:
+  - {path: /.well-known/openid-configuration, status: '000', note: IP-whitelisted, no public response}
+- host: https://www.algbra.com
+  documents:
+  - {path: /.well-known/security.txt, status: '404'}
+  - {path: /security.txt, status: '404'}

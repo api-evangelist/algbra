@@ -1,0 +1,23 @@
+generated: '2026-07-23'
+method: searched
+source: https://developer.algbralabs.com/open-banking-uk/introduction
+note: >-
+  Lifecycle derived from the OBIE AIS spec and Algbra Labs docs. Algbra's Open Banking
+  interface follows OBIE Read/Write Standard versioning (URI-path major.minor); the
+  harvested contract is v3.1.0 within the v3.1.8 standard. No public status page or
+  formal deprecation-policy page was found for the (mTLS-gated) interfaces.
+versioning:
+  scheme: uri-path
+  current: v3.1
+  standard: OBIE Read/Write Standard v3.1.8
+  docs: https://developer.algbralabs.com/open-banking-uk/introduction
+  note: OBIE version carried in the base path (/algbra/open-banking/v3.1/aisp).
+deprecation:
+  policy_url: null
+  sunset_header: false
+  note: Follows OBIE standard deprecation cadence; no Algbra-specific deprecation page published.
+sla:
+  url: null
+  note: PSD2 availability/performance reporting obligations apply to the dedicated interface; no public SLA doc found.
+status_page: null
+deprecated_operations: []

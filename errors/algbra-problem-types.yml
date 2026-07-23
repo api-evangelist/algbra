@@ -1,0 +1,25 @@
+generated: '2026-07-23'
+method: derived
+source: openapi/algbra-account-transaction-api-openapi.yml
+format: obie-error
+note: >-
+  Derived from the OBIE AIS spec 4xx/5xx responses. Errors are NOT RFC 9457
+  application/problem+json - they use the OBIE OBErrorResponse1 envelope.
+envelope:
+  schema: OBErrorResponse1
+  fields:
+    Code: High-level textual error code categorizing the errors (maxLength 40).
+    Id: Unique reference for the error instance, for audit purposes (maxLength 40).
+    Message: Brief error description.
+    Errors: Array of OBError1 { ErrorCode (e.g. UK.OBIE.Field.Missing), Message, Path, Url }.
+  low_level_code_scheme: 'UK.OBIE.* (e.g. UK.OBIE.Field.Missing, UK.OBIE.Resource.NotFound)'
+problems:
+- {status: 400, title: Bad request, schema: OBErrorResponse1, source_operation: openapi/algbra-account-transaction-api-openapi.yml#CreateAccountAccessConsents}
+- {status: 401, title: Unauthorized, schema: OBErrorResponse1}
+- {status: 403, title: Forbidden, schema: OBErrorResponse1}
+- {status: 404, title: Not found, schema: OBErrorResponse1}
+- {status: 405, title: Method not allowed, schema: OBErrorResponse1}
+- {status: 406, title: Not acceptable, schema: OBErrorResponse1}
+- {status: 415, title: Unsupported media type, schema: OBErrorResponse1}
+- {status: 429, title: Too many requests, schema: OBErrorResponse1}
+- {status: 500, title: Internal server error, schema: OBErrorResponse1}

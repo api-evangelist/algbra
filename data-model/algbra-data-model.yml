@@ -1,0 +1,34 @@
+generated: '2026-07-23'
+method: derived
+source: openapi/algbra-account-transaction-api-openapi.yml
+note: >-
+  Entity-relationship graph derived from the OBIE AIS Swagger 2.0 definitions and
+  path structure. Account is the aggregate root; the account-access consent gates
+  all reads. Identifiers follow OBIE conventions (AccountId, ConsentId, StatementId).
+entities:
+- name: AccountAccessConsent
+  id_field: ConsentId
+  schema: OBReadConsentResponse1
+  note: TPP consent that authorizes access; created before any account read.
+- name: Account
+  id_field: AccountId
+  schema: OBAccount3
+  path: /accounts, /accounts/{AccountId}
+- name: Balance
+  schema: OBCashBalance1
+  path: /accounts/{AccountId}/balances
+- name: Beneficiary
+  schema: OBBeneficiary3
+  path: /accounts/{AccountId}/beneficiaries
+- name: Transaction
+  schema: OBTransaction4
+  path: /accounts/{AccountId}/transactions
+relationships:
+- {from: AccountAccessConsent, type: grants_access_to, to: Account, via: Permissions}
+- {from: Balance, type: belongs_to, to: Account, via: AccountId}
+- {from: Beneficiary, type: belongs_to, to: Account, via: AccountId}
+- {from: Transaction, type: belongs_to, to: Account, via: AccountId}
+- {from: Account, type: has_many, to: Transaction, via: AccountId}
+- {from: Account, type: has_many, to: Balance, via: AccountId}
+- {from: Account, type: has_many, to: Beneficiary, via: AccountId}
+- {from: Account, type: has_one, to: Servicer, via: OBBranchAndFinancialInstitutionIdentification5}

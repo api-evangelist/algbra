@@ -1,0 +1,16 @@
+generated: '2026-07-23'
+method: generated
+source: openapi/algbra-account-transaction-api-openapi.yml
+skills:
+- file: algbra-account-access.md
+  name: Access Algbra account & transaction data (OBIE AIS)
+  api: openapi/algbra-account-transaction-api-openapi.yml
+  operations:
+  - CreateAccountAccessConsents
+  - GetAccountAccessConsentsConsentId
+  - GetAccounts
+  - GetAccountsAccountId
+  - GetAccountsAccountIdBalances
+  - GetAccountsAccountIdBeneficiaries
+  - GetAccountsAccountIdTransactions
+  - DeleteAccountAccessConsentsConsentId
