@@ -1,0 +1,107 @@
+aid: algbra
+name: Algbra
+review:
+  question: >-
+    Does Algbra operate a real, documented public API developer platform, and does it
+    publish a UK Open Banking (OBIE) surface with a confirmable Open Data endpoint?
+  answer: true
+  date: '2026-07-23'
+  reviewer: API Evangelist
+  openDataConfirmed: false
+findings:
+  summary: |
+    Algbra runs a genuine, publicly documented developer platform at
+    developer.algbralabs.com (Algbra Labs) covering two distinct API surfaces:
+    (1) a first-party Partner Banking / Banking-as-a-Service API, and (2) a UK
+    Open Banking "dedicated interface" conformant to the OBIE Read/Write
+    Standard v3.1.8. Algbra is an FCA-authorised electronic money institution
+    (Algbra FS UK Limited, FRN 952360), NOT one of the CMA9 and not a licensed
+    clearing bank or building society; its OBIE obligations arise from PSD2
+    access-to-account rather than the CMA order. The Open Banking interface is
+    delivered through the Tell Money (Tell Connect / "Open Banking Lite")
+    platform - the harvested AIS specification carries Tell Connect contact
+    details, an https://secure.tell.systems/algbra/... auth server, and a
+    basePath of /algbra/open-banking/v3.1/aisp. No public, unauthenticated OBIE
+    Open Data API (ATMs, Branches, Personal/Business Current Accounts, etc.) is
+    published by Algbra; this is expected for a non-CMA9 EMI, and none was
+    invented. Probes of the Open Data / dedicated-interface hosts returned no
+    response (curl exit / HTTP 000) because those hosts are IP-whitelisted and
+    eIDAS/mTLS-gated, so no live 200 could be confirmed from a public network.
+  authModel:
+    standard: OBIE Read/Write API Standard v3.1.8 (DCR v3.2)
+    profile: FAPI
+    protocols:
+      - OAuth2 / OpenID Connect (response_type 'code id_token')
+      - grant_types: authorization_code, client_credentials, refresh_token
+      - mutual-TLS with OBIE OBWAC transport certificates
+      - request-object + token-endpoint auth signing with PS256 (OBSEAL)
+      - Dynamic Client Registration (POST /register, OBIE DCR v3.2)
+      - PSD2 Strong Customer Authentication (SCA)
+    scopes:
+      - openid
+      - accounts
+      - payments
+      - fundsconfirmations
+    partnerBankingAuth: API keys + mTLS + payload signing over IP-whitelisted hosts
+  specProvenance:
+    harvested: openapi/algbra-account-transaction-api-openapi.yml
+    format: Swagger/OpenAPI 2.0
+    title: Account and Transaction API Specification
+    version: v3.1.0
+    basePath: /algbra/open-banking/v3.1/aisp
+    provenanceNote: >-
+      This is the OBIE Account & Transaction (AISP) Read/Write standard rendered
+      and served for Algbra by Tell Money (Tell Connect) - it is Algbra-branded
+      (basePath /algbra/..., Tell Connect support contact, secure.tell.systems
+      OAuth server) rather than a purely generic OBIE reference document, but the
+      contract shape is the OBIE standard, not a bespoke Algbra design. Downloaded
+      verbatim from the GitBook-hosted aisp.yaml linked in the API reference.
+      PIS and CBPII surfaces are documented (scopes 'payments' and
+      'fundsconfirmations') but no separate downloadable OpenAPI was published for
+      them; their base URLs follow the OBIE pisp/cbpii convention on the same host
+      and are marked documented/unverified.
+  transports:
+    - protocol: REST
+      scheme: https
+      baseURL: https://secure.tell.systems/algbra/open-banking/v3.1/aisp
+      documented: true
+      liveConfirmed: false
+      note: OBIE AIS dedicated interface; host is mTLS/eIDAS-gated, returned HTTP 000 on public probe.
+    - protocol: REST
+      scheme: https
+      baseURL: https://horizon-link.algbralabs.com
+      documented: true
+      liveConfirmed: false
+      note: Partner Banking (BaaS) production host (sandbox.horizon-link.algbralabs.com for sandbox); IP-whitelisted, returned HTTP 000 on public probe.
+  endpointsProbed:
+    - url: https://secure.tell.systems/algbra/open-banking/v3.1/aisp/accounts
+      status: '000'
+    - url: https://secure.tell.systems/algbra/open-banking/v3.1/atms
+      status: '000'
+      note: Candidate OBIE Open Data ATMs endpoint - no response; Algbra does not publish Open Data.
+    - url: https://horizon-link.algbralabs.com/
+      status: '000'
+    - url: https://developers.algbra.com/
+      status: '200'
+      note: Tell Connect ("Open Banking Lite") landing - confirms Algbra's OB provider is Tell Money.
+    - url: https://developer.algbralabs.com/home
+      status: '200'
+sources:
+  - url: https://developer.algbralabs.com/home
+    type: DeveloperPortal
+    note: Algbra Labs developer platform home; lists Partner Banking and Open Banking - UK.
+  - url: https://developer.algbralabs.com/open-banking-uk/introduction
+    type: Documentation
+    note: OBIE onboarding, certificates (OBWAC/OBSEAL), .well-known, DCR v3.2, security model and scopes.
+  - url: https://developer.algbralabs.com/open-banking-uk/api-reference/accounts
+    type: APIReference
+    note: Links the downloadable aisp.yaml OpenAPI for accounts/balances/transactions.
+  - url: https://developer.algbralabs.com/partner-banking/getting-started/api-hosts
+    type: Documentation
+    note: Real Partner Banking API hosts - horizon-link.algbralabs.com (prod) and sandbox.horizon-link.algbralabs.com.
+  - url: https://openbankinguk.github.io/read-write-api-site3/v3.1.8/profiles/
+    type: Documentation
+    note: OBIE Read/Write v3.1.8 standard Algbra's dedicated interface conforms to.
+  - url: https://www.algbra.com/
+    type: Website
+    note: Algbra FS UK Limited, FCA EMI FRN 952360, B Corp parent Algbra Group Limited.
