@@ -47,7 +47,7 @@ tags:
 - Banking as a Service
 created: '2026-07-23'
 modified: '2026-07-23'
-specificationVersion: '0.19'
+specificationVersion: '0.23'
 apis:
 - aid: algbra:algbra-account-transaction-api
   name: Algbra Account and Transaction Information API (AIS)
