@@ -34,6 +34,18 @@ accessModel:
   method: derived
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
 tags:
+- Financial-Services
+- Banking
+- Open Banking
+- PSD2
+- OBIE
+- United Kingdom
+- Payments
+- Account Information
+- Fintech
+- Ethical Finance
+- Banking as a Service
+tags_raw:
 - Financial Services
 - Banking
 - Open Banking
@@ -125,6 +137,10 @@ apis:
   humanURL: https://developer.algbralabs.com/partner-banking/introduction
   baseURL: https://horizon-link.algbralabs.com
   tags:
+  - Banking as a Service
+  - Payments
+  - Account
+  tags_raw:
   - Banking as a Service
   - Payments
   - Accounts
