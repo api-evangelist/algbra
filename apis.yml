@@ -61,40 +61,13 @@ created: '2026-07-23'
 modified: '2026-07-23'
 specificationVersion: '0.23'
 apis:
-- aid: algbra:algbra-account-transaction-api
-  name: Algbra Account and Transaction Information API (AIS)
-  description: >-
-    Algbra's UK Open Banking Account & Transaction Information (AIS) dedicated
-    interface, conformant to the OBIE Read/Write Standard v3.1, enabling authorised
-    AISP Third Party Providers to create account-access consents and read accounts,
-    balances, beneficiaries and transactions with the customer's consent. Delivered
-    via the Tell Money (Tell Connect) platform; FAPI OAuth2/OIDC + mTLS + PSD2 SCA.
-  humanURL: https://developer.algbralabs.com/open-banking-uk/introduction
-  baseURL: https://secure.tell.systems/algbra/open-banking/v3.1/aisp
-  tags:
-  - Account Information
-  - Open Banking
-  - AIS
-  properties:
-  - type: OpenAPI
-    url: openapi/algbra-account-transaction-api-openapi.yml
-  - type: Documentation
-    url: https://developer.algbralabs.com/open-banking-uk/introduction
-  - type: APIReference
-    url: https://developer.algbralabs.com/open-banking-uk/api-reference
-  - type: Documentation
-    url: https://developer.algbralabs.com/open-banking-uk/api-reference/account-access-consents
-  - type: Documentation
-    url: https://developer.algbralabs.com/open-banking-uk/api-reference/accounts
 - aid: algbra:algbra-payment-initiation-api
   name: Algbra Payment Initiation API (PIS)
   description: >-
-    Algbra's UK Open Banking Payment Initiation (PIS) dedicated interface under the
-    OBIE Read/Write Standard v3.1.8, allowing authorised PISP Third Party Providers
-    to initiate payments on a customer's behalf (scope 'payments'). Documented as
-    part of Algbra's OBIE-conformant interface; secured with FAPI OAuth2/OIDC, mTLS
-    and PSD2 SCA. No first-party OpenAPI is published separately from the OBIE
-    standard specification.
+    Algbra's UK Open Banking Payment Initiation (PIS) dedicated interface under the OBIE Read/Write Standard
+    v3.1.8, allowing authorised PISP Third Party Providers to initiate payments on a customer's behalf
+    (scope 'payments'). Documented as part of Algbra's OBIE-conformant interface; secured with FAPI OAuth2/OIDC,
+    mTLS and PSD2 SCA. No first-party OpenAPI is published separately from the OBIE standard specification.
   humanURL: https://developer.algbralabs.com/open-banking-uk/introduction
   baseURL: https://secure.tell.systems/algbra/open-banking/v3.1/pisp
   tags:
@@ -109,11 +82,10 @@ apis:
 - aid: algbra:algbra-confirmation-of-funds-api
   name: Algbra Confirmation of Funds API (CBPII)
   description: >-
-    Algbra's UK Open Banking Confirmation of Funds (CBPII) dedicated interface under
-    the OBIE Read/Write Standard v3.1.8, allowing authorised CBPII Third Party
-    Providers to confirm the availability of funds (scope 'fundsconfirmations').
-    Documented as part of Algbra's OBIE-conformant interface; secured with FAPI
-    OAuth2/OIDC, mTLS and PSD2 SCA.
+    Algbra's UK Open Banking Confirmation of Funds (CBPII) dedicated interface under the OBIE Read/Write
+    Standard v3.1.8, allowing authorised CBPII Third Party Providers to confirm the availability of funds
+    (scope 'fundsconfirmations'). Documented as part of Algbra's OBIE-conformant interface; secured with
+    FAPI OAuth2/OIDC, mTLS and PSD2 SCA.
   humanURL: https://developer.algbralabs.com/open-banking-uk/introduction
   baseURL: https://secure.tell.systems/algbra/open-banking/v3.1/cbpii
   tags:
@@ -128,12 +100,11 @@ apis:
 - aid: algbra:algbra-partner-banking-api
   name: Algbra Partner Banking API
   description: >-
-    Algbra Labs' first-party Partner Banking (Banking-as-a-Service) API for B2B
-    partners, covering customer onboarding and compliance checks, primary and
-    virtual accounts, card issuing, internal/inbound/outbound and automated
-    payments, counterparty validation, transactions, activity feeds, investments
-    and webhooks. Secured with API keys, mTLS and payload signing over IP-whitelisted
-    hosts (Shared/Isolated Tenancy or Standalone deployment).
+    Algbra Labs' first-party Partner Banking (Banking-as-a-Service) API for B2B partners, covering customer
+    onboarding and compliance checks, primary and virtual accounts, card issuing, internal/inbound/outbound
+    and automated payments, counterparty validation, transactions, activity feeds, investments and webhooks.
+    Secured with API keys, mTLS and payload signing over IP-whitelisted hosts (Shared/Isolated Tenancy
+    or Standalone deployment).
   humanURL: https://developer.algbralabs.com/partner-banking/introduction
   baseURL: https://horizon-link.algbralabs.com
   tags:
@@ -157,6 +128,96 @@ apis:
     url: https://developer.algbralabs.com/partner-banking/concepts/webhooks
   - type: Webhooks
     url: asyncapi/algbra-partner-banking-webhooks.yml
+- aid: algbra:algbra-account-access-api
+  name: Algbra Account Access API
+  description: The Account Access API from Algbra — 2 operation(s) for account access.
+  humanURL: https://developer.algbralabs.com/open-banking-uk/introduction
+  baseURL: https://secure.tell.systems/algbra/open-banking/v3.1/aisp
+  tags:
+  - Account Access
+  properties:
+  - type: OpenAPI
+    url: openapi/algbra-account-access-api-openapi.yml
+  - type: Documentation
+    url: https://developer.algbralabs.com/open-banking-uk/introduction
+  - type: APIReference
+    url: https://developer.algbralabs.com/open-banking-uk/api-reference
+  - type: Documentation
+    url: https://developer.algbralabs.com/open-banking-uk/api-reference/account-access-consents
+  - type: Documentation
+    url: https://developer.algbralabs.com/open-banking-uk/api-reference/accounts
+- aid: algbra:algbra-accounts-api
+  name: Algbra Accounts API
+  description: The Accounts API from Algbra — 2 operation(s) for accounts.
+  humanURL: https://developer.algbralabs.com/open-banking-uk/introduction
+  baseURL: https://secure.tell.systems/algbra/open-banking/v3.1/aisp
+  tags:
+  - Accounts
+  properties:
+  - type: OpenAPI
+    url: openapi/algbra-accounts-api-openapi.yml
+  - type: Documentation
+    url: https://developer.algbralabs.com/open-banking-uk/introduction
+  - type: APIReference
+    url: https://developer.algbralabs.com/open-banking-uk/api-reference
+  - type: Documentation
+    url: https://developer.algbralabs.com/open-banking-uk/api-reference/account-access-consents
+  - type: Documentation
+    url: https://developer.algbralabs.com/open-banking-uk/api-reference/accounts
+- aid: algbra:algbra-balances-api
+  name: Algbra Balances API
+  description: The Balances API from Algbra — 1 operation(s) for balances.
+  humanURL: https://developer.algbralabs.com/open-banking-uk/introduction
+  baseURL: https://secure.tell.systems/algbra/open-banking/v3.1/aisp
+  tags:
+  - Balances
+  properties:
+  - type: OpenAPI
+    url: openapi/algbra-balances-api-openapi.yml
+  - type: Documentation
+    url: https://developer.algbralabs.com/open-banking-uk/introduction
+  - type: APIReference
+    url: https://developer.algbralabs.com/open-banking-uk/api-reference
+  - type: Documentation
+    url: https://developer.algbralabs.com/open-banking-uk/api-reference/account-access-consents
+  - type: Documentation
+    url: https://developer.algbralabs.com/open-banking-uk/api-reference/accounts
+- aid: algbra:algbra-beneficiaries-api
+  name: Algbra Beneficiaries API
+  description: The Beneficiaries API from Algbra — 1 operation(s) for beneficiaries.
+  humanURL: https://developer.algbralabs.com/open-banking-uk/introduction
+  baseURL: https://secure.tell.systems/algbra/open-banking/v3.1/aisp
+  tags:
+  - Beneficiaries
+  properties:
+  - type: OpenAPI
+    url: openapi/algbra-beneficiaries-api-openapi.yml
+  - type: Documentation
+    url: https://developer.algbralabs.com/open-banking-uk/introduction
+  - type: APIReference
+    url: https://developer.algbralabs.com/open-banking-uk/api-reference
+  - type: Documentation
+    url: https://developer.algbralabs.com/open-banking-uk/api-reference/account-access-consents
+  - type: Documentation
+    url: https://developer.algbralabs.com/open-banking-uk/api-reference/accounts
+- aid: algbra:algbra-transactions-api
+  name: Algbra Transactions API
+  description: The Transactions API from Algbra — 1 operation(s) for transactions.
+  humanURL: https://developer.algbralabs.com/open-banking-uk/introduction
+  baseURL: https://secure.tell.systems/algbra/open-banking/v3.1/aisp
+  tags:
+  - Transactions
+  properties:
+  - type: OpenAPI
+    url: openapi/algbra-transactions-api-openapi.yml
+  - type: Documentation
+    url: https://developer.algbralabs.com/open-banking-uk/introduction
+  - type: APIReference
+    url: https://developer.algbralabs.com/open-banking-uk/api-reference
+  - type: Documentation
+    url: https://developer.algbralabs.com/open-banking-uk/api-reference/account-access-consents
+  - type: Documentation
+    url: https://developer.algbralabs.com/open-banking-uk/api-reference/accounts
 common:
 - type: AgenticAccess
   url: agentic-access/algbra-agentic-access.yml
