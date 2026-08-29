@@ -7,8 +7,17 @@ info:
     customer's accounts, balances and transactions through Algbra's UK Open Banking
     (AIS) dedicated interface. All operationIds are verified against the harvested spec.
 sourceDescriptions:
-- name: algbraAis
-  url: ../openapi/algbra-account-transaction-api-openapi.yml
+- name: accountAccessApi
+  url: ../openapi/algbra-account-access-api-openapi.yml
+  type: openapi
+- name: accountsApi
+  url: ../openapi/algbra-accounts-api-openapi.yml
+  type: openapi
+- name: balancesApi
+  url: ../openapi/algbra-balances-api-openapi.yml
+  type: openapi
+- name: transactionsApi
+  url: ../openapi/algbra-transactions-api-openapi.yml
   type: openapi
 workflows:
 - workflowId: accountAccessAndRead
