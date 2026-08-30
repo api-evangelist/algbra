@@ -2,15 +2,15 @@
 kin_checks:
   slug: algbra
   schema_version: 0.15.1
-  scored_at: '2026-08-27'
-  run_ts: 2026-08-27T140727
+  scored_at: '2026-08-28'
+  run_ts: 2026-08-28T221322
   note: Actionable checks only (missed + partial). earned/na are every other check
     in rubric/scoring-0.15.1.yml; counts below let you verify that.
   counts:
     total: 130
-    earned: 54
-    partial: 7
-    missed: 50
+    earned: 55
+    partial: 8
+    missed: 48
     na: 19
   checks:
   - id: well_known_published
@@ -19,24 +19,21 @@ kin_checks:
     status: missed
   - id: openapi_3_2
     status: missed
-    detail: 0 of 1 openapi documents pass
+    detail: 0 of 5 openapi documents pass
   - id: openapi_3_1
     status: missed
-    detail: 0 of 1 openapi documents pass
+    detail: 0 of 5 openapi documents pass
   - id: openapi_3_0
     status: missed
-    detail: 0 of 1 openapi documents pass
-  - id: servers_defined
-    status: missed
-    detail: 0 of 1 openapi documents pass
+    detail: 0 of 5 openapi documents pass
   - id: operations_description_coverage
     status: missed
-    detail: 0 of 1 openapi documents pass
+    detail: 0 of 5 openapi documents pass
   - id: examples_present
     status: missed
   - id: webhooks_or_callbacks
     status: missed
-    detail: 0 of 1 openapi documents pass
+    detail: 0 of 5 openapi documents pass
   - id: json_schema_present
     status: missed
   - id: json_schema_per_resource
@@ -111,8 +108,6 @@ kin_checks:
     status: missed
   - id: dry_run_mode
     status: missed
-  - id: delegated_identity
-    status: missed
   - id: protected_resource_metadata
     status: missed
   - id: dynamic_client_registration
@@ -131,8 +126,8 @@ kin_checks:
     detail: 'authorship: derived'
   - id: auth_clarity
     status: partial
-    earned: 3.5
-    detail: 'grade: bearer'
+    earned: 7.5
+    detail: 'grade: negotiable'
   - id: idempotency
     status: partial
     earned: 4.5
@@ -145,3 +140,7 @@ kin_checks:
     status: partial
     earned: 1.25
     detail: 'authorship: derived'
+  - id: delegated_identity
+    status: partial
+    earned: 3.0
+    detail: 'grade: documented'
