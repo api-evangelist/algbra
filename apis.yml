@@ -164,6 +164,8 @@ apis:
   humanURL: https://developer.algbralabs.com/open-banking-uk/introduction
   baseURL: https://secure.tell.systems/algbra/open-banking/v3.1/aisp
   tags:
+  - Account
+  tags_raw:
   - Accounts
   properties:
   - type: OpenAPI
@@ -218,6 +220,8 @@ apis:
   humanURL: https://developer.algbralabs.com/open-banking-uk/introduction
   baseURL: https://secure.tell.systems/algbra/open-banking/v3.1/aisp
   tags:
+  - Transaction
+  tags_raw:
   - Transactions
   properties:
   - type: OpenAPI
