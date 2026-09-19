@@ -45,6 +45,9 @@ accessModel:
   generated: '2026-07-23'
   method: derived
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+x-docs-platform: gitbook
+x-docs-platform-confidence: high
+x-docs-platform-checked: 2026-09-17
 tags:
 - Financial-Services
 - Banking
@@ -83,6 +86,10 @@ apis:
   humanURL: https://developer.algbralabs.com/open-banking-uk/introduction
   baseURL: https://secure.tell.systems/algbra/open-banking/v3.1/pisp
   tags:
+  - Payments
+  - Open Banking
+  - PI
+  tags_raw:
   - Payments
   - Open Banking
   - PIS
