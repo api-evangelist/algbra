@@ -123,20 +123,6 @@ paths:
         - accounts
 components:
   parameters:
-    x-fapi-interaction-id-Param:
-      in: header
-      name: x-fapi-interaction-id
-      required: false
-      description: An RFC4122 UID used as a correlation id.
-      schema:
-        type: string
-    x-customer-user-agent-Param:
-      in: header
-      name: x-customer-user-agent
-      description: Indicates the user-agent that the PSU is using.
-      required: false
-      schema:
-        type: string
     AuthorizationParam:
       in: header
       name: Authorization
@@ -151,13 +137,6 @@ components:
       description: The PSU's IP address if the PSU is currently logged in with the TPP.
       schema:
         type: string
-    ConsentId:
-      name: ConsentId
-      in: path
-      description: ConsentId
-      required: true
-      schema:
-        type: string
     OBReadConsent1Param:
       name: OBReadConsent1Param
       in: body
@@ -165,14 +144,6 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/OBReadConsent1'
-    x-fapi-customer-last-logged-time-Param:
-      in: header
-      name: x-fapi-customer-last-logged-time
-      required: false
-      description: "The time when the PSU last logged in with the TPP. \nAll dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below: \nSun, 10 Sep 2017 19:43:31 UTC"
-      schema:
-        type: string
-        pattern: ^(Mon|Tue|Wed|Thu|Fri|Sat|Sun), \d{2} (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \d{4} \d{2}:\d{2}:\d{2} (GMT|UTC)$
     x-fapi-financial-id-Param:
       in: header
       name: x-fapi-financial-id
@@ -181,68 +152,83 @@ components:
       schema:
         type: string
         default: ea01566d-f21d-49af-9d0c-b74fbe36911f
-  responses:
-    500ErrorResponse:
-      description: Internal Server Error
-      content:
-        application/json; charset=utf-8:
-          schema:
-            $ref: '#/components/schemas/OBErrorResponse1'
-    204AccountAccessConsentsConsentIdDeleted:
-      description: Account Access Consents Deleted
-      headers:
-        x-fapi-interaction-id:
-          description: An RFC4122 UID used as a correlation id.
-          schema:
-            type: string
-    403ErrorResponse:
-      description: Forbidden
-    201AccountAccessConsentsCreated:
-      description: Account Access Consents Created
-      headers:
-        x-fapi-interaction-id:
-          description: An RFC4122 UID used as a correlation id.
-          schema:
-            type: string
-      content:
-        application/json; charset=utf-8:
-          schema:
-            $ref: '#/components/schemas/OBReadConsentResponse1'
-    429ErrorResponse:
-      description: Too Many Requests
-      headers:
-        Retry-After:
-          description: Number in seconds to wait
-          schema:
-            type: integer
-    406ErrorResponse:
-      description: Not Acceptable
-    415ErrorResponse:
-      description: Unsupported Media Type
-    404ErrorResponse:
-      description: Not found
-    405ErrorResponse:
-      description: Method Not Allowed
-    401ErrorResponse:
-      description: Unauthorized
-    200AccountAccessConsentsConsentIdRead:
-      description: Account Access Consents Read
-      headers:
-        x-fapi-interaction-id:
-          description: An RFC4122 UID used as a correlation id.
-          schema:
-            type: string
-      content:
-        application/json; charset=utf-8:
-          schema:
-            $ref: '#/components/schemas/OBReadConsentResponse1'
-    400ErrorResponse:
-      description: Bad request
-      content:
-        application/json; charset=utf-8:
-          schema:
-            $ref: '#/components/schemas/OBErrorResponse1'
+    x-customer-user-agent-Param:
+      in: header
+      name: x-customer-user-agent
+      description: Indicates the user-agent that the PSU is using.
+      required: false
+      schema:
+        type: string
+    x-fapi-customer-last-logged-time-Param:
+      in: header
+      name: x-fapi-customer-last-logged-time
+      required: false
+      description: "The time when the PSU last logged in with the TPP. \nAll dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below: \nSun, 10 Sep 2017 19:43:31 UTC"
+      schema:
+        type: string
+        pattern: ^(Mon|Tue|Wed|Thu|Fri|Sat|Sun), \d{2} (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \d{4} \d{2}:\d{2}:\d{2} (GMT|UTC)$
+    ConsentId:
+      name: ConsentId
+      in: path
+      description: ConsentId
+      required: true
+      schema:
+        type: string
+    x-fapi-interaction-id-Param:
+      in: header
+      name: x-fapi-interaction-id
+      required: false
+      description: An RFC4122 UID used as a correlation id.
+      schema:
+        type: string
   schemas:
+    OBExternalPermissions1Code:
+      description: Specifies the Open Banking account access data types. This is a list of the data clusters being consented by the PSU, and requested for authorisation with the ASPSP.
+      type: string
+      enum:
+      - ReadAccountsBasic
+      - ReadAccountsDetail
+      - ReadBalances
+      - ReadBeneficiariesBasic
+      - ReadBeneficiariesDetail
+      - ReadDirectDebits
+      - ReadOffers
+      - ReadPAN
+      - ReadParty
+      - ReadPartyPSU
+      - ReadProducts
+      - ReadScheduledPaymentsBasic
+      - ReadScheduledPaymentsDetail
+      - ReadStandingOrdersBasic
+      - ReadStandingOrdersDetail
+      - ReadStatementsBasic
+      - ReadStatementsDetail
+      - ReadTransactionsBasic
+      - ReadTransactionsCredits
+      - ReadTransactionsDebits
+      - ReadTransactionsDetail
+    Links:
+      type: object
+      description: Links relevant to the payload
+      properties:
+        Self:
+          type: string
+          format: uri
+        First:
+          type: string
+          format: uri
+        Prev:
+          type: string
+          format: uri
+        Next:
+          type: string
+          format: uri
+        Last:
+          type: string
+          format: uri
+      additionalProperties: false
+      required:
+      - Self
     OBReadConsent1:
       type: object
       properties:
@@ -254,10 +240,47 @@ components:
       - Data
       - Risk
       additionalProperties: false
-    OBRisk2:
-      description: The Risk section is sent by the initiating party to the ASPSP. It is used to specify additional details for risk scoring for Account Info.
+    OBErrorResponse1:
+      description: An array of detail error codes, and messages, and URLs to documentation to help remediation.
       type: object
-      properties: {}
+      properties:
+        Code:
+          description: High level textual error code, to help categorize the errors.
+          type: string
+          minLength: 1
+          maxLength: 40
+        Id:
+          description: A unique reference for the error instance, for audit purposes, in case of unknown/unclassified errors.
+          type: string
+          minLength: 1
+          maxLength: 40
+        Message:
+          description: Brief Error message, e.g., 'There is something wrong with the request parameters provided'
+          type: string
+          minLength: 1
+          maxLength: 500
+        Errors:
+          items:
+            $ref: '#/components/schemas/OBError1'
+          type: array
+          minItems: 1
+      required:
+      - Code
+      - Message
+      - Errors
+      additionalProperties: false
+    Meta:
+      title: MetaData
+      type: object
+      description: Meta Data relevant to the payload
+      properties:
+        TotalPages:
+          type: integer
+          format: int32
+        FirstAvailableDateTime:
+          $ref: '#/components/schemas/ISODateTime'
+        LastAvailableDateTime:
+          $ref: '#/components/schemas/ISODateTime'
       additionalProperties: false
     OBError1:
       type: object
@@ -295,22 +318,10 @@ components:
       - AwaitingAuthorisation
       - Rejected
       - Revoked
-    ISODateTime:
-      description: "All dates in the JSON payloads are represented in ISO 8601 date-time format. \nAll date-time fields in responses must include the timezone. An example is below:\n2017-04-05T10:43:07+00:00"
-      type: string
-      format: date-time
-    Meta:
-      title: MetaData
+    OBRisk2:
+      description: The Risk section is sent by the initiating party to the ASPSP. It is used to specify additional details for risk scoring for Account Info.
       type: object
-      description: Meta Data relevant to the payload
-      properties:
-        TotalPages:
-          type: integer
-          format: int32
-        FirstAvailableDateTime:
-          $ref: '#/components/schemas/ISODateTime'
-        LastAvailableDateTime:
-          $ref: '#/components/schemas/ISODateTime'
+      properties: {}
       additionalProperties: false
     OBReadData1:
       type: object
@@ -336,82 +347,6 @@ components:
       required:
       - Permissions
       additionalProperties: false
-    OBErrorResponse1:
-      description: An array of detail error codes, and messages, and URLs to documentation to help remediation.
-      type: object
-      properties:
-        Code:
-          description: High level textual error code, to help categorize the errors.
-          type: string
-          minLength: 1
-          maxLength: 40
-        Id:
-          description: A unique reference for the error instance, for audit purposes, in case of unknown/unclassified errors.
-          type: string
-          minLength: 1
-          maxLength: 40
-        Message:
-          description: Brief Error message, e.g., 'There is something wrong with the request parameters provided'
-          type: string
-          minLength: 1
-          maxLength: 500
-        Errors:
-          items:
-            $ref: '#/components/schemas/OBError1'
-          type: array
-          minItems: 1
-      required:
-      - Code
-      - Message
-      - Errors
-      additionalProperties: false
-    Links:
-      type: object
-      description: Links relevant to the payload
-      properties:
-        Self:
-          type: string
-          format: uri
-        First:
-          type: string
-          format: uri
-        Prev:
-          type: string
-          format: uri
-        Next:
-          type: string
-          format: uri
-        Last:
-          type: string
-          format: uri
-      additionalProperties: false
-      required:
-      - Self
-    OBExternalPermissions1Code:
-      description: Specifies the Open Banking account access data types. This is a list of the data clusters being consented by the PSU, and requested for authorisation with the ASPSP.
-      type: string
-      enum:
-      - ReadAccountsBasic
-      - ReadAccountsDetail
-      - ReadBalances
-      - ReadBeneficiariesBasic
-      - ReadBeneficiariesDetail
-      - ReadDirectDebits
-      - ReadOffers
-      - ReadPAN
-      - ReadParty
-      - ReadPartyPSU
-      - ReadProducts
-      - ReadScheduledPaymentsBasic
-      - ReadScheduledPaymentsDetail
-      - ReadStandingOrdersBasic
-      - ReadStandingOrdersDetail
-      - ReadStatementsBasic
-      - ReadStatementsDetail
-      - ReadTransactionsBasic
-      - ReadTransactionsCredits
-      - ReadTransactionsDebits
-      - ReadTransactionsDetail
     OBReadConsentResponse1:
       type: object
       properties:
@@ -470,6 +405,71 @@ components:
       - Links
       - Meta
       additionalProperties: false
+    ISODateTime:
+      description: "All dates in the JSON payloads are represented in ISO 8601 date-time format. \nAll date-time fields in responses must include the timezone. An example is below:\n2017-04-05T10:43:07+00:00"
+      type: string
+      format: date-time
+  responses:
+    400ErrorResponse:
+      description: Bad request
+      content:
+        application/json; charset=utf-8:
+          schema:
+            $ref: '#/components/schemas/OBErrorResponse1'
+    204AccountAccessConsentsConsentIdDeleted:
+      description: Account Access Consents Deleted
+      headers:
+        x-fapi-interaction-id:
+          description: An RFC4122 UID used as a correlation id.
+          schema:
+            type: string
+    404ErrorResponse:
+      description: Not found
+    406ErrorResponse:
+      description: Not Acceptable
+    415ErrorResponse:
+      description: Unsupported Media Type
+    500ErrorResponse:
+      description: Internal Server Error
+      content:
+        application/json; charset=utf-8:
+          schema:
+            $ref: '#/components/schemas/OBErrorResponse1'
+    401ErrorResponse:
+      description: Unauthorized
+    405ErrorResponse:
+      description: Method Not Allowed
+    201AccountAccessConsentsCreated:
+      description: Account Access Consents Created
+      headers:
+        x-fapi-interaction-id:
+          description: An RFC4122 UID used as a correlation id.
+          schema:
+            type: string
+      content:
+        application/json; charset=utf-8:
+          schema:
+            $ref: '#/components/schemas/OBReadConsentResponse1'
+    200AccountAccessConsentsConsentIdRead:
+      description: Account Access Consents Read
+      headers:
+        x-fapi-interaction-id:
+          description: An RFC4122 UID used as a correlation id.
+          schema:
+            type: string
+      content:
+        application/json; charset=utf-8:
+          schema:
+            $ref: '#/components/schemas/OBReadConsentResponse1'
+    403ErrorResponse:
+      description: Forbidden
+    429ErrorResponse:
+      description: Too Many Requests
+      headers:
+        Retry-After:
+          description: Number in seconds to wait
+          schema:
+            type: integer
   securitySchemes:
     PSUOAuth2Security:
       type: oauth2

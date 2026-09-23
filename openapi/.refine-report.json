@@ -1,0 +1,33 @@
+{
+  "provider": "algbra",
+  "sources": [
+    "_original/algbra-account-transaction-api-openapi.yml"
+  ],
+  "outputs": [
+    "algbra-account-access-api-openapi.yml",
+    "algbra-accounts-api-openapi.yml",
+    "algbra-balances-api-openapi.yml",
+    "algbra-beneficiaries-api-openapi.yml",
+    "algbra-transactions-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "algbra-account-transaction-api-openapi.yml: upgraded swagger 2.0 -> OpenAPI 3.2.0",
+    "algbra-account-transaction-api-openapi.yml: declared missing tag: Account Access",
+    "algbra-account-transaction-api-openapi.yml: declared missing tag: Accounts",
+    "algbra-account-transaction-api-openapi.yml: declared missing tag: Balances",
+    "algbra-account-transaction-api-openapi.yml: declared missing tag: Beneficiaries",
+    "algbra-account-transaction-api-openapi.yml: declared missing tag: Transactions",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "algbra-account-access-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "algbra-accounts-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "algbra-balances-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "algbra-beneficiaries-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "algbra-transactions-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
+}
