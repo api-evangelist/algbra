@@ -48,11 +48,11 @@ paths:
         - accounts
 components:
   parameters:
-    AuthorizationParam:
+    x-customer-user-agent-Param:
       in: header
-      name: Authorization
+      name: x-customer-user-agent
+      description: Indicates the user-agent that the PSU is using.
       required: false
-      description: An Authorisation Token as per https://tools.ietf.org/html/rfc6750 - required for API calls but may be ommited when using Swagger UI where the "Authorize" function has been operated
       schema:
         type: string
     x-fapi-customer-ip-address-Param:
@@ -60,6 +60,13 @@ components:
       name: x-fapi-customer-ip-address
       required: false
       description: The PSU's IP address if the PSU is currently logged in with the TPP.
+      schema:
+        type: string
+    AuthorizationParam:
+      in: header
+      name: Authorization
+      required: false
+      description: An Authorisation Token as per https://tools.ietf.org/html/rfc6750 - required for API calls but may be ommited when using Swagger UI where the "Authorize" function has been operated
       schema:
         type: string
     x-fapi-financial-id-Param:
@@ -70,13 +77,6 @@ components:
       schema:
         type: string
         default: ea01566d-f21d-49af-9d0c-b74fbe36911f
-    x-customer-user-agent-Param:
-      in: header
-      name: x-customer-user-agent
-      description: Indicates the user-agent that the PSU is using.
-      required: false
-      schema:
-        type: string
     x-fapi-customer-last-logged-time-Param:
       in: header
       name: x-fapi-customer-last-logged-time
@@ -100,61 +100,6 @@ components:
       schema:
         type: string
   schemas:
-    Links:
-      type: object
-      description: Links relevant to the payload
-      properties:
-        Self:
-          type: string
-          format: uri
-        First:
-          type: string
-          format: uri
-        Prev:
-          type: string
-          format: uri
-        Next:
-          type: string
-          format: uri
-        Last:
-          type: string
-          format: uri
-      additionalProperties: false
-      required:
-      - Self
-    ISODateTime:
-      description: "All dates in the JSON payloads are represented in ISO 8601 date-time format. \nAll date-time fields in responses must include the timezone. An example is below:\n2017-04-05T10:43:07+00:00"
-      type: string
-      format: date-time
-    OBErrorResponse1:
-      description: An array of detail error codes, and messages, and URLs to documentation to help remediation.
-      type: object
-      properties:
-        Code:
-          description: High level textual error code, to help categorize the errors.
-          type: string
-          minLength: 1
-          maxLength: 40
-        Id:
-          description: A unique reference for the error instance, for audit purposes, in case of unknown/unclassified errors.
-          type: string
-          minLength: 1
-          maxLength: 40
-        Message:
-          description: Brief Error message, e.g., 'There is something wrong with the request parameters provided'
-          type: string
-          minLength: 1
-          maxLength: 500
-        Errors:
-          items:
-            $ref: '#/components/schemas/OBError1'
-          type: array
-          minItems: 1
-      required:
-      - Code
-      - Message
-      - Errors
-      additionalProperties: false
     Meta:
       title: MetaData
       type: object
@@ -168,39 +113,57 @@ components:
         LastAvailableDateTime:
           $ref: '#/components/schemas/ISODateTime'
       additionalProperties: false
-    OBError1:
+    OBActiveOrHistoricCurrencyAndAmount:
+      description: Amount of money of the cash balance after a transaction entry is applied to the account..
       type: object
       properties:
-        ErrorCode:
-          description: Low level textual error code, e.g., UK.OBIE.Field.Missing
+        Amount:
+          $ref: '#/components/schemas/OBActiveCurrencyAndAmount_SimpleType'
+        Currency:
+          description: A code allocated to a currency by a Maintenance Agency under an international identification scheme, as described in the latest edition of the international standard ISO 4217 "Codes for the representation of currencies and funds".
           type: string
-          minLength: 1
-          maxLength: 128
-        Message:
-          description: 'A description of the error that occurred. e.g., ''A mandatory field isn''t supplied'' or ''RequestedExecutionDateTime must be in future''
-
-            OBIE doesn''t standardise this field'
-          type: string
-          minLength: 1
-          maxLength: 500
-        Path:
-          description: Recommended but optional reference to the JSON Path of the field with error, e.g., Data.Initiation.InstructedAmount.Currency
-          type: string
-          minLength: 1
-          maxLength: 500
-        Url:
-          description: URL to help remediate the problem, or provide more information, or to API Reference, or help etc
-          type: string
+          pattern: ^[A-Z]{3,3}$
       required:
-      - ErrorCode
-      - Message
+      - Amount
+      - Currency
+      additionalProperties: false
+    OBActiveCurrencyAndAmount_SimpleType:
+      description: A number of monetary units specified in an active currency where the unit of currency is explicit and compliant with ISO 4217.
+      type: string
+      pattern: ^\d{1,13}\.\d{1,5}$
+    OBCashBalance1:
+      description: Set of elements used to define the balance details.
+      type: object
+      properties:
+        AccountId:
+          $ref: '#/components/schemas/AccountId'
+        CreditDebitIndicator:
+          type: string
+          enum:
+          - Credit
+          - Debit
+          description: "Indicates whether the balance is a credit or a debit balance. \nUsage: A zero balance is considered to be a credit balance."
+        Type:
+          $ref: '#/components/schemas/OBBalanceType1Code'
+        DateTime:
+          description: "Indicates the date (and time) of the balance.\nAll dates in the JSON payloads are represented in ISO 8601 date-time format. \nAll date-time fields in responses must include the timezone. An example is below:\n2017-04-05T10:43:07+00:00"
+          type: string
+          format: date-time
+        Amount:
+          $ref: '#/components/schemas/OBActiveOrHistoricCurrencyAndAmount'
+        CreditLine:
+          items:
+            $ref: '#/components/schemas/OBCreditLine1'
+          type: array
+          description: Set of elements used to provide details on the credit line.
+      required:
+      - AccountId
+      - CreditDebitIndicator
+      - Type
+      - DateTime
+      - Amount
       additionalProperties: false
       minProperties: 1
-    AccountId:
-      description: A unique and immutable identifier used to identify the account resource. This identifier has no meaning to the account owner.
-      type: string
-      minLength: 1
-      maxLength: 40
     OBReadBalance1:
       type: object
       properties:
@@ -242,48 +205,60 @@ components:
       - OpeningBooked
       - OpeningCleared
       - PreviouslyClosedBooked
-    OBCashBalance1:
-      description: Set of elements used to define the balance details.
+    ISODateTime:
+      description: "All dates in the JSON payloads are represented in ISO 8601 date-time format. \nAll date-time fields in responses must include the timezone. An example is below:\n2017-04-05T10:43:07+00:00"
+      type: string
+      format: date-time
+    OBError1:
       type: object
       properties:
-        AccountId:
-          $ref: '#/components/schemas/AccountId'
-        CreditDebitIndicator:
+        ErrorCode:
+          description: Low level textual error code, e.g., UK.OBIE.Field.Missing
           type: string
-          enum:
-          - Credit
-          - Debit
-          description: "Indicates whether the balance is a credit or a debit balance. \nUsage: A zero balance is considered to be a credit balance."
-        Type:
-          $ref: '#/components/schemas/OBBalanceType1Code'
-        DateTime:
-          description: "Indicates the date (and time) of the balance.\nAll dates in the JSON payloads are represented in ISO 8601 date-time format. \nAll date-time fields in responses must include the timezone. An example is below:\n2017-04-05T10:43:07+00:00"
+          minLength: 1
+          maxLength: 128
+        Message:
+          description: 'A description of the error that occurred. e.g., ''A mandatory field isn''t supplied'' or ''RequestedExecutionDateTime must be in future''
+
+            OBIE doesn''t standardise this field'
           type: string
-          format: date-time
-        Amount:
-          $ref: '#/components/schemas/OBActiveOrHistoricCurrencyAndAmount'
-        CreditLine:
-          items:
-            $ref: '#/components/schemas/OBCreditLine1'
-          type: array
-          description: Set of elements used to provide details on the credit line.
+          minLength: 1
+          maxLength: 500
+        Path:
+          description: Recommended but optional reference to the JSON Path of the field with error, e.g., Data.Initiation.InstructedAmount.Currency
+          type: string
+          minLength: 1
+          maxLength: 500
+        Url:
+          description: URL to help remediate the problem, or provide more information, or to API Reference, or help etc
+          type: string
       required:
-      - AccountId
-      - CreditDebitIndicator
-      - Type
-      - DateTime
-      - Amount
+      - ErrorCode
+      - Message
       additionalProperties: false
       minProperties: 1
-    OBExternalLimitType1Code:
-      description: Limit type, in a coded form.
-      type: string
-      enum:
-      - Available
-      - Credit
-      - Emergency
-      - Pre-Agreed
-      - Temporary
+    Links:
+      type: object
+      description: Links relevant to the payload
+      properties:
+        Self:
+          type: string
+          format: uri
+        First:
+          type: string
+          format: uri
+        Prev:
+          type: string
+          format: uri
+        Next:
+          type: string
+          format: uri
+        Last:
+          type: string
+          format: uri
+      additionalProperties: false
+      required:
+      - Self
     OBCreditLine1:
       description: Set of elements used to provide details on the credit line.
       type: object
@@ -300,43 +275,77 @@ components:
       required:
       - Included
       additionalProperties: false
-    OBActiveOrHistoricCurrencyAndAmount:
-      description: Amount of money of the cash balance after a transaction entry is applied to the account..
+    OBExternalLimitType1Code:
+      description: Limit type, in a coded form.
+      type: string
+      enum:
+      - Available
+      - Credit
+      - Emergency
+      - Pre-Agreed
+      - Temporary
+    AccountId:
+      description: A unique and immutable identifier used to identify the account resource. This identifier has no meaning to the account owner.
+      type: string
+      minLength: 1
+      maxLength: 40
+    OBErrorResponse1:
+      description: An array of detail error codes, and messages, and URLs to documentation to help remediation.
       type: object
       properties:
-        Amount:
-          $ref: '#/components/schemas/OBActiveCurrencyAndAmount_SimpleType'
-        Currency:
-          description: A code allocated to a currency by a Maintenance Agency under an international identification scheme, as described in the latest edition of the international standard ISO 4217 "Codes for the representation of currencies and funds".
+        Code:
+          description: High level textual error code, to help categorize the errors.
           type: string
-          pattern: ^[A-Z]{3,3}$
+          minLength: 1
+          maxLength: 40
+        Id:
+          description: A unique reference for the error instance, for audit purposes, in case of unknown/unclassified errors.
+          type: string
+          minLength: 1
+          maxLength: 40
+        Message:
+          description: Brief Error message, e.g., 'There is something wrong with the request parameters provided'
+          type: string
+          minLength: 1
+          maxLength: 500
+        Errors:
+          items:
+            $ref: '#/components/schemas/OBError1'
+          type: array
+          minItems: 1
       required:
-      - Amount
-      - Currency
+      - Code
+      - Message
+      - Errors
       additionalProperties: false
-    OBActiveCurrencyAndAmount_SimpleType:
-      description: A number of monetary units specified in an active currency where the unit of currency is explicit and compliant with ISO 4217.
-      type: string
-      pattern: ^\d{1,13}\.\d{1,5}$
   responses:
+    403ErrorResponse:
+      description: Forbidden
+    401ErrorResponse:
+      description: Unauthorized
+    405ErrorResponse:
+      description: Method Not Allowed
     400ErrorResponse:
       description: Bad request
       content:
         application/json; charset=utf-8:
           schema:
             $ref: '#/components/schemas/OBErrorResponse1'
-    406ErrorResponse:
-      description: Not Acceptable
     500ErrorResponse:
       description: Internal Server Error
       content:
         application/json; charset=utf-8:
           schema:
             $ref: '#/components/schemas/OBErrorResponse1'
-    401ErrorResponse:
-      description: Unauthorized
-    405ErrorResponse:
-      description: Method Not Allowed
+    429ErrorResponse:
+      description: Too Many Requests
+      headers:
+        Retry-After:
+          description: Number in seconds to wait
+          schema:
+            type: integer
+    406ErrorResponse:
+      description: Not Acceptable
     200AccountsAccountIdBalancesRead:
       description: Balances Read
       headers:
@@ -348,15 +357,6 @@ components:
         application/json; charset=utf-8:
           schema:
             $ref: '#/components/schemas/OBReadBalance1'
-    403ErrorResponse:
-      description: Forbidden
-    429ErrorResponse:
-      description: Too Many Requests
-      headers:
-        Retry-After:
-          description: Number in seconds to wait
-          schema:
-            type: integer
   securitySchemes:
     PSUOAuth2Security:
       type: oauth2
