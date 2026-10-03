@@ -49,117 +49,40 @@ paths:
       - PSUOAuth2Security:
         - accounts
 components:
-  responses:
-    404ErrorResponse:
-      description: Not found
-    403ErrorResponse:
-      description: Forbidden
-    401ErrorResponse:
-      description: Unauthorized
-    200AccountsAccountIdBeneficiariesRead:
-      description: Beneficiaries Read
-      headers:
-        x-fapi-interaction-id:
-          description: An RFC4122 UID used as a correlation id.
-          schema:
-            type: string
-      content:
-        application/json; charset=utf-8:
-          schema:
-            $ref: '#/components/schemas/OBReadBeneficiary3'
-    405ErrorResponse:
-      description: Method Not Allowed
-    400ErrorResponse:
-      description: Bad request
-      content:
-        application/json; charset=utf-8:
-          schema:
-            $ref: '#/components/schemas/OBErrorResponse1'
-    500ErrorResponse:
-      description: Internal Server Error
-      content:
-        application/json; charset=utf-8:
-          schema:
-            $ref: '#/components/schemas/OBErrorResponse1'
-    429ErrorResponse:
-      description: Too Many Requests
-      headers:
-        Retry-After:
-          description: Number in seconds to wait
-          schema:
-            type: integer
-    406ErrorResponse:
-      description: Not Acceptable
-  parameters:
-    x-customer-user-agent-Param:
-      in: header
-      name: x-customer-user-agent
-      description: Indicates the user-agent that the PSU is using.
-      required: false
-      schema:
-        type: string
-    x-fapi-customer-ip-address-Param:
-      in: header
-      name: x-fapi-customer-ip-address
-      required: false
-      description: The PSU's IP address if the PSU is currently logged in with the TPP.
-      schema:
-        type: string
-    AuthorizationParam:
-      in: header
-      name: Authorization
-      required: false
-      description: An Authorisation Token as per https://tools.ietf.org/html/rfc6750 - required for API calls but may be ommited when using Swagger UI where the "Authorize" function has been operated
-      schema:
-        type: string
-    x-fapi-financial-id-Param:
-      in: header
-      name: x-fapi-financial-id
-      required: true
-      description: The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.
-      schema:
-        type: string
-        default: ea01566d-f21d-49af-9d0c-b74fbe36911f
-    x-fapi-customer-last-logged-time-Param:
-      in: header
-      name: x-fapi-customer-last-logged-time
-      required: false
-      description: "The time when the PSU last logged in with the TPP. \nAll dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below: \nSun, 10 Sep 2017 19:43:31 UTC"
-      schema:
-        type: string
-        pattern: ^(Mon|Tue|Wed|Thu|Fri|Sat|Sun), \d{2} (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \d{4} \d{2}:\d{2}:\d{2} (GMT|UTC)$
-    AccountId:
-      name: AccountId
-      in: path
-      description: AccountId
-      required: true
-      schema:
-        type: string
-    x-fapi-interaction-id-Param:
-      in: header
-      name: x-fapi-interaction-id
-      required: false
-      description: An RFC4122 UID used as a correlation id.
-      schema:
-        type: string
   schemas:
-    Meta:
-      title: MetaData
-      type: object
-      description: Meta Data relevant to the payload
-      properties:
-        TotalPages:
-          type: integer
-          format: int32
-        FirstAvailableDateTime:
-          $ref: '#/components/schemas/ISODateTime'
-        LastAvailableDateTime:
-          $ref: '#/components/schemas/ISODateTime'
-      additionalProperties: false
-    ISODateTime:
-      description: "All dates in the JSON payloads are represented in ISO 8601 date-time format. \nAll date-time fields in responses must include the timezone. An example is below:\n2017-04-05T10:43:07+00:00"
+    OBExternalAccountIdentification4Code:
+      description: Name of the identification scheme, in a coded form as published in an external list.
       type: string
-      format: date-time
+      example:
+      - UK.OBIE.BBAN
+      - UK.OBIE.IBAN
+      - UK.OBIE.PAN
+      - UK.OBIE.Paym
+      - UK.OBIE.SortCodeAccountNumber
+      minLength: 1
+      maxLength: 40
+    Links:
+      type: object
+      description: Links relevant to the payload
+      properties:
+        Self:
+          type: string
+          format: uri
+        First:
+          type: string
+          format: uri
+        Prev:
+          type: string
+          format: uri
+        Next:
+          type: string
+          format: uri
+        Last:
+          type: string
+          format: uri
+      additionalProperties: false
+      required:
+      - Self
     OBPostalAddress6:
       description: Information that locates and identifies a specific address, as defined by postal services.
       type: object
@@ -239,34 +162,6 @@ components:
         CreditorAccount:
           $ref: '#/components/schemas/OBCashAccount5'
       additionalProperties: false
-    OBError1:
-      type: object
-      properties:
-        ErrorCode:
-          description: Low level textual error code, e.g., UK.OBIE.Field.Missing
-          type: string
-          minLength: 1
-          maxLength: 128
-        Message:
-          description: 'A description of the error that occurred. e.g., ''A mandatory field isn''t supplied'' or ''RequestedExecutionDateTime must be in future''
-
-            OBIE doesn''t standardise this field'
-          type: string
-          minLength: 1
-          maxLength: 500
-        Path:
-          description: Recommended but optional reference to the JSON Path of the field with error, e.g., Data.Initiation.InstructedAmount.Currency
-          type: string
-          minLength: 1
-          maxLength: 500
-        Url:
-          description: URL to help remediate the problem, or provide more information, or to API Reference, or help etc
-          type: string
-      required:
-      - ErrorCode
-      - Message
-      additionalProperties: false
-      minProperties: 1
     OBCashAccount5:
       description: Provides the details to identify the beneficiary account.
       type: object
@@ -294,35 +189,6 @@ components:
       - SchemeName
       - Identification
       additionalProperties: false
-    OBExternalFinancialInstitutionIdentification4Code:
-      description: Name of the identification scheme, in a coded form as published in an external list.
-      type: string
-      example:
-      - UK.OBIE.BICFI
-      minLength: 1
-      maxLength: 40
-    Links:
-      type: object
-      description: Links relevant to the payload
-      properties:
-        Self:
-          type: string
-          format: uri
-        First:
-          type: string
-          format: uri
-        Prev:
-          type: string
-          format: uri
-        Next:
-          type: string
-          format: uri
-        Last:
-          type: string
-          format: uri
-      additionalProperties: false
-      required:
-      - Self
     OBAddressTypeCode:
       description: Identifies the nature of the postal address.
       type: string
@@ -335,59 +201,11 @@ components:
       - Postal
       - Residential
       - Statement
-    AccountId:
-      description: A unique and immutable identifier used to identify the account resource. This identifier has no meaning to the account owner.
-      type: string
-      minLength: 1
-      maxLength: 40
-    OBBranchAndFinancialInstitutionIdentification6:
-      description: Financial institution servicing an account for the debtor.
-      type: object
-      properties:
-        SchemeName:
-          $ref: '#/components/schemas/OBExternalFinancialInstitutionIdentification4Code'
-        Identification:
-          description: Unique and unambiguous identification of a financial institution or a branch of a financial institution.
-          type: string
-          minLength: 1
-          maxLength: 35
-        Name:
-          description: Name by which an agent is known and which is usually used to identify that agent.
-          type: string
-          minLength: 1
-          maxLength: 140
-        PostalAddress:
-          $ref: '#/components/schemas/OBPostalAddress6'
-      additionalProperties: false
-    OBReadBeneficiary3:
-      type: object
-      properties:
-        Data:
-          type: object
-          properties:
-            Beneficiary:
-              items:
-                $ref: '#/components/schemas/OBBeneficiary3'
-              type: array
-          additionalProperties: false
-        Links:
-          $ref: '#/components/schemas/Links'
-        Meta:
-          $ref: '#/components/schemas/Meta'
-      required:
-      - Data
-      - Links
-      - Meta
-      additionalProperties: false
-    OBExternalAccountIdentification4Code:
+    OBExternalFinancialInstitutionIdentification4Code:
       description: Name of the identification scheme, in a coded form as published in an external list.
       type: string
       example:
-      - UK.OBIE.BBAN
-      - UK.OBIE.IBAN
-      - UK.OBIE.PAN
-      - UK.OBIE.Paym
-      - UK.OBIE.SortCodeAccountNumber
+      - UK.OBIE.BICFI
       minLength: 1
       maxLength: 40
     OBErrorResponse1:
@@ -419,6 +237,188 @@ components:
       - Message
       - Errors
       additionalProperties: false
+    OBError1:
+      type: object
+      properties:
+        ErrorCode:
+          description: Low level textual error code, e.g., UK.OBIE.Field.Missing
+          type: string
+          minLength: 1
+          maxLength: 128
+        Message:
+          description: 'A description of the error that occurred. e.g., ''A mandatory field isn''t supplied'' or ''RequestedExecutionDateTime must be in future''
+
+            OBIE doesn''t standardise this field'
+          type: string
+          minLength: 1
+          maxLength: 500
+        Path:
+          description: Recommended but optional reference to the JSON Path of the field with error, e.g., Data.Initiation.InstructedAmount.Currency
+          type: string
+          minLength: 1
+          maxLength: 500
+        Url:
+          description: URL to help remediate the problem, or provide more information, or to API Reference, or help etc
+          type: string
+      required:
+      - ErrorCode
+      - Message
+      additionalProperties: false
+      minProperties: 1
+    AccountId:
+      description: A unique and immutable identifier used to identify the account resource. This identifier has no meaning to the account owner.
+      type: string
+      minLength: 1
+      maxLength: 40
+    OBBranchAndFinancialInstitutionIdentification6:
+      description: Financial institution servicing an account for the debtor.
+      type: object
+      properties:
+        SchemeName:
+          $ref: '#/components/schemas/OBExternalFinancialInstitutionIdentification4Code'
+        Identification:
+          description: Unique and unambiguous identification of a financial institution or a branch of a financial institution.
+          type: string
+          minLength: 1
+          maxLength: 35
+        Name:
+          description: Name by which an agent is known and which is usually used to identify that agent.
+          type: string
+          minLength: 1
+          maxLength: 140
+        PostalAddress:
+          $ref: '#/components/schemas/OBPostalAddress6'
+      additionalProperties: false
+    Meta:
+      title: MetaData
+      type: object
+      description: Meta Data relevant to the payload
+      properties:
+        TotalPages:
+          type: integer
+          format: int32
+        FirstAvailableDateTime:
+          $ref: '#/components/schemas/ISODateTime'
+        LastAvailableDateTime:
+          $ref: '#/components/schemas/ISODateTime'
+      additionalProperties: false
+    ISODateTime:
+      description: "All dates in the JSON payloads are represented in ISO 8601 date-time format. \nAll date-time fields in responses must include the timezone. An example is below:\n2017-04-05T10:43:07+00:00"
+      type: string
+      format: date-time
+    OBReadBeneficiary3:
+      type: object
+      properties:
+        Data:
+          type: object
+          properties:
+            Beneficiary:
+              items:
+                $ref: '#/components/schemas/OBBeneficiary3'
+              type: array
+          additionalProperties: false
+        Links:
+          $ref: '#/components/schemas/Links'
+        Meta:
+          $ref: '#/components/schemas/Meta'
+      required:
+      - Data
+      - Links
+      - Meta
+      additionalProperties: false
+  responses:
+    500ErrorResponse:
+      description: Internal Server Error
+      content:
+        application/json; charset=utf-8:
+          schema:
+            $ref: '#/components/schemas/OBErrorResponse1'
+    200AccountsAccountIdBeneficiariesRead:
+      description: Beneficiaries Read
+      headers:
+        x-fapi-interaction-id:
+          description: An RFC4122 UID used as a correlation id.
+          schema:
+            type: string
+      content:
+        application/json; charset=utf-8:
+          schema:
+            $ref: '#/components/schemas/OBReadBeneficiary3'
+    405ErrorResponse:
+      description: Method Not Allowed
+    401ErrorResponse:
+      description: Unauthorized
+    403ErrorResponse:
+      description: Forbidden
+    429ErrorResponse:
+      description: Too Many Requests
+      headers:
+        Retry-After:
+          description: Number in seconds to wait
+          schema:
+            type: integer
+    400ErrorResponse:
+      description: Bad request
+      content:
+        application/json; charset=utf-8:
+          schema:
+            $ref: '#/components/schemas/OBErrorResponse1'
+    406ErrorResponse:
+      description: Not Acceptable
+    404ErrorResponse:
+      description: Not found
+  parameters:
+    x-fapi-customer-last-logged-time-Param:
+      in: header
+      name: x-fapi-customer-last-logged-time
+      required: false
+      description: "The time when the PSU last logged in with the TPP. \nAll dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below: \nSun, 10 Sep 2017 19:43:31 UTC"
+      schema:
+        type: string
+        pattern: ^(Mon|Tue|Wed|Thu|Fri|Sat|Sun), \d{2} (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \d{4} \d{2}:\d{2}:\d{2} (GMT|UTC)$
+    x-fapi-financial-id-Param:
+      in: header
+      name: x-fapi-financial-id
+      required: true
+      description: The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.
+      schema:
+        type: string
+        default: ea01566d-f21d-49af-9d0c-b74fbe36911f
+    x-customer-user-agent-Param:
+      in: header
+      name: x-customer-user-agent
+      description: Indicates the user-agent that the PSU is using.
+      required: false
+      schema:
+        type: string
+    x-fapi-customer-ip-address-Param:
+      in: header
+      name: x-fapi-customer-ip-address
+      required: false
+      description: The PSU's IP address if the PSU is currently logged in with the TPP.
+      schema:
+        type: string
+    AccountId:
+      name: AccountId
+      in: path
+      description: AccountId
+      required: true
+      schema:
+        type: string
+    x-fapi-interaction-id-Param:
+      in: header
+      name: x-fapi-interaction-id
+      required: false
+      description: An RFC4122 UID used as a correlation id.
+      schema:
+        type: string
+    AuthorizationParam:
+      in: header
+      name: Authorization
+      required: false
+      description: An Authorisation Token as per https://tools.ietf.org/html/rfc6750 - required for API calls but may be ommited when using Swagger UI where the "Authorize" function has been operated
+      schema:
+        type: string
   securitySchemes:
     PSUOAuth2Security:
       type: oauth2
