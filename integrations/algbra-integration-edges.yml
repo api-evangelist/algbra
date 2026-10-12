@@ -1,0 +1,16 @@
+generated: '2026-10-12'
+method: none
+source:
+- https://zapier.com/apps/algbra/integrations
+- https://n8n.io/integrations/algbra/
+- https://composio.dev/toolkits/algbra
+- https://monid.ai/tools/algbra
+checked:
+- https://composio.dev/toolkits/algbra
+- https://monid.ai/tools/algbra
+- https://n8n.io/integrations/algbra/
+- https://zapier.com/apps/algbra/integrations
+summary: null
+marketplace_apps: []
+edges: []
+templates: []
