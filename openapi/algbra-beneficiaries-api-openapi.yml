@@ -50,6 +50,161 @@ paths:
         - accounts
 components:
   schemas:
+    OBExternalAccountIdentification4Code:
+      description: Name of the identification scheme, in a coded form as published in an external list.
+      type: string
+      example:
+      - UK.OBIE.BBAN
+      - UK.OBIE.IBAN
+      - UK.OBIE.PAN
+      - UK.OBIE.Paym
+      - UK.OBIE.SortCodeAccountNumber
+      minLength: 1
+      maxLength: 40
+    AccountId:
+      description: A unique and immutable identifier used to identify the account resource. This identifier has no meaning to the account owner.
+      type: string
+      minLength: 1
+      maxLength: 40
+    OBBranchAndFinancialInstitutionIdentification6:
+      description: Financial institution servicing an account for the debtor.
+      type: object
+      properties:
+        SchemeName:
+          $ref: '#/components/schemas/OBExternalFinancialInstitutionIdentification4Code'
+        Identification:
+          description: Unique and unambiguous identification of a financial institution or a branch of a financial institution.
+          type: string
+          minLength: 1
+          maxLength: 35
+        Name:
+          description: Name by which an agent is known and which is usually used to identify that agent.
+          type: string
+          minLength: 1
+          maxLength: 140
+        PostalAddress:
+          $ref: '#/components/schemas/OBPostalAddress6'
+      additionalProperties: false
+    OBPostalAddress6:
+      description: Information that locates and identifies a specific address, as defined by postal services.
+      type: object
+      properties:
+        AddressType:
+          $ref: '#/components/schemas/OBAddressTypeCode'
+        Department:
+          description: Identification of a division of a large organisation or building.
+          type: string
+          minLength: 1
+          maxLength: 70
+        SubDepartment:
+          description: Identification of a sub-division of a large organisation or building.
+          type: string
+          minLength: 1
+          maxLength: 70
+        StreetName:
+          description: Name of a street or thoroughfare.
+          type: string
+          minLength: 1
+          maxLength: 70
+        BuildingNumber:
+          description: Number that identifies the position of a building on a street.
+          type: string
+          minLength: 1
+          maxLength: 16
+        PostCode:
+          description: Identifier consisting of a group of letters and/or numbers that is added to a postal address to assist the sorting of mail.
+          type: string
+          minLength: 1
+          maxLength: 16
+        TownName:
+          description: Name of a built-up area, with defined boundaries, and a local government.
+          type: string
+          minLength: 1
+          maxLength: 35
+        CountrySubDivision:
+          description: Identifies a subdivision of a country such as state, region, county.
+          type: string
+          minLength: 1
+          maxLength: 35
+        Country:
+          description: Nation with its own government.
+          type: string
+          pattern: ^[A-Z]{2,2}$
+        AddressLine:
+          items:
+            type: string
+            minLength: 1
+            maxLength: 70
+          type: array
+          description: Information that locates and identifies a specific address, as defined by postal services, presented in free format text.
+          minItems: 0
+          maxItems: 7
+      additionalProperties: false
+    Links:
+      type: object
+      description: Links relevant to the payload
+      properties:
+        Self:
+          type: string
+          format: uri
+        First:
+          type: string
+          format: uri
+        Prev:
+          type: string
+          format: uri
+        Next:
+          type: string
+          format: uri
+        Last:
+          type: string
+          format: uri
+      additionalProperties: false
+      required:
+      - Self
+    OBExternalFinancialInstitutionIdentification4Code:
+      description: Name of the identification scheme, in a coded form as published in an external list.
+      type: string
+      example:
+      - UK.OBIE.BICFI
+      minLength: 1
+      maxLength: 40
+    OBBeneficiary3:
+      type: object
+      properties:
+        AccountId:
+          $ref: '#/components/schemas/AccountId'
+        BeneficiaryId:
+          description: A unique and immutable identifier used to identify the beneficiary resource. This identifier has no meaning to the account owner.
+          type: string
+          minLength: 1
+          maxLength: 40
+        Reference:
+          description: 'Unique reference, as assigned by the creditor, to unambiguously refer to the payment transaction.
+
+            Usage: If available, the initiating party should provide this reference in the structured remittance information, to enable reconciliation by the creditor upon receipt of the amount of money.
+
+            If the business context requires the use of a creditor reference or a payment remit identification, and only one identifier can be passed through the end-to-end chain, the creditor''s reference or payment remittance identification should be quoted in the end-to-end transaction identification.'
+          type: string
+          minLength: 1
+          maxLength: 35
+        CreditorAgent:
+          $ref: '#/components/schemas/OBBranchAndFinancialInstitutionIdentification6'
+        CreditorAccount:
+          $ref: '#/components/schemas/OBCashAccount5'
+      additionalProperties: false
+    OBAddressTypeCode:
+      description: Identifies the nature of the postal address.
+      type: string
+      enum:
+      - Business
+      - Correspondence
+      - DeliveryTo
+      - MailTo
+      - POBox
+      - Postal
+      - Residential
+      - Statement
     OBErrorResponse1:
       description: An array of detail error codes, and messages, and URLs to documentation to help remediation.
       type: object
@@ -106,107 +261,23 @@ components:
       - SchemeName
       - Identification
       additionalProperties: false
-    OBExternalFinancialInstitutionIdentification4Code:
-      description: Name of the identification scheme, in a coded form as published in an external list.
+    Meta:
+      title: MetaData
+      type: object
+      description: Meta Data relevant to the payload
+      properties:
+        TotalPages:
+          type: integer
+          format: int32
+        FirstAvailableDateTime:
+          $ref: '#/components/schemas/ISODateTime'
+        LastAvailableDateTime:
+          $ref: '#/components/schemas/ISODateTime'
+      additionalProperties: false
+    ISODateTime:
+      description: "All dates in the JSON payloads are represented in ISO 8601 date-time format. \nAll date-time fields in responses must include the timezone. An example is below:\n2017-04-05T10:43:07+00:00"
       type: string
-      example:
-      - UK.OBIE.BICFI
-      minLength: 1
-      maxLength: 40
-    OBPostalAddress6:
-      description: Information that locates and identifies a specific address, as defined by postal services.
-      type: object
-      properties:
-        AddressType:
-          $ref: '#/components/schemas/OBAddressTypeCode'
-        Department:
-          description: Identification of a division of a large organisation or building.
-          type: string
-          minLength: 1
-          maxLength: 70
-        SubDepartment:
-          description: Identification of a sub-division of a large organisation or building.
-          type: string
-          minLength: 1
-          maxLength: 70
-        StreetName:
-          description: Name of a street or thoroughfare.
-          type: string
-          minLength: 1
-          maxLength: 70
-        BuildingNumber:
-          description: Number that identifies the position of a building on a street.
-          type: string
-          minLength: 1
-          maxLength: 16
-        PostCode:
-          description: Identifier consisting of a group of letters and/or numbers that is added to a postal address to assist the sorting of mail.
-          type: string
-          minLength: 1
-          maxLength: 16
-        TownName:
-          description: Name of a built-up area, with defined boundaries, and a local government.
-          type: string
-          minLength: 1
-          maxLength: 35
-        CountrySubDivision:
-          description: Identifies a subdivision of a country such as state, region, county.
-          type: string
-          minLength: 1
-          maxLength: 35
-        Country:
-          description: Nation with its own government.
-          type: string
-          pattern: ^[A-Z]{2,2}$
-        AddressLine:
-          items:
-            type: string
-            minLength: 1
-            maxLength: 70
-          type: array
-          description: Information that locates and identifies a specific address, as defined by postal services, presented in free format text.
-          minItems: 0
-          maxItems: 7
-      additionalProperties: false
-    OBBranchAndFinancialInstitutionIdentification6:
-      description: Financial institution servicing an account for the debtor.
-      type: object
-      properties:
-        SchemeName:
-          $ref: '#/components/schemas/OBExternalFinancialInstitutionIdentification4Code'
-        Identification:
-          description: Unique and unambiguous identification of a financial institution or a branch of a financial institution.
-          type: string
-          minLength: 1
-          maxLength: 35
-        Name:
-          description: Name by which an agent is known and which is usually used to identify that agent.
-          type: string
-          minLength: 1
-          maxLength: 140
-        PostalAddress:
-          $ref: '#/components/schemas/OBPostalAddress6'
-      additionalProperties: false
-    OBReadBeneficiary3:
-      type: object
-      properties:
-        Data:
-          type: object
-          properties:
-            Beneficiary:
-              items:
-                $ref: '#/components/schemas/OBBeneficiary3'
-              type: array
-          additionalProperties: false
-        Links:
-          $ref: '#/components/schemas/Links'
-        Meta:
-          $ref: '#/components/schemas/Meta'
-      required:
-      - Data
-      - Links
-      - Meta
-      additionalProperties: false
+      format: date-time
     OBError1:
       type: object
       properties:
@@ -235,112 +306,27 @@ components:
       - Message
       additionalProperties: false
       minProperties: 1
-    ISODateTime:
-      description: "All dates in the JSON payloads are represented in ISO 8601 date-time format. \nAll date-time fields in responses must include the timezone. An example is below:\n2017-04-05T10:43:07+00:00"
-      type: string
-      format: date-time
-    OBAddressTypeCode:
-      description: Identifies the nature of the postal address.
-      type: string
-      enum:
-      - Business
-      - Correspondence
-      - DeliveryTo
-      - MailTo
-      - POBox
-      - Postal
-      - Residential
-      - Statement
-    Meta:
-      title: MetaData
+    OBReadBeneficiary3:
       type: object
-      description: Meta Data relevant to the payload
       properties:
-        TotalPages:
-          type: integer
-          format: int32
-        FirstAvailableDateTime:
-          $ref: '#/components/schemas/ISODateTime'
-        LastAvailableDateTime:
-          $ref: '#/components/schemas/ISODateTime'
-      additionalProperties: false
-    AccountId:
-      description: A unique and immutable identifier used to identify the account resource. This identifier has no meaning to the account owner.
-      type: string
-      minLength: 1
-      maxLength: 40
-    OBExternalAccountIdentification4Code:
-      description: Name of the identification scheme, in a coded form as published in an external list.
-      type: string
-      example:
-      - UK.OBIE.BBAN
-      - UK.OBIE.IBAN
-      - UK.OBIE.PAN
-      - UK.OBIE.Paym
-      - UK.OBIE.SortCodeAccountNumber
-      minLength: 1
-      maxLength: 40
-    Links:
-      type: object
-      description: Links relevant to the payload
-      properties:
-        Self:
-          type: string
-          format: uri
-        First:
-          type: string
-          format: uri
-        Prev:
-          type: string
-          format: uri
-        Next:
-          type: string
-          format: uri
-        Last:
-          type: string
-          format: uri
-      additionalProperties: false
+        Data:
+          type: object
+          properties:
+            Beneficiary:
+              items:
+                $ref: '#/components/schemas/OBBeneficiary3'
+              type: array
+          additionalProperties: false
+        Links:
+          $ref: '#/components/schemas/Links'
+        Meta:
+          $ref: '#/components/schemas/Meta'
       required:
-      - Self
-    OBBeneficiary3:
-      type: object
-      properties:
-        AccountId:
-          $ref: '#/components/schemas/AccountId'
-        BeneficiaryId:
-          description: A unique and immutable identifier used to identify the beneficiary resource. This identifier has no meaning to the account owner.
-          type: string
-          minLength: 1
-          maxLength: 40
-        Reference:
-          description: 'Unique reference, as assigned by the creditor, to unambiguously refer to the payment transaction.
-
-            Usage: If available, the initiating party should provide this reference in the structured remittance information, to enable reconciliation by the creditor upon receipt of the amount of money.
-
-            If the business context requires the use of a creditor reference or a payment remit identification, and only one identifier can be passed through the end-to-end chain, the creditor''s reference or payment remittance identification should be quoted in the end-to-end transaction identification.'
-          type: string
-          minLength: 1
-          maxLength: 35
-        CreditorAgent:
-          $ref: '#/components/schemas/OBBranchAndFinancialInstitutionIdentification6'
-        CreditorAccount:
-          $ref: '#/components/schemas/OBCashAccount5'
+      - Data
+      - Links
+      - Meta
       additionalProperties: false
   parameters:
-    x-customer-user-agent-Param:
-      in: header
-      name: x-customer-user-agent
-      description: Indicates the user-agent that the PSU is using.
-      required: false
-      schema:
-        type: string
-    AccountId:
-      name: AccountId
-      in: path
-      description: AccountId
-      required: true
-      schema:
-        type: string
     x-fapi-interaction-id-Param:
       in: header
       name: x-fapi-interaction-id
@@ -355,6 +341,13 @@ components:
       description: The PSU's IP address if the PSU is currently logged in with the TPP.
       schema:
         type: string
+    x-customer-user-agent-Param:
+      in: header
+      name: x-customer-user-agent
+      description: Indicates the user-agent that the PSU is using.
+      required: false
+      schema:
+        type: string
     x-fapi-customer-last-logged-time-Param:
       in: header
       name: x-fapi-customer-last-logged-time
@@ -363,6 +356,13 @@ components:
       schema:
         type: string
         pattern: ^(Mon|Tue|Wed|Thu|Fri|Sat|Sun), \d{2} (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \d{4} \d{2}:\d{2}:\d{2} (GMT|UTC)$
+    AccountId:
+      name: AccountId
+      in: path
+      description: AccountId
+      required: true
+      schema:
+        type: string
     x-fapi-financial-id-Param:
       in: header
       name: x-fapi-financial-id
@@ -379,14 +379,10 @@ components:
       schema:
         type: string
   responses:
-    405ErrorResponse:
-      description: Method Not Allowed
-    401ErrorResponse:
-      description: Unauthorized
-    403ErrorResponse:
-      description: Forbidden
     406ErrorResponse:
       description: Not Acceptable
+    401ErrorResponse:
+      description: Unauthorized
     200AccountsAccountIdBeneficiariesRead:
       description: Beneficiaries Read
       headers:
@@ -398,14 +394,16 @@ components:
         application/json; charset=utf-8:
           schema:
             $ref: '#/components/schemas/OBReadBeneficiary3'
-    400ErrorResponse:
-      description: Bad request
+    500ErrorResponse:
+      description: Internal Server Error
       content:
         application/json; charset=utf-8:
           schema:
             $ref: '#/components/schemas/OBErrorResponse1'
-    500ErrorResponse:
-      description: Internal Server Error
+    405ErrorResponse:
+      description: Method Not Allowed
+    400ErrorResponse:
+      description: Bad request
       content:
         application/json; charset=utf-8:
           schema:
@@ -417,6 +415,8 @@ components:
           description: Number in seconds to wait
           schema:
             type: integer
+    403ErrorResponse:
+      description: Forbidden
     404ErrorResponse:
       description: Not found
   securitySchemes:
