@@ -1,0 +1,994 @@
+openapi: 3.2.0
+info:
+  title: Horizon Link - API Docs Compliance API
+  description: ''
+  version: '1.0'
+  contact: {}
+servers:
+- url: api-url
+tags:
+- name: Compliance
+paths:
+  /v1/partner/compliance/due-diligence/questionnaire:
+    get:
+      operationId: DueDiligenceController_getQuestionnaire
+      summary: Get questionnaire for a applicant
+      description: Retrieves the compliance questionnaire associated with applicant. Fails if the applicant is not ready for questionnaire.
+      parameters:
+      - name: entityId
+        required: true
+        in: query
+        description: Unique entity identifier (prospectId or customerId)
+        schema:
+          type: string
+      - name: sourceId
+        required: false
+        in: query
+        description: Source Id of the questionnaire
+        schema:
+          type: string
+      - name: source
+        required: false
+        in: query
+        description: Source of the questionnaire
+        schema:
+          enum:
+          - NONE
+          - ONBOARDING
+          - PERIODIC_REVIEW
+          - CUSTOMER_TASK
+          type: string
+      - name: authorization
+        in: header
+        description: Authorization header containing your API Token
+        schema:
+          type: string
+      - name: x-alg-nonce
+        in: header
+        description: Nonce used to generate the payload signature
+        schema:
+          type: string
+      - name: x-alg-signature
+        in: header
+        description: Payload signature
+        schema:
+          type: string
+      - name: date
+        in: header
+        description: Date of the request un UTC/GMT
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Questionnaire successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerQuestionnaireResponse'
+        '400':
+          description: Input validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+        '406':
+          description: Applicant not ready for questionnaire
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+      tags:
+      - Compliance
+    post:
+      operationId: DueDiligenceController_submitQuestionnaire
+      summary: Submit questionnaire for applicant
+      description: Retrieves the compliance questionnaire associated with applicant. Fails if the applicant is not ready for questionnaire.
+      parameters:
+      - name: authorization
+        in: header
+        description: Authorization header containing your API Token
+        schema:
+          type: string
+      - name: x-alg-nonce
+        in: header
+        description: Nonce used to generate the payload signature
+        schema:
+          type: string
+      - name: x-alg-signature
+        in: header
+        description: Payload signature
+        schema:
+          type: string
+      - name: date
+        in: header
+        description: Date of the request un UTC/GMT
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PartnerQuestionnaireQuestionAnswerRequest'
+      responses:
+        '200':
+          description: Questionnaire successfully retrieved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerQuestionnaireResponse'
+        '400':
+          description: Input validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+        '406':
+          description: Applicant not ready for questionnaire
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+      tags:
+      - Compliance
+  /v1/partner/compliance/due-diligence/{prospectId}/upload-evidence/{externalEvidenceId}:
+    post:
+      operationId: DueDiligenceController_uploadEvidence
+      summary: Upload evidence file
+      parameters:
+      - name: prospectId
+        required: true
+        in: path
+        schema:
+          type: string
+      - name: externalEvidenceId
+        required: true
+        in: path
+        schema:
+          type: string
+      - name: authorization
+        in: header
+        description: Authorization header containing your API Token
+        schema:
+          type: string
+      - name: x-alg-nonce
+        in: header
+        description: Nonce used to generate the payload signature
+        schema:
+          type: string
+      - name: x-alg-signature
+        in: header
+        description: Payload signature
+        schema:
+          type: string
+      - name: date
+        in: header
+        description: Date of the request un UTC/GMT
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '201':
+          description: Upload evidence file.
+        '400':
+          description: Input validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+      tags:
+      - Compliance
+  /v1/partner/compliance/due-diligence/{prospectId}/onboarding-checks:
+    get:
+      operationId: DueDiligenceController_getOnboardingChecks
+      summary: Get compliance checks details for personal prospect
+      parameters:
+      - name: prospectId
+        required: true
+        in: path
+        schema:
+          type: string
+      - name: authorization
+        in: header
+        description: Authorization header containing your API Token
+        schema:
+          type: string
+      - name: x-alg-nonce
+        in: header
+        description: Nonce used to generate the payload signature
+        schema:
+          type: string
+      - name: x-alg-signature
+        in: header
+        description: Payload signature
+        schema:
+          type: string
+      - name: date
+        in: header
+        description: Date of the request un UTC/GMT
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Start compliance checks for personal prospect.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerPersonalProspectDueDiligenceInfo'
+        '400':
+          description: Input validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+      tags:
+      - Compliance
+  /v1/partner/compliance/due-diligence/{prospectId}/start-onboarding-checks:
+    post:
+      operationId: DueDiligenceController_startComplianceChecks
+      summary: Start compliance checks personal prospect
+      parameters:
+      - name: prospectId
+        required: true
+        in: path
+        schema:
+          type: string
+      - name: authorization
+        in: header
+        description: Authorization header containing your API Token
+        schema:
+          type: string
+      - name: x-alg-nonce
+        in: header
+        description: Nonce used to generate the payload signature
+        schema:
+          type: string
+      - name: x-alg-signature
+        in: header
+        description: Payload signature
+        schema:
+          type: string
+      - name: date
+        in: header
+        description: Date of the request un UTC/GMT
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PartnerStartPersonalComplianceChecksRequest'
+      responses:
+        '200':
+          description: Start compliance checks for personal prospect.
+        '400':
+          description: Input validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+      tags:
+      - Compliance
+components:
+  schemas:
+    PartnerValidationFieldError:
+      type: object
+      properties:
+        message:
+          type: string
+        path:
+          type:
+          - string
+          - 'null'
+      required:
+      - message
+    PartnerComplianceCheckItemEvidence:
+      type: object
+      properties:
+        externalEvidenceId:
+          type: string
+          example: '123456789'
+        type:
+          type: string
+          enum:
+          - BILL
+          - PASSPORT
+          - RESIDENCY_PERMIT
+          - BIRTH_CERTIFICATE
+          - ID_CARD
+          - BANK_STATEMENT
+          - TAX_RETURNS
+          - ACCOUNTING_DOCS
+          - FACE_RECORDING
+          - VOTER_ID
+          - DRIVING_LICENCE
+          - WORK_PERMIT
+          - OTHER
+          - DRIVING_LICENSE
+          - EGOV_DOC
+          - UK_SHARE_CODE
+        providedBy:
+          type: string
+          enum:
+          - CUSTOMER
+          - PARTNER
+        issuingCountry:
+          type: string
+          enum:
+          - AFG
+          - ALA
+          - ALB
+          - DZA
+          - ASM
+          - AND
+          - AGO
+          - AIA
+          - ATA
+          - ATG
+          - ARG
+          - ARM
+          - ABW
+          - AUS
+          - AUT
+          - AZE
+          - BHS
+          - BHR
+          - BGD
+          - BRB
+          - BLR
+          - BEL
+          - BLZ
+          - BEN
+          - BMU
+          - BTN
+          - BOL
+          - BES
+          - BIH
+          - BWA
+          - BVT
+          - BRA
+          - IOT
+          - BRN
+          - BGR
+          - BFA
+          - BDI
+          - CPV
+          - KHM
+          - CMR
+          - CAN
+          - CYM
+          - CAF
+          - TCD
+          - CHL
+          - CHN
+          - CXR
+          - CCK
+          - COL
+          - COM
+          - COG
+          - COD
+          - COK
+          - CRI
+          - CIV
+          - HRV
+          - CUB
+          - CUW
+          - CYP
+          - CZE
+          - DNK
+          - DJI
+          - DMA
+          - DOM
+          - ECU
+          - EGY
+          - SLV
+          - GNQ
+          - ERI
+          - EST
+          - SWZ
+          - ETH
+          - FLK
+          - FRO
+          - FJI
+          - FIN
+          - FRA
+          - GUF
+          - PYF
+          - ATF
+          - GAB
+          - GMB
+          - GEO
+          - DEU
+          - GHA
+          - GIB
+          - GRC
+          - GRL
+          - GRD
+          - GLP
+          - GUM
+          - GTM
+          - GGY
+          - GIN
+          - GNB
+          - GUY
+          - HTI
+          - HMD
+          - VAT
+          - HND
+          - HKG
+          - HUN
+          - ISL
+          - IND
+          - IDN
+          - IRN
+          - IRQ
+          - IRL
+          - IMN
+          - ISR
+          - ITA
+          - JAM
+          - JPN
+          - JEY
+          - JOR
+          - KAZ
+          - KEN
+          - KIR
+          - PRK
+          - KOR
+          - KWT
+          - KGZ
+          - LAO
+          - LVA
+          - LBN
+          - LSO
+          - LBR
+          - LBY
+          - LIE
+          - LTU
+          - LUX
+          - MAC
+          - MDG
+          - MWI
+          - MYS
+          - MDV
+          - MLI
+          - MLT
+          - MHL
+          - MTQ
+          - MRT
+          - MUS
+          - MYT
+          - MEX
+          - FSM
+          - MDA
+          - MCO
+          - MNG
+          - MNE
+          - MSR
+          - MAR
+          - MOZ
+          - MMR
+          - NAM
+          - NRU
+          - NPL
+          - NLD
+          - NCL
+          - NZL
+          - NIC
+          - NER
+          - NGA
+          - NIU
+          - NFK
+          - MKD
+          - MNP
+          - NOR
+          - OMN
+          - PAK
+          - PLW
+          - PSE
+          - PAN
+          - PNG
+          - PRY
+          - PER
+          - PHL
+          - PCN
+          - POL
+          - PRT
+          - PRI
+          - QAT
+          - REU
+          - ROU
+          - RUS
+          - RWA
+          - BLM
+          - SHN
+          - KNA
+          - LCA
+          - MAF
+          - SPM
+          - VCT
+          - WSM
+          - SMR
+          - STP
+          - SAU
+          - SEN
+          - SRB
+          - SYC
+          - SLE
+          - SGP
+          - SXM
+          - SVK
+          - SVN
+          - SLB
+          - SOM
+          - ZAF
+          - SGS
+          - SSD
+          - ESP
+          - LKA
+          - SDN
+          - SUR
+          - SJM
+          - SWE
+          - CHE
+          - SYR
+          - TWN
+          - TJK
+          - TZA
+          - THA
+          - TLS
+          - TGO
+          - TKL
+          - TON
+          - TTO
+          - TUN
+          - TUR
+          - TKM
+          - TCA
+          - TUV
+          - UGA
+          - UKR
+          - ARE
+          - GBR
+          - USA
+          - UMI
+          - URY
+          - UZB
+          - VUT
+          - VEN
+          - VNM
+          - VGB
+          - VIR
+          - WLF
+          - ESH
+          - YEM
+          - ZMB
+          - ZWE
+          - XXK
+          - XKX
+          example: GBR
+        side:
+          type: string
+          enum:
+          - FRONT
+          - BACK
+        kind:
+          type: string
+          enum:
+          - IMAGE
+          - VIDEO
+      required:
+      - externalEvidenceId
+      - type
+      - providedBy
+      - kind
+    PartnerPersonalProspectDueDiligenceInfo:
+      type: object
+      properties:
+        clear:
+          type: string
+          enum:
+          - VERIFIED
+          - FAILED
+        details:
+          $ref: '#/components/schemas/PartnerPersonalProspectDueDiligenceDetails'
+      required:
+      - clear
+      - details
+    PartnerPersonalProspectDueDiligenceDetails:
+      type: object
+      properties:
+        ADDRESS_PROOF:
+          $ref: '#/components/schemas/PartnerDueDiligenceItem'
+        ANTI_IMPERSONATION:
+          $ref: '#/components/schemas/PartnerDueDiligenceItem'
+        FUND_PROOF:
+          $ref: '#/components/schemas/PartnerDueDiligenceItem'
+        ID_PROOF:
+          $ref: '#/components/schemas/PartnerDueDiligenceItem'
+        PROOF_OF_MEDIA_SCREENING:
+          $ref: '#/components/schemas/PartnerDueDiligenceItem'
+        LEGAL_WARNINGS_EXPLANATION:
+          $ref: '#/components/schemas/PartnerDueDiligenceItem'
+        BACKGROUND_CHECK:
+          $ref: '#/components/schemas/PartnerDueDiligenceItem'
+        SANCTION:
+          $ref: '#/components/schemas/PartnerDueDiligenceItem'
+      required:
+      - ADDRESS_PROOF
+      - ANTI_IMPERSONATION
+      - FUND_PROOF
+      - ID_PROOF
+      - PROOF_OF_MEDIA_SCREENING
+      - LEGAL_WARNINGS_EXPLANATION
+      - BACKGROUND_CHECK
+      - SANCTION
+    PartnerQuestionnaireResponse:
+      type: object
+      properties:
+        questions:
+          $ref: '#/components/schemas/PartnerQuestionnaireQuestionResponse'
+        answers:
+          allOf:
+          - $ref: '#/components/schemas/PartnerQuestionnaireQuestionAnswerResponse'
+      required:
+      - questions
+      - answers
+    PartnerDueDiligenceItem:
+      type: object
+      properties:
+        required:
+          type: boolean
+        valid:
+          type:
+          - boolean
+          - 'null'
+        attributes:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PartnerDueDiligenceItemAttributeDetail'
+      required:
+      - required
+      - attributes
+    QuestionnaireQuestionOption:
+      type: object
+      properties:
+        key:
+          type: object
+        text:
+          type: string
+        value:
+          type:
+          - object
+          - 'null'
+        inputType:
+          type:
+          - string
+          - 'null'
+          enum:
+          - NUMBER
+          - TEXT
+        hidden:
+          type:
+          - boolean
+          - 'null'
+      required:
+      - key
+      - text
+      - value
+      - inputType
+    PartnerQuestionnaireQuestionAnswer:
+      type: object
+      properties:
+        questionKey:
+          type: string
+        options:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        text:
+          type:
+          - string
+          - 'null'
+      required:
+      - questionKey
+      - options
+      - text
+    PartnerCommonErrorResponse:
+      type: object
+      properties:
+        errorType:
+          type: string
+          enum:
+          - VALIDATION_ERROR
+          - FORBIDDEN
+          - NOT_FOUND
+          - UNAUTHORIZED
+          - PRECONDITION_FAILED
+          - REQUEST_TIMEOUT
+          - SERVICE_UNAVAILABLE
+          - UNIDENTIFIED
+          - TECHNICAL_ERROR
+        reason:
+          type:
+          - string
+          - 'null'
+        validationFailures:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PartnerValidationFieldError'
+      required:
+      - errorType
+    PartnerQuestionnaireQuestionResponse:
+      type: object
+      properties:
+        key:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        type:
+          type: string
+          enum:
+          - CHECKBOX
+          - RADIO
+          - TEXT
+          - MULTI_LINE_TEXT
+          - COUNTRY_PICKER
+          - TAX_RESIDENCY
+        options:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/QuestionnaireQuestionOption'
+        maxSelection:
+          type:
+          - number
+          - 'null'
+        optional:
+          type:
+          - boolean
+          - 'null'
+      required:
+      - key
+      - title
+      - description
+      - type
+      - options
+      - maxSelection
+      - optional
+    PartnerComplianceCheckItem:
+      type: object
+      properties:
+        key:
+          type: object
+          description: Required attribute key
+          example: true
+        verified:
+          type: boolean
+          description: Indicates where the verification result is successful
+          example: true
+        processType:
+          type: string
+          description: Indicates where a verification decision is made automatically or manually
+          enum:
+          - MANUAL
+          - AUTOMATIC
+        remarks:
+          description: Additional comments about the compliance check item
+          example:
+          - Prospective customer provided multiple bank statements as address proof from AAA Bank and BBB Financial institution
+          - The customer manually provided a passport scan after the automated check failed with the expired ID document
+          type: array
+          items:
+            type: array
+        properties:
+          description: Supplementary data from the verification documents
+          example:
+          - key: passport_number
+            value: ALG123456
+          type:
+          - array
+          - 'null'
+          items:
+            type: array
+        evidence:
+          type:
+          - array
+          - 'null'
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/PartnerComplianceCheckItemEvidence'
+            - $ref: '#/components/schemas/PartnerComplianceCheckItemEvidenceExternal'
+      required:
+      - key
+      - verified
+      - processType
+      - remarks
+    PartnerStartPersonalComplianceChecksRequest:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/PartnerComplianceCheckItem'
+      required:
+      - items
+    PartnerQuestionnaireQuestionAnswerRequest:
+      type: object
+      properties:
+        entityId:
+          type: string
+          description: Unique entityId identifier (prospect or customer id)
+          format: uuid
+        source:
+          type: string
+          enum:
+          - NONE
+          - ONBOARDING
+          - PERIODIC_REVIEW
+          - CUSTOMER_TASK
+        sourceId:
+          type:
+          - string
+          - 'null'
+        answers:
+          type: array
+          items:
+            $ref: '#/components/schemas/PartnerQuestionnaireQuestionAnswer'
+      required:
+      - entityId
+      - source
+      - sourceId
+      - answers
+    PartnerComplianceCheckItemEvidenceExternal:
+      type: object
+      properties:
+        externalEvidenceId:
+          type: string
+          example: '123456789'
+        externalProvider:
+          type: string
+          example: ONFIDO
+      required:
+      - externalEvidenceId
+      - externalProvider
+    PartnerDueDiligenceItemAttributeDetail:
+      type: object
+      properties:
+        key:
+          type: string
+          enum:
+          - PEP
+          - SANCTION
+          - ADVERSE_MEDIA
+          - COUNTRY_OF_RESIDENCE
+          - ID_DOCUMENT
+          - NATIONALITY
+          - PLACE_OF_BIRTH
+          - ANTI_IMPERSONATION
+          - LEGAL_WARNINGS
+          - AUTO_KYC_RESOLUTION
+          - RISK_SCORE_OVERRIDE
+          - RISK_SCORE_CALCULATED
+          - EXPECTED_ANNUAL_INCOME
+          - NFD
+          - INTELLIGENCE
+        valid:
+          type: boolean
+        available:
+          type: boolean
+        input:
+          type: string
+          enum:
+          - REQUIRED
+          - OPTIONAL
+        informative:
+          type: boolean
+          description: When true, this attribute is informative only and processed internally by the platform.
+      required:
+      - key
+      - valid
+      - available
+      - input
+      - informative
+    PartnerQuestionnaireQuestionAnswerResponse:
+      type: object
+      properties:
+        questionnaireKey:
+          type: string
+        questionKey:
+          type: string
+        options:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        text:
+          type:
+          - string
+          - 'null'
+      required:
+      - questionnaireKey
+      - questionKey
+      - options
+      - text

@@ -1,0 +1,12 @@
+{
+ "url": "https://openapi.gitbook.com/o/9IJ2beFKIxLmw3fw1HZm/spec/algbra-api.json",
+ "final": "https://openapi.gitbook.com/o/9IJ2beFKIxLmw3fw1HZm/spec/algbra-api.json",
+ "status": 200,
+ "content_type": "application/json",
+ "bytes": 264881,
+ "sha256": "5db38a2d167ba190d148f9dd7e3bebab997cd42b7545b1588426da07246f3842",
+ "fetched_at": "2026-10-19",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "byte-identical",
+ "note": "re-archived: the provider's current document replaced a stale archive (roadmap#793); the old files are in openapi/_superseded/2026-10-19-stale"
+}

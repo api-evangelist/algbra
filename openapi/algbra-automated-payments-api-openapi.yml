@@ -1,0 +1,2551 @@
+openapi: 3.2.0
+info:
+  title: Horizon Link - API Docs Automated Payments API
+  description: ''
+  version: '1.0'
+  contact: {}
+servers:
+- url: api-url
+tags:
+- name: Automated Payments
+paths:
+  /v1/partner/automated-payments/customers/{customerId}:
+    get:
+      operationId: AutomatedPaymentController_getCustomerAutomatedPayments
+      summary: Get customer automated payments
+      parameters:
+      - name: customerId
+        required: true
+        in: path
+        schema:
+          type: string
+      - name: stateTypes
+        required: true
+        in: query
+        schema:
+          type: array
+          items:
+            type: string
+      - name: authorization
+        in: header
+        description: Authorization header containing your API Token
+        schema:
+          type: string
+      - name: x-alg-nonce
+        in: header
+        description: Nonce used to generate the payload signature
+        schema:
+          type: string
+      - name: x-alg-signature
+        in: header
+        description: Payload signature
+        schema:
+          type: string
+      - name: date
+        in: header
+        description: Date of the request un UTC/GMT
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PartnerAutomatedPaymentResponse'
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+        '403':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+      tags:
+      - Automated Payments
+  /v1/partner/automated-payments/customers/{customerId}/{automatedPaymentId}:
+    get:
+      operationId: AutomatedPaymentController_getCustomerAutomatedPaymentById
+      summary: Get customer automated payment
+      parameters:
+      - name: customerId
+        required: true
+        in: path
+        schema:
+          type: string
+      - name: automatedPaymentId
+        required: true
+        in: path
+        schema:
+          type: string
+      - name: authorization
+        in: header
+        description: Authorization header containing your API Token
+        schema:
+          type: string
+      - name: x-alg-nonce
+        in: header
+        description: Nonce used to generate the payload signature
+        schema:
+          type: string
+      - name: x-alg-signature
+        in: header
+        description: Payload signature
+        schema:
+          type: string
+      - name: date
+        in: header
+        description: Date of the request un UTC/GMT
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerAutomatedPaymentResponse'
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+        '403':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+        '404':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+      tags:
+      - Automated Payments
+    delete:
+      operationId: AutomatedPaymentController_revokeCustomerAutomatedPayment
+      summary: Revoke customer automated payment
+      parameters:
+      - name: customerId
+        required: true
+        in: path
+        schema:
+          type: string
+      - name: automatedPaymentId
+        required: true
+        in: path
+        schema:
+          type: string
+      - name: authorization
+        in: header
+        description: Authorization header containing your API Token
+        schema:
+          type: string
+      - name: x-alg-nonce
+        in: header
+        description: Nonce used to generate the payload signature
+        schema:
+          type: string
+      - name: x-alg-signature
+        in: header
+        description: Payload signature
+        schema:
+          type: string
+      - name: date
+        in: header
+        description: Date of the request un UTC/GMT
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PartnerRevokeAutomatedPaymentRequest'
+      responses:
+        '204':
+          description: ''
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+        '403':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+        '404':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+      tags:
+      - Automated Payments
+  /v1/partner/automated-payments/customers/{customerId}/{automatedPaymentId}/states:
+    get:
+      operationId: AutomatedPaymentController_getCustomerAutomatedPaymentStates
+      summary: Get customer automated payment states
+      parameters:
+      - name: customerId
+        required: true
+        in: path
+        schema:
+          type: string
+      - name: automatedPaymentId
+        required: true
+        in: path
+        schema:
+          type: string
+      - name: authorization
+        in: header
+        description: Authorization header containing your API Token
+        schema:
+          type: string
+      - name: x-alg-nonce
+        in: header
+        description: Nonce used to generate the payload signature
+        schema:
+          type: string
+      - name: x-alg-signature
+        in: header
+        description: Payload signature
+        schema:
+          type: string
+      - name: date
+        in: header
+        description: Date of the request un UTC/GMT
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PartnerAutomatedPaymentStateResponse'
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+        '403':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+        '404':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+      tags:
+      - Automated Payments
+  /v1/partner/automated-payments/accounts/{accountId}:
+    get:
+      operationId: AutomatedPaymentController_getAccountAutomatedPayments
+      summary: Get account automated payments
+      parameters:
+      - name: accountId
+        required: true
+        in: path
+        schema:
+          type: string
+      - name: stateTypes
+        required: true
+        in: query
+        schema:
+          type: array
+          items:
+            type: string
+      - name: authorization
+        in: header
+        description: Authorization header containing your API Token
+        schema:
+          type: string
+      - name: x-alg-nonce
+        in: header
+        description: Nonce used to generate the payload signature
+        schema:
+          type: string
+      - name: x-alg-signature
+        in: header
+        description: Payload signature
+        schema:
+          type: string
+      - name: date
+        in: header
+        description: Date of the request un UTC/GMT
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PartnerAutomatedPaymentResponse'
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+        '403':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+        '404':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+      tags:
+      - Automated Payments
+components:
+  schemas:
+    PartnerValidationFieldError:
+      type: object
+      properties:
+        message:
+          type: string
+        path:
+          type:
+          - string
+          - 'null'
+      required:
+      - message
+    PartnerAutomatedPaymentCounterpartyMetadataResponse:
+      type: object
+      properties:
+        serviceUserNumber:
+          type: string
+          description: BACS service user number associated with the direct debit originator.
+        name:
+          type:
+          - string
+          - 'null'
+          description: Originator display name associated with the automated payment.
+        logo:
+          type:
+          - string
+          - 'null'
+          description: Optional logo URL resolved for the automated payment counterparty.
+        category:
+          type:
+          - string
+          - 'null'
+          enum:
+          - GENERAL
+          - SHOPPING
+          - TRANSFERS
+          - EATING_OUT
+          - DONATIONS
+          - FAMILY
+          - CASH
+          - ENTERTAINMENT
+          - EXPENSES
+          - GIFTS
+          - GROCERIES
+          - HOLIDAYS
+          - INVESTMENTS
+          - PERSONAL_CARE
+          - SALARY
+          - SAVINGS
+          - SERVICES
+          - TRANSPORT
+          - UTILITIES
+          - CASHBACK_REWARDS
+          - REFERRAL_REWARDS
+          description: Optional transaction category inferred for the automated payment counterparty.
+      required:
+      - serviceUserNumber
+    PartnerAutomatedPaymentResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier of the automated payment.
+        type:
+          type: string
+          enum:
+          - DIRECT_DEBIT
+          description: Type of automated payment.
+        customerId:
+          type:
+          - string
+          - 'null'
+          format: uuid
+          description: Identifier of the customer that owns the automated payment.
+        accountId:
+          type: string
+          format: uuid
+          description: Identifier of the customer's account linked to the automated payment.
+        reference:
+          type:
+          - string
+          - 'null'
+          description: Partner reference associated with the automated payment instruction.
+        amount:
+          type:
+          - number
+          - 'null'
+          description: Amount configured for the automated payment, when available.
+        state:
+          type: string
+          enum:
+          - IDLE
+          - INITIATION_PENDING
+          - INITIATED
+          - CANCELLATION_PENDING
+          - CANCELLED
+          description: Current lifecycle state of the automated payment.
+        reasonCode:
+          type:
+          - string
+          - 'null'
+          description: Reason code associated with the current state, when available. `PAYER_NAME_MISMATCH` indicates the mandate was cancelled because the payer name did not match the account holder.
+        createdOn:
+          format: date-time
+          type: string
+          description: Timestamp when the automated payment was created.
+        updatedOn:
+          format: date-time
+          type: string
+          description: Timestamp when the automated payment was last updated.
+        counterparty:
+          description: Counterparty linked to the automated payment instruction.
+          allOf:
+          - $ref: '#/components/schemas/PartnerAutomatedPaymentCounterpartyResponse'
+        metadata:
+          description: Partner-safe metadata associated with the automated payment counterparty.
+          allOf:
+          - $ref: '#/components/schemas/PartnerAutomatedPaymentCounterpartyMetadataResponse'
+        payer:
+          description: Payer account details reported when the automated payment was set up, when available.
+          allOf:
+          - $ref: '#/components/schemas/PartnerAutomatedPaymentPayerResponse'
+      required:
+      - id
+      - type
+      - accountId
+      - state
+      - createdOn
+      - updatedOn
+      - counterparty
+      - metadata
+    PartnerPaymentOtherExternalCounterpartyPayload:
+      type: object
+      properties:
+        descriptor:
+          type: string
+          description: Descriptor of the account.
+          example: AMERICAN INTERNATIONAL GROUP UK LTD
+        bic:
+          type:
+          - string
+          - 'null'
+          description: Bank Identifier Code (BIC).
+          example: BUKBGB22
+        currency:
+          type: string
+          description: Currency of the counterparty account.
+          enum:
+          - AFN
+          - EUR
+          - ALL
+          - DZD
+          - USD
+          - AOA
+          - XCD
+          - ARS
+          - AMD
+          - AWG
+          - AUD
+          - AZN
+          - BSD
+          - BHD
+          - BDT
+          - BBD
+          - BYN
+          - BZD
+          - XOF
+          - BMD
+          - INR
+          - BTN
+          - BOB
+          - BOV
+          - BAM
+          - BWP
+          - NOK
+          - BRL
+          - BND
+          - BGN
+          - BIF
+          - CVE
+          - KHR
+          - XAF
+          - CAD
+          - KYD
+          - CLP
+          - CLF
+          - CNY
+          - COP
+          - COU
+          - KMF
+          - CDF
+          - NZD
+          - CRC
+          - HRK
+          - CUP
+          - CUC
+          - ANG
+          - CZK
+          - DKK
+          - DJF
+          - DOP
+          - EGP
+          - SVC
+          - ERN
+          - SZL
+          - ETB
+          - FKP
+          - FJD
+          - XPF
+          - GMD
+          - GEL
+          - GHS
+          - GIP
+          - GTQ
+          - GBP
+          - GNF
+          - GYD
+          - HTG
+          - HNL
+          - HKD
+          - HUF
+          - ISK
+          - IDR
+          - XDR
+          - IRR
+          - IQD
+          - ILS
+          - JMD
+          - JPY
+          - JOD
+          - KZT
+          - KES
+          - KPW
+          - KRW
+          - KWD
+          - KGS
+          - LAK
+          - LBP
+          - LSL
+          - ZAR
+          - LRD
+          - LYD
+          - CHF
+          - MOP
+          - MKD
+          - MGA
+          - MWK
+          - MYR
+          - MVR
+          - MRU
+          - MUR
+          - XUA
+          - MXN
+          - MXV
+          - MDL
+          - MNT
+          - MAD
+          - MZN
+          - MMK
+          - NAD
+          - NPR
+          - NIO
+          - NGN
+          - OMR
+          - PKR
+          - PAB
+          - PGK
+          - PYG
+          - PEN
+          - PHP
+          - PLN
+          - QAR
+          - RON
+          - RUB
+          - RWF
+          - WST
+          - STN
+          - SAR
+          - RSD
+          - SCR
+          - SLL
+          - SGD
+          - XSU
+          - SBD
+          - SOS
+          - SSP
+          - LKR
+          - SDG
+          - SRD
+          - SEK
+          - CHE
+          - CHW
+          - SYP
+          - TWD
+          - TJS
+          - THB
+          - TOP
+          - TTD
+          - TND
+          - TRY
+          - TMT
+          - UGX
+          - UAH
+          - AED
+          - USN
+          - UYU
+          - UYI
+          - UYW
+          - UZS
+          - VUV
+          - VES
+          - VND
+          - YER
+          - ZMW
+          - ZWL
+          - XBA
+          - XBB
+          - XBC
+          - XBD
+          - XTS
+          - XXX
+          - XAU
+          - XPD
+          - XPT
+          - XAG
+          - AFA
+          - FIM
+          - ADP
+          - ESP
+          - FRF
+          - AOK
+          - AOR
+          - RUR
+          - ATS
+          - AYM
+          - AZM
+          - BYB
+          - BYR
+          - BEC
+          - BEF
+          - BEL
+          - BAD
+          - BRB
+          - BRR
+          - BGJ
+          - CYP
+          - CSK
+          - ECS
+          - ECV
+          - GQE
+          - EEK
+          - XEU
+          - GEK
+          - DDM
+          - DEM
+          - GHC
+          - GHP
+          - GRD
+          - GWE
+          - ITL
+          - IEP
+          - LVL
+          - ZAL
+          - LTL
+          - LUC
+          - LUF
+          - LUL
+          - MGF
+          - MLF
+          - MTL
+          - MRO
+          - MZE
+          - NLG
+          - PLZ
+          - PTE
+          - ROK
+          - STD
+          - CSD
+          - SKK
+          - SIT
+          - RHD
+          - ESA
+          - ESB
+          - SDD
+          - SRG
+          - TJR
+          - TPE
+          - TRL
+          - TMM
+          - UAK
+          - USS
+          - VEB
+          - VEF
+          - YUD
+          - ZRN
+          - ZMK
+          - ZWN
+          - ZWR
+          example: GBP
+        country:
+          type:
+          - string
+          - 'null'
+          description: Country of the counterparty account.
+          enum:
+          - AFG
+          - ALA
+          - ALB
+          - DZA
+          - ASM
+          - AND
+          - AGO
+          - AIA
+          - ATA
+          - ATG
+          - ARG
+          - ARM
+          - ABW
+          - AUS
+          - AUT
+          - AZE
+          - BHS
+          - BHR
+          - BGD
+          - BRB
+          - BLR
+          - BEL
+          - BLZ
+          - BEN
+          - BMU
+          - BTN
+          - BOL
+          - BES
+          - BIH
+          - BWA
+          - BVT
+          - BRA
+          - IOT
+          - BRN
+          - BGR
+          - BFA
+          - BDI
+          - CPV
+          - KHM
+          - CMR
+          - CAN
+          - CYM
+          - CAF
+          - TCD
+          - CHL
+          - CHN
+          - CXR
+          - CCK
+          - COL
+          - COM
+          - COG
+          - COD
+          - COK
+          - CRI
+          - CIV
+          - HRV
+          - CUB
+          - CUW
+          - CYP
+          - CZE
+          - DNK
+          - DJI
+          - DMA
+          - DOM
+          - ECU
+          - EGY
+          - SLV
+          - GNQ
+          - ERI
+          - EST
+          - SWZ
+          - ETH
+          - FLK
+          - FRO
+          - FJI
+          - FIN
+          - FRA
+          - GUF
+          - PYF
+          - ATF
+          - GAB
+          - GMB
+          - GEO
+          - DEU
+          - GHA
+          - GIB
+          - GRC
+          - GRL
+          - GRD
+          - GLP
+          - GUM
+          - GTM
+          - GGY
+          - GIN
+          - GNB
+          - GUY
+          - HTI
+          - HMD
+          - VAT
+          - HND
+          - HKG
+          - HUN
+          - ISL
+          - IND
+          - IDN
+          - IRN
+          - IRQ
+          - IRL
+          - IMN
+          - ISR
+          - ITA
+          - JAM
+          - JPN
+          - JEY
+          - JOR
+          - KAZ
+          - KEN
+          - KIR
+          - PRK
+          - KOR
+          - KWT
+          - KGZ
+          - LAO
+          - LVA
+          - LBN
+          - LSO
+          - LBR
+          - LBY
+          - LIE
+          - LTU
+          - LUX
+          - MAC
+          - MDG
+          - MWI
+          - MYS
+          - MDV
+          - MLI
+          - MLT
+          - MHL
+          - MTQ
+          - MRT
+          - MUS
+          - MYT
+          - MEX
+          - FSM
+          - MDA
+          - MCO
+          - MNG
+          - MNE
+          - MSR
+          - MAR
+          - MOZ
+          - MMR
+          - NAM
+          - NRU
+          - NPL
+          - NLD
+          - NCL
+          - NZL
+          - NIC
+          - NER
+          - NGA
+          - NIU
+          - NFK
+          - MKD
+          - MNP
+          - NOR
+          - OMN
+          - PAK
+          - PLW
+          - PSE
+          - PAN
+          - PNG
+          - PRY
+          - PER
+          - PHL
+          - PCN
+          - POL
+          - PRT
+          - PRI
+          - QAT
+          - REU
+          - ROU
+          - RUS
+          - RWA
+          - BLM
+          - SHN
+          - KNA
+          - LCA
+          - MAF
+          - SPM
+          - VCT
+          - WSM
+          - SMR
+          - STP
+          - SAU
+          - SEN
+          - SRB
+          - SYC
+          - SLE
+          - SGP
+          - SXM
+          - SVK
+          - SVN
+          - SLB
+          - SOM
+          - ZAF
+          - SGS
+          - SSD
+          - ESP
+          - LKA
+          - SDN
+          - SUR
+          - SJM
+          - SWE
+          - CHE
+          - SYR
+          - TWN
+          - TJK
+          - TZA
+          - THA
+          - TLS
+          - TGO
+          - TKL
+          - TON
+          - TTO
+          - TUN
+          - TUR
+          - TKM
+          - TCA
+          - TUV
+          - UGA
+          - UKR
+          - ARE
+          - GBR
+          - USA
+          - UMI
+          - URY
+          - UZB
+          - VUT
+          - VEN
+          - VNM
+          - VGB
+          - VIR
+          - WLF
+          - ESH
+          - YEM
+          - ZMB
+          - ZWE
+          - XXK
+          - XKX
+          example: GBR
+      required:
+      - descriptor
+      - currency
+    PartnerAutomatedPaymentPayerResponse:
+      type: object
+      properties:
+        accountName:
+          type:
+          - string
+          - 'null'
+          description: Payer account name provided to the originator when the direct debit mandate was set up.
+          example: J SMITH
+        sortCode:
+          type:
+          - string
+          - 'null'
+          description: Sort code of the payer account debited by the automated payment.
+          example: '040000'
+        accountNumber:
+          type:
+          - string
+          - 'null'
+          description: Account number of the payer account debited by the automated payment.
+          example: '12345678'
+    PartnerPaymentDomesticCounterpartyPayload:
+      type: object
+      properties:
+        sortCode:
+          type: string
+          description: UK domestic bank sort code.
+          example: '010102'
+        accountNumber:
+          type: string
+          description: UK domestic bank account number.
+          example: '12345678'
+      required:
+      - sortCode
+      - accountNumber
+    PartnerPaymentCustodyIdCounterpartyPayload:
+      type: object
+      properties:
+        id:
+          type: string
+          description: External identifier
+          example: A0000EXTM
+      required:
+      - id
+    PartnerUnknownDetailsPayload:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the counterparty
+          example: OperatingAcc
+          maxLength: 140
+      required:
+      - name
+    PartnerAutomatedPaymentCounterpartyResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - BUSINESS
+          - PERSONAL
+          - UNKNOWN
+          description: Type of the automated payment counterparty.
+        details:
+          description: Counterparty identity details. Shape depends on the counterparty type.
+          oneOf:
+          - $ref: '#/components/schemas/PartnerPersonalDetailsPayload'
+          - $ref: '#/components/schemas/PartnerBusinessDetailsPayload'
+          - $ref: '#/components/schemas/PartnerUnknownDetailsPayload'
+        accountCurrency:
+          type: string
+          enum:
+          - AFN
+          - EUR
+          - ALL
+          - DZD
+          - USD
+          - AOA
+          - XCD
+          - ARS
+          - AMD
+          - AWG
+          - AUD
+          - AZN
+          - BSD
+          - BHD
+          - BDT
+          - BBD
+          - BYN
+          - BZD
+          - XOF
+          - BMD
+          - INR
+          - BTN
+          - BOB
+          - BOV
+          - BAM
+          - BWP
+          - NOK
+          - BRL
+          - BND
+          - BGN
+          - BIF
+          - CVE
+          - KHR
+          - XAF
+          - CAD
+          - KYD
+          - CLP
+          - CLF
+          - CNY
+          - COP
+          - COU
+          - KMF
+          - CDF
+          - NZD
+          - CRC
+          - HRK
+          - CUP
+          - CUC
+          - ANG
+          - CZK
+          - DKK
+          - DJF
+          - DOP
+          - EGP
+          - SVC
+          - ERN
+          - SZL
+          - ETB
+          - FKP
+          - FJD
+          - XPF
+          - GMD
+          - GEL
+          - GHS
+          - GIP
+          - GTQ
+          - GBP
+          - GNF
+          - GYD
+          - HTG
+          - HNL
+          - HKD
+          - HUF
+          - ISK
+          - IDR
+          - XDR
+          - IRR
+          - IQD
+          - ILS
+          - JMD
+          - JPY
+          - JOD
+          - KZT
+          - KES
+          - KPW
+          - KRW
+          - KWD
+          - KGS
+          - LAK
+          - LBP
+          - LSL
+          - ZAR
+          - LRD
+          - LYD
+          - CHF
+          - MOP
+          - MKD
+          - MGA
+          - MWK
+          - MYR
+          - MVR
+          - MRU
+          - MUR
+          - XUA
+          - MXN
+          - MXV
+          - MDL
+          - MNT
+          - MAD
+          - MZN
+          - MMK
+          - NAD
+          - NPR
+          - NIO
+          - NGN
+          - OMR
+          - PKR
+          - PAB
+          - PGK
+          - PYG
+          - PEN
+          - PHP
+          - PLN
+          - QAR
+          - RON
+          - RUB
+          - RWF
+          - WST
+          - STN
+          - SAR
+          - RSD
+          - SCR
+          - SLL
+          - SGD
+          - XSU
+          - SBD
+          - SOS
+          - SSP
+          - LKR
+          - SDG
+          - SRD
+          - SEK
+          - CHE
+          - CHW
+          - SYP
+          - TWD
+          - TJS
+          - THB
+          - TOP
+          - TTD
+          - TND
+          - TRY
+          - TMT
+          - UGX
+          - UAH
+          - AED
+          - USN
+          - UYU
+          - UYI
+          - UYW
+          - UZS
+          - VUV
+          - VES
+          - VND
+          - YER
+          - ZMW
+          - ZWL
+          - XBA
+          - XBB
+          - XBC
+          - XBD
+          - XTS
+          - XXX
+          - XAU
+          - XPD
+          - XPT
+          - XAG
+          - AFA
+          - FIM
+          - ADP
+          - ESP
+          - FRF
+          - AOK
+          - AOR
+          - RUR
+          - ATS
+          - AYM
+          - AZM
+          - BYB
+          - BYR
+          - BEC
+          - BEF
+          - BEL
+          - BAD
+          - BRB
+          - BRR
+          - BGJ
+          - CYP
+          - CSK
+          - ECS
+          - ECV
+          - GQE
+          - EEK
+          - XEU
+          - GEK
+          - DDM
+          - DEM
+          - GHC
+          - GHP
+          - GRD
+          - GWE
+          - ITL
+          - IEP
+          - LVL
+          - ZAL
+          - LTL
+          - LUC
+          - LUF
+          - LUL
+          - MGF
+          - MLF
+          - MTL
+          - MRO
+          - MZE
+          - NLG
+          - PLZ
+          - PTE
+          - ROK
+          - STD
+          - CSD
+          - SKK
+          - SIT
+          - RHD
+          - ESA
+          - ESB
+          - SDD
+          - SRG
+          - TJR
+          - TPE
+          - TRL
+          - TMM
+          - UAK
+          - USS
+          - VEB
+          - VEF
+          - YUD
+          - ZRN
+          - ZMK
+          - ZWN
+          - ZWR
+          description: Currency of the counterparty account.
+        accountReferenceType:
+          type: string
+          enum:
+          - UK_ACCOUNT
+          - IBAN
+          - CUSTODY_ID
+          - OTHER_EXTERNAL
+          - GENERIC_ACCOUNT
+          description: Type of account reference supplied for the counterparty.
+        accountReference:
+          description: Counterparty account reference details. Shape depends on the account reference type.
+          oneOf:
+          - $ref: '#/components/schemas/PartnerPaymentDomesticCounterpartyPayload'
+          - $ref: '#/components/schemas/PartnerPaymentIBANCounterpartyPayload'
+          - $ref: '#/components/schemas/PartnerPaymentCustodyIdCounterpartyPayload'
+          - $ref: '#/components/schemas/PartnerPaymentOtherExternalCounterpartyPayload'
+          - $ref: '#/components/schemas/PartnerPaymentGenericAccountCounterpartyPayload'
+      required:
+      - type
+      - details
+      - accountCurrency
+      - accountReferenceType
+      - accountReference
+    PartnerPaymentGenericAccountCounterpartyPayload:
+      type: object
+      properties:
+        accountNumber:
+          type:
+          - string
+          - 'null'
+          description: Account number (required unless routingType is CLABE)
+          example: '1234567890'
+        routingType:
+          type:
+          - string
+          - 'null'
+          description: Primary routing type (required when BIC is not provided)
+          enum:
+          - ROUTING_CODE
+          - GIRO_ROUTING_CODE
+          - ACH_ROUTING_NUMBER
+          - FAST_ROUTING_CODE
+          - WIRE_ROUTING_NUMBER
+          - MEPS_ROUTING_CODE
+          - ABA_ROUTING_NUMBER
+          - BANK_CODE
+          - BRANCH_CODE
+          - BSB_CODE
+          - CLABE
+          - CNAPS
+          - IFSC
+          - INSTITUTION_NO
+          example: ABA_ROUTING_NUMBER
+        routingNumber:
+          type:
+          - string
+          - 'null'
+          description: Primary routing number (required when routingType is provided)
+          example: 026009593
+        secondaryRoutingType:
+          type:
+          - string
+          - 'null'
+          description: Secondary routing type
+          enum:
+          - ROUTING_CODE
+          - GIRO_ROUTING_CODE
+          - ACH_ROUTING_NUMBER
+          - FAST_ROUTING_CODE
+          - WIRE_ROUTING_NUMBER
+          - MEPS_ROUTING_CODE
+          - ABA_ROUTING_NUMBER
+          - BANK_CODE
+          - BRANCH_CODE
+          - BSB_CODE
+          - CLABE
+          - CNAPS
+          - IFSC
+          - INSTITUTION_NO
+          example: ROUTING_CODE
+        secondaryRoutingNumber:
+          type:
+          - string
+          - 'null'
+          description: Secondary routing number (required when secondaryRoutingType is provided)
+          example: GB33BUKB20201555555555
+        bic:
+          type:
+          - string
+          - 'null'
+          description: Bank Identifier Code (required when routingType is not provided)
+          example: BUKBGB22
+        currency:
+          type: string
+          description: Currency of the counterparty account.
+          enum:
+          - AFN
+          - EUR
+          - ALL
+          - DZD
+          - USD
+          - AOA
+          - XCD
+          - ARS
+          - AMD
+          - AWG
+          - AUD
+          - AZN
+          - BSD
+          - BHD
+          - BDT
+          - BBD
+          - BYN
+          - BZD
+          - XOF
+          - BMD
+          - INR
+          - BTN
+          - BOB
+          - BOV
+          - BAM
+          - BWP
+          - NOK
+          - BRL
+          - BND
+          - BGN
+          - BIF
+          - CVE
+          - KHR
+          - XAF
+          - CAD
+          - KYD
+          - CLP
+          - CLF
+          - CNY
+          - COP
+          - COU
+          - KMF
+          - CDF
+          - NZD
+          - CRC
+          - HRK
+          - CUP
+          - CUC
+          - ANG
+          - CZK
+          - DKK
+          - DJF
+          - DOP
+          - EGP
+          - SVC
+          - ERN
+          - SZL
+          - ETB
+          - FKP
+          - FJD
+          - XPF
+          - GMD
+          - GEL
+          - GHS
+          - GIP
+          - GTQ
+          - GBP
+          - GNF
+          - GYD
+          - HTG
+          - HNL
+          - HKD
+          - HUF
+          - ISK
+          - IDR
+          - XDR
+          - IRR
+          - IQD
+          - ILS
+          - JMD
+          - JPY
+          - JOD
+          - KZT
+          - KES
+          - KPW
+          - KRW
+          - KWD
+          - KGS
+          - LAK
+          - LBP
+          - LSL
+          - ZAR
+          - LRD
+          - LYD
+          - CHF
+          - MOP
+          - MKD
+          - MGA
+          - MWK
+          - MYR
+          - MVR
+          - MRU
+          - MUR
+          - XUA
+          - MXN
+          - MXV
+          - MDL
+          - MNT
+          - MAD
+          - MZN
+          - MMK
+          - NAD
+          - NPR
+          - NIO
+          - NGN
+          - OMR
+          - PKR
+          - PAB
+          - PGK
+          - PYG
+          - PEN
+          - PHP
+          - PLN
+          - QAR
+          - RON
+          - RUB
+          - RWF
+          - WST
+          - STN
+          - SAR
+          - RSD
+          - SCR
+          - SLL
+          - SGD
+          - XSU
+          - SBD
+          - SOS
+          - SSP
+          - LKR
+          - SDG
+          - SRD
+          - SEK
+          - CHE
+          - CHW
+          - SYP
+          - TWD
+          - TJS
+          - THB
+          - TOP
+          - TTD
+          - TND
+          - TRY
+          - TMT
+          - UGX
+          - UAH
+          - AED
+          - USN
+          - UYU
+          - UYI
+          - UYW
+          - UZS
+          - VUV
+          - VES
+          - VND
+          - YER
+          - ZMW
+          - ZWL
+          - XBA
+          - XBB
+          - XBC
+          - XBD
+          - XTS
+          - XXX
+          - XAU
+          - XPD
+          - XPT
+          - XAG
+          - AFA
+          - FIM
+          - ADP
+          - ESP
+          - FRF
+          - AOK
+          - AOR
+          - RUR
+          - ATS
+          - AYM
+          - AZM
+          - BYB
+          - BYR
+          - BEC
+          - BEF
+          - BEL
+          - BAD
+          - BRB
+          - BRR
+          - BGJ
+          - CYP
+          - CSK
+          - ECS
+          - ECV
+          - GQE
+          - EEK
+          - XEU
+          - GEK
+          - DDM
+          - DEM
+          - GHC
+          - GHP
+          - GRD
+          - GWE
+          - ITL
+          - IEP
+          - LVL
+          - ZAL
+          - LTL
+          - LUC
+          - LUF
+          - LUL
+          - MGF
+          - MLF
+          - MTL
+          - MRO
+          - MZE
+          - NLG
+          - PLZ
+          - PTE
+          - ROK
+          - STD
+          - CSD
+          - SKK
+          - SIT
+          - RHD
+          - ESA
+          - ESB
+          - SDD
+          - SRG
+          - TJR
+          - TPE
+          - TRL
+          - TMM
+          - UAK
+          - USS
+          - VEB
+          - VEF
+          - YUD
+          - ZRN
+          - ZMK
+          - ZWN
+          - ZWR
+          example: GBP
+        country:
+          type: string
+          description: Country of the counterparty account.
+          enum:
+          - AFG
+          - ALA
+          - ALB
+          - DZA
+          - ASM
+          - AND
+          - AGO
+          - AIA
+          - ATA
+          - ATG
+          - ARG
+          - ARM
+          - ABW
+          - AUS
+          - AUT
+          - AZE
+          - BHS
+          - BHR
+          - BGD
+          - BRB
+          - BLR
+          - BEL
+          - BLZ
+          - BEN
+          - BMU
+          - BTN
+          - BOL
+          - BES
+          - BIH
+          - BWA
+          - BVT
+          - BRA
+          - IOT
+          - BRN
+          - BGR
+          - BFA
+          - BDI
+          - CPV
+          - KHM
+          - CMR
+          - CAN
+          - CYM
+          - CAF
+          - TCD
+          - CHL
+          - CHN
+          - CXR
+          - CCK
+          - COL
+          - COM
+          - COG
+          - COD
+          - COK
+          - CRI
+          - CIV
+          - HRV
+          - CUB
+          - CUW
+          - CYP
+          - CZE
+          - DNK
+          - DJI
+          - DMA
+          - DOM
+          - ECU
+          - EGY
+          - SLV
+          - GNQ
+          - ERI
+          - EST
+          - SWZ
+          - ETH
+          - FLK
+          - FRO
+          - FJI
+          - FIN
+          - FRA
+          - GUF
+          - PYF
+          - ATF
+          - GAB
+          - GMB
+          - GEO
+          - DEU
+          - GHA
+          - GIB
+          - GRC
+          - GRL
+          - GRD
+          - GLP
+          - GUM
+          - GTM
+          - GGY
+          - GIN
+          - GNB
+          - GUY
+          - HTI
+          - HMD
+          - VAT
+          - HND
+          - HKG
+          - HUN
+          - ISL
+          - IND
+          - IDN
+          - IRN
+          - IRQ
+          - IRL
+          - IMN
+          - ISR
+          - ITA
+          - JAM
+          - JPN
+          - JEY
+          - JOR
+          - KAZ
+          - KEN
+          - KIR
+          - PRK
+          - KOR
+          - KWT
+          - KGZ
+          - LAO
+          - LVA
+          - LBN
+          - LSO
+          - LBR
+          - LBY
+          - LIE
+          - LTU
+          - LUX
+          - MAC
+          - MDG
+          - MWI
+          - MYS
+          - MDV
+          - MLI
+          - MLT
+          - MHL
+          - MTQ
+          - MRT
+          - MUS
+          - MYT
+          - MEX
+          - FSM
+          - MDA
+          - MCO
+          - MNG
+          - MNE
+          - MSR
+          - MAR
+          - MOZ
+          - MMR
+          - NAM
+          - NRU
+          - NPL
+          - NLD
+          - NCL
+          - NZL
+          - NIC
+          - NER
+          - NGA
+          - NIU
+          - NFK
+          - MKD
+          - MNP
+          - NOR
+          - OMN
+          - PAK
+          - PLW
+          - PSE
+          - PAN
+          - PNG
+          - PRY
+          - PER
+          - PHL
+          - PCN
+          - POL
+          - PRT
+          - PRI
+          - QAT
+          - REU
+          - ROU
+          - RUS
+          - RWA
+          - BLM
+          - SHN
+          - KNA
+          - LCA
+          - MAF
+          - SPM
+          - VCT
+          - WSM
+          - SMR
+          - STP
+          - SAU
+          - SEN
+          - SRB
+          - SYC
+          - SLE
+          - SGP
+          - SXM
+          - SVK
+          - SVN
+          - SLB
+          - SOM
+          - ZAF
+          - SGS
+          - SSD
+          - ESP
+          - LKA
+          - SDN
+          - SUR
+          - SJM
+          - SWE
+          - CHE
+          - SYR
+          - TWN
+          - TJK
+          - TZA
+          - THA
+          - TLS
+          - TGO
+          - TKL
+          - TON
+          - TTO
+          - TUN
+          - TUR
+          - TKM
+          - TCA
+          - TUV
+          - UGA
+          - UKR
+          - ARE
+          - GBR
+          - USA
+          - UMI
+          - URY
+          - UZB
+          - VUT
+          - VEN
+          - VNM
+          - VGB
+          - VIR
+          - WLF
+          - ESH
+          - YEM
+          - ZMB
+          - ZWE
+          - XXK
+          - XKX
+          example: GBR
+      required:
+      - currency
+      - country
+    PartnerCommonErrorResponse:
+      type: object
+      properties:
+        errorType:
+          type: string
+          enum:
+          - VALIDATION_ERROR
+          - FORBIDDEN
+          - NOT_FOUND
+          - UNAUTHORIZED
+          - PRECONDITION_FAILED
+          - REQUEST_TIMEOUT
+          - SERVICE_UNAVAILABLE
+          - UNIDENTIFIED
+          - TECHNICAL_ERROR
+        reason:
+          type:
+          - string
+          - 'null'
+        validationFailures:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PartnerValidationFieldError'
+      required:
+      - errorType
+    PartnerBusinessDetailsPayload:
+      type: object
+      properties:
+        businessName:
+          type: string
+          description: Registered legal name of the business partner
+          example: Algbra U.K. Ltd
+          maxLength: 140
+      required:
+      - businessName
+    PartnerAutomatedPaymentStateResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier of the automated payment state record.
+        state:
+          type: string
+          enum:
+          - IDLE
+          - INITIATION_PENDING
+          - INITIATED
+          - CANCELLATION_PENDING
+          - CANCELLED
+          description: Lifecycle state recorded for the automated payment.
+        createdOn:
+          format: date-time
+          type: string
+          description: Timestamp when this automated payment state was recorded.
+        automatedPaymentId:
+          type: string
+          format: uuid
+          description: Identifier of the automated payment this state belongs to.
+        reasonCode:
+          type:
+          - string
+          - 'null'
+          description: Optional reason code associated with this state transition.
+      required:
+      - id
+      - state
+      - createdOn
+      - automatedPaymentId
+    PartnerRevokeAutomatedPaymentRequest:
+      type: object
+      properties:
+        reasonCode:
+          type: string
+          enum:
+          - INSTITUTION_CANCELLED_REFER_TO_PAYER
+          - CANCELLED_BY_PAYER
+          - PAYER_DECEASED
+          - ACCOUNT_CLOSED
+          description: Reason code explaining why the automated payment should be revoked.
+        idempotencyKey:
+          type: string
+          format: uuid
+          description: Unique idempotency key to prevent duplicate revoke requests.
+      required:
+      - reasonCode
+      - idempotencyKey
+    PartnerPaymentIBANCounterpartyPayload:
+      type: object
+      properties:
+        iban:
+          type: string
+          description: International Bank Account Number (IBAN).
+          example: GB33BUKB20201555555555
+        bic:
+          type:
+          - string
+          - 'null'
+          description: Bank Identifier Code (BIC).
+          example: BUKBGB22
+        currency:
+          type: string
+          description: Currency of the counterparty account.
+          enum:
+          - AFN
+          - EUR
+          - ALL
+          - DZD
+          - USD
+          - AOA
+          - XCD
+          - ARS
+          - AMD
+          - AWG
+          - AUD
+          - AZN
+          - BSD
+          - BHD
+          - BDT
+          - BBD
+          - BYN
+          - BZD
+          - XOF
+          - BMD
+          - INR
+          - BTN
+          - BOB
+          - BOV
+          - BAM
+          - BWP
+          - NOK
+          - BRL
+          - BND
+          - BGN
+          - BIF
+          - CVE
+          - KHR
+          - XAF
+          - CAD
+          - KYD
+          - CLP
+          - CLF
+          - CNY
+          - COP
+          - COU
+          - KMF
+          - CDF
+          - NZD
+          - CRC
+          - HRK
+          - CUP
+          - CUC
+          - ANG
+          - CZK
+          - DKK
+          - DJF
+          - DOP
+          - EGP
+          - SVC
+          - ERN
+          - SZL
+          - ETB
+          - FKP
+          - FJD
+          - XPF
+          - GMD
+          - GEL
+          - GHS
+          - GIP
+          - GTQ
+          - GBP
+          - GNF
+          - GYD
+          - HTG
+          - HNL
+          - HKD
+          - HUF
+          - ISK
+          - IDR
+          - XDR
+          - IRR
+          - IQD
+          - ILS
+          - JMD
+          - JPY
+          - JOD
+          - KZT
+          - KES
+          - KPW
+          - KRW
+          - KWD
+          - KGS
+          - LAK
+          - LBP
+          - LSL
+          - ZAR
+          - LRD
+          - LYD
+          - CHF
+          - MOP
+          - MKD
+          - MGA
+          - MWK
+          - MYR
+          - MVR
+          - MRU
+          - MUR
+          - XUA
+          - MXN
+          - MXV
+          - MDL
+          - MNT
+          - MAD
+          - MZN
+          - MMK
+          - NAD
+          - NPR
+          - NIO
+          - NGN
+          - OMR
+          - PKR
+          - PAB
+          - PGK
+          - PYG
+          - PEN
+          - PHP
+          - PLN
+          - QAR
+          - RON
+          - RUB
+          - RWF
+          - WST
+          - STN
+          - SAR
+          - RSD
+          - SCR
+          - SLL
+          - SGD
+          - XSU
+          - SBD
+          - SOS
+          - SSP
+          - LKR
+          - SDG
+          - SRD
+          - SEK
+          - CHE
+          - CHW
+          - SYP
+          - TWD
+          - TJS
+          - THB
+          - TOP
+          - TTD
+          - TND
+          - TRY
+          - TMT
+          - UGX
+          - UAH
+          - AED
+          - USN
+          - UYU
+          - UYI
+          - UYW
+          - UZS
+          - VUV
+          - VES
+          - VND
+          - YER
+          - ZMW
+          - ZWL
+          - XBA
+          - XBB
+          - XBC
+          - XBD
+          - XTS
+          - XXX
+          - XAU
+          - XPD
+          - XPT
+          - XAG
+          - AFA
+          - FIM
+          - ADP
+          - ESP
+          - FRF
+          - AOK
+          - AOR
+          - RUR
+          - ATS
+          - AYM
+          - AZM
+          - BYB
+          - BYR
+          - BEC
+          - BEF
+          - BEL
+          - BAD
+          - BRB
+          - BRR
+          - BGJ
+          - CYP
+          - CSK
+          - ECS
+          - ECV
+          - GQE
+          - EEK
+          - XEU
+          - GEK
+          - DDM
+          - DEM
+          - GHC
+          - GHP
+          - GRD
+          - GWE
+          - ITL
+          - IEP
+          - LVL
+          - ZAL
+          - LTL
+          - LUC
+          - LUF
+          - LUL
+          - MGF
+          - MLF
+          - MTL
+          - MRO
+          - MZE
+          - NLG
+          - PLZ
+          - PTE
+          - ROK
+          - STD
+          - CSD
+          - SKK
+          - SIT
+          - RHD
+          - ESA
+          - ESB
+          - SDD
+          - SRG
+          - TJR
+          - TPE
+          - TRL
+          - TMM
+          - UAK
+          - USS
+          - VEB
+          - VEF
+          - YUD
+          - ZRN
+          - ZMK
+          - ZWN
+          - ZWR
+          example: GBP
+        country:
+          type: string
+          description: Country of the counterparty account.
+          enum:
+          - AFG
+          - ALA
+          - ALB
+          - DZA
+          - ASM
+          - AND
+          - AGO
+          - AIA
+          - ATA
+          - ATG
+          - ARG
+          - ARM
+          - ABW
+          - AUS
+          - AUT
+          - AZE
+          - BHS
+          - BHR
+          - BGD
+          - BRB
+          - BLR
+          - BEL
+          - BLZ
+          - BEN
+          - BMU
+          - BTN
+          - BOL
+          - BES
+          - BIH
+          - BWA
+          - BVT
+          - BRA
+          - IOT
+          - BRN
+          - BGR
+          - BFA
+          - BDI
+          - CPV
+          - KHM
+          - CMR
+          - CAN
+          - CYM
+          - CAF
+          - TCD
+          - CHL
+          - CHN
+          - CXR
+          - CCK
+          - COL
+          - COM
+          - COG
+          - COD
+          - COK
+          - CRI
+          - CIV
+          - HRV
+          - CUB
+          - CUW
+          - CYP
+          - CZE
+          - DNK
+          - DJI
+          - DMA
+          - DOM
+          - ECU
+          - EGY
+          - SLV
+          - GNQ
+          - ERI
+          - EST
+          - SWZ
+          - ETH
+          - FLK
+          - FRO
+          - FJI
+          - FIN
+          - FRA
+          - GUF
+          - PYF
+          - ATF
+          - GAB
+          - GMB
+          - GEO
+          - DEU
+          - GHA
+          - GIB
+          - GRC
+          - GRL
+          - GRD
+          - GLP
+          - GUM
+          - GTM
+          - GGY
+          - GIN
+          - GNB
+          - GUY
+          - HTI
+          - HMD
+          - VAT
+          - HND
+          - HKG
+          - HUN
+          - ISL
+          - IND
+          - IDN
+          - IRN
+          - IRQ
+          - IRL
+          - IMN
+          - ISR
+          - ITA
+          - JAM
+          - JPN
+          - JEY
+          - JOR
+          - KAZ
+          - KEN
+          - KIR
+          - PRK
+          - KOR
+          - KWT
+          - KGZ
+          - LAO
+          - LVA
+          - LBN
+          - LSO
+          - LBR
+          - LBY
+          - LIE
+          - LTU
+          - LUX
+          - MAC
+          - MDG
+          - MWI
+          - MYS
+          - MDV
+          - MLI
+          - MLT
+          - MHL
+          - MTQ
+          - MRT
+          - MUS
+          - MYT
+          - MEX
+          - FSM
+          - MDA
+          - MCO
+          - MNG
+          - MNE
+          - MSR
+          - MAR
+          - MOZ
+          - MMR
+          - NAM
+          - NRU
+          - NPL
+          - NLD
+          - NCL
+          - NZL
+          - NIC
+          - NER
+          - NGA
+          - NIU
+          - NFK
+          - MKD
+          - MNP
+          - NOR
+          - OMN
+          - PAK
+          - PLW
+          - PSE
+          - PAN
+          - PNG
+          - PRY
+          - PER
+          - PHL
+          - PCN
+          - POL
+          - PRT
+          - PRI
+          - QAT
+          - REU
+          - ROU
+          - RUS
+          - RWA
+          - BLM
+          - SHN
+          - KNA
+          - LCA
+          - MAF
+          - SPM
+          - VCT
+          - WSM
+          - SMR
+          - STP
+          - SAU
+          - SEN
+          - SRB
+          - SYC
+          - SLE
+          - SGP
+          - SXM
+          - SVK
+          - SVN
+          - SLB
+          - SOM
+          - ZAF
+          - SGS
+          - SSD
+          - ESP
+          - LKA
+          - SDN
+          - SUR
+          - SJM
+          - SWE
+          - CHE
+          - SYR
+          - TWN
+          - TJK
+          - TZA
+          - THA
+          - TLS
+          - TGO
+          - TKL
+          - TON
+          - TTO
+          - TUN
+          - TUR
+          - TKM
+          - TCA
+          - TUV
+          - UGA
+          - UKR
+          - ARE
+          - GBR
+          - USA
+          - UMI
+          - URY
+          - UZB
+          - VUT
+          - VEN
+          - VNM
+          - VGB
+          - VIR
+          - WLF
+          - ESH
+          - YEM
+          - ZMB
+          - ZWE
+          - XXK
+          - XKX
+          example: GBR
+      required:
+      - iban
+      - currency
+      - country
+    PartnerPersonalDetailsPayload:
+      type: object
+      properties:
+        firstName:
+          type: string
+          description: First name of the counterparty.
+          example: John
+          maxLength: 70
+        lastName:
+          type: string
+          description: Last name of the counterparty.
+          example: Doe
+          maxLength: 70
+      required:
+      - firstName
+      - lastName

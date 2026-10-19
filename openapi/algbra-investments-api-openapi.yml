@@ -1,0 +1,1920 @@
+openapi: 3.2.0
+info:
+  title: Horizon Link - API Docs Investments API
+  description: ''
+  version: '1.0'
+  contact: {}
+servers:
+- url: api-url
+tags:
+- name: Investments
+paths:
+  /v1/partner/investments/product-variants:
+    get:
+      operationId: InvestmentController_getProductVariants
+      summary: Get all product variants
+      parameters:
+      - name: page
+        required: true
+        in: query
+        description: Page number for paginated results.
+        example: 1
+        schema:
+          default: 1
+          type: number
+      - name: limit
+        required: true
+        in: query
+        description: Number of product variants per page.
+        example: 10
+        schema:
+          maximum: 100
+          default: 10
+          type: number
+      - name: authorization
+        in: header
+        description: Authorization header containing your API Token
+        schema:
+          type: string
+      - name: x-alg-nonce
+        in: header
+        description: Nonce used to generate the payload signature
+        schema:
+          type: string
+      - name: x-alg-signature
+        in: header
+        description: Payload signature
+        schema:
+          type: string
+      - name: date
+        in: header
+        description: Date of the request un UTC/GMT
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List of product variants available to the partner
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/Pagination'
+                - properties:
+                    items:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/PartnerProductVariantResponse'
+                    meta:
+                      type: object
+                      properties:
+                        currentPage:
+                          type: number
+                          example: 1
+                        itemCount:
+                          type: number
+                          example: 10
+                        itemsPerPage:
+                          type: number
+                          example: 10
+                        totalItems:
+                          type: number
+                          example: 100
+                        totalPages:
+                          type: number
+                          example: 10
+        '400':
+          description: Input validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+      tags:
+      - Investments
+  /v1/partner/investments/product-variants/{productVariantId}:
+    get:
+      operationId: InvestmentController_getProductVariant
+      summary: Get product variant
+      parameters:
+      - name: productVariantId
+        required: true
+        in: path
+        schema:
+          type: string
+      - name: authorization
+        in: header
+        description: Authorization header containing your API Token
+        schema:
+          type: string
+      - name: x-alg-nonce
+        in: header
+        description: Nonce used to generate the payload signature
+        schema:
+          type: string
+      - name: x-alg-signature
+        in: header
+        description: Payload signature
+        schema:
+          type: string
+      - name: date
+        in: header
+        description: Date of the request un UTC/GMT
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returns the product details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerProductVariantResponse'
+        '400':
+          description: Input validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+        '404':
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+      tags:
+      - Investments
+  /v1/partner/investments/subscriptions:
+    get:
+      operationId: InvestmentController_getSubscriptions
+      summary: Get all subscriptions
+      parameters:
+      - name: page
+        required: true
+        in: query
+        description: Page number for paginated results.
+        example: 1
+        schema:
+          minimum: 1
+          default: 1
+          type: number
+      - name: limit
+        required: true
+        in: query
+        description: Number of subscriptions per page.
+        example: 10
+        schema:
+          minimum: 1
+          maximum: 100
+          default: 10
+          type: number
+      - name: customerIds
+        required: true
+        in: query
+        description: Filter by customerIds.
+        example:
+        - a2b9649e-df7f-4349-adff-1c57283fef10
+        schema:
+          type: array
+          items:
+            type: string
+      - name: authorization
+        in: header
+        description: Authorization header containing your API Token
+        schema:
+          type: string
+      - name: x-alg-nonce
+        in: header
+        description: Nonce used to generate the payload signature
+        schema:
+          type: string
+      - name: x-alg-signature
+        in: header
+        description: Payload signature
+        schema:
+          type: string
+      - name: date
+        in: header
+        description: Date of the request un UTC/GMT
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List of subscriptions available to the partner
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/Pagination'
+                - properties:
+                    items:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/PartnerSubscriptionResponse'
+                    meta:
+                      type: object
+                      properties:
+                        currentPage:
+                          type: number
+                          example: 1
+                        itemCount:
+                          type: number
+                          example: 10
+                        itemsPerPage:
+                          type: number
+                          example: 10
+                        totalItems:
+                          type: number
+                          example: 100
+                        totalPages:
+                          type: number
+                          example: 10
+        '400':
+          description: Input validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+      tags:
+      - Investments
+    post:
+      operationId: InvestmentController_subscribeToProduct
+      summary: Create subscription
+      parameters:
+      - name: authorization
+        in: header
+        description: Authorization header containing your API Token
+        schema:
+          type: string
+      - name: x-alg-nonce
+        in: header
+        description: Nonce used to generate the payload signature
+        schema:
+          type: string
+      - name: x-alg-signature
+        in: header
+        description: Payload signature
+        schema:
+          type: string
+      - name: date
+        in: header
+        description: Date of the request un UTC/GMT
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PartnerCreateSubscriptionRequest'
+      responses:
+        '201':
+          description: Returns the subscription details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerSubscriptionResponse'
+        '400':
+          description: Input validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+        '404':
+          description: Subscription not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+      tags:
+      - Investments
+  /v1/partner/investments/subscriptions/{subscriptionId}:
+    get:
+      operationId: InvestmentController_getSubscription
+      summary: Get subscription
+      parameters:
+      - name: subscriptionId
+        required: true
+        in: path
+        schema:
+          type: string
+      - name: authorization
+        in: header
+        description: Authorization header containing your API Token
+        schema:
+          type: string
+      - name: x-alg-nonce
+        in: header
+        description: Nonce used to generate the payload signature
+        schema:
+          type: string
+      - name: x-alg-signature
+        in: header
+        description: Payload signature
+        schema:
+          type: string
+      - name: date
+        in: header
+        description: Date of the request un UTC/GMT
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returns the subscription details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerSubscriptionResponse'
+        '400':
+          description: Input validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+        '404':
+          description: Subscription not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+      tags:
+      - Investments
+  /v1/partner/investments/product-variants/{productVariantId}/returns:
+    get:
+      operationId: InvestmentController_getProductVariantReturns
+      summary: Get product variant returns
+      parameters:
+      - name: productVariantId
+        required: true
+        in: path
+        schema:
+          type: string
+      - name: amount
+        required: true
+        in: query
+        description: Amount in minor units (e.g. 129 for £1.29)
+        example: 10000
+        schema:
+          type: number
+      - name: authorization
+        in: header
+        description: Authorization header containing your API Token
+        schema:
+          type: string
+      - name: x-alg-nonce
+        in: header
+        description: Nonce used to generate the payload signature
+        schema:
+          type: string
+      - name: x-alg-signature
+        in: header
+        description: Payload signature
+        schema:
+          type: string
+      - name: date
+        in: header
+        description: Date of the request un UTC/GMT
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returns calculated product return details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerProductVariantReturnsResponse'
+        '400':
+          description: Input validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+        '404':
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+        '412':
+          description: Amount lower than product's minimum amount. Try greater value
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+      tags:
+      - Investments
+components:
+  schemas:
+    PartnerProductResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 69cd09c496504d5f5905ec98
+          description: Unique identifier of the product
+        name:
+          type: string
+          example: EPR Product
+          description: Name of the product
+        calculationMethod:
+          type: string
+          description: Calculation method of the rate
+          enum:
+          - AER
+          - EPR
+          example: EPR
+        currencyCode:
+          type: string
+          description: Currency of the product
+          enum:
+          - AFN
+          - EUR
+          - ALL
+          - DZD
+          - USD
+          - AOA
+          - XCD
+          - ARS
+          - AMD
+          - AWG
+          - AUD
+          - AZN
+          - BSD
+          - BHD
+          - BDT
+          - BBD
+          - BYN
+          - BZD
+          - XOF
+          - BMD
+          - INR
+          - BTN
+          - BOB
+          - BOV
+          - BAM
+          - BWP
+          - NOK
+          - BRL
+          - BND
+          - BGN
+          - BIF
+          - CVE
+          - KHR
+          - XAF
+          - CAD
+          - KYD
+          - CLP
+          - CLF
+          - CNY
+          - COP
+          - COU
+          - KMF
+          - CDF
+          - NZD
+          - CRC
+          - HRK
+          - CUP
+          - CUC
+          - ANG
+          - CZK
+          - DKK
+          - DJF
+          - DOP
+          - EGP
+          - SVC
+          - ERN
+          - SZL
+          - ETB
+          - FKP
+          - FJD
+          - XPF
+          - GMD
+          - GEL
+          - GHS
+          - GIP
+          - GTQ
+          - GBP
+          - GNF
+          - GYD
+          - HTG
+          - HNL
+          - HKD
+          - HUF
+          - ISK
+          - IDR
+          - XDR
+          - IRR
+          - IQD
+          - ILS
+          - JMD
+          - JPY
+          - JOD
+          - KZT
+          - KES
+          - KPW
+          - KRW
+          - KWD
+          - KGS
+          - LAK
+          - LBP
+          - LSL
+          - ZAR
+          - LRD
+          - LYD
+          - CHF
+          - MOP
+          - MKD
+          - MGA
+          - MWK
+          - MYR
+          - MVR
+          - MRU
+          - MUR
+          - XUA
+          - MXN
+          - MXV
+          - MDL
+          - MNT
+          - MAD
+          - MZN
+          - MMK
+          - NAD
+          - NPR
+          - NIO
+          - NGN
+          - OMR
+          - PKR
+          - PAB
+          - PGK
+          - PYG
+          - PEN
+          - PHP
+          - PLN
+          - QAR
+          - RON
+          - RUB
+          - RWF
+          - WST
+          - STN
+          - SAR
+          - RSD
+          - SCR
+          - SLL
+          - SGD
+          - XSU
+          - SBD
+          - SOS
+          - SSP
+          - LKR
+          - SDG
+          - SRD
+          - SEK
+          - CHE
+          - CHW
+          - SYP
+          - TWD
+          - TJS
+          - THB
+          - TOP
+          - TTD
+          - TND
+          - TRY
+          - TMT
+          - UGX
+          - UAH
+          - AED
+          - USN
+          - UYU
+          - UYI
+          - UYW
+          - UZS
+          - VUV
+          - VES
+          - VND
+          - YER
+          - ZMW
+          - ZWL
+          - XBA
+          - XBB
+          - XBC
+          - XBD
+          - XTS
+          - XXX
+          - XAU
+          - XPD
+          - XPT
+          - XAG
+          - AFA
+          - FIM
+          - ADP
+          - ESP
+          - FRF
+          - AOK
+          - AOR
+          - RUR
+          - ATS
+          - AYM
+          - AZM
+          - BYB
+          - BYR
+          - BEC
+          - BEF
+          - BEL
+          - BAD
+          - BRB
+          - BRR
+          - BGJ
+          - CYP
+          - CSK
+          - ECS
+          - ECV
+          - GQE
+          - EEK
+          - XEU
+          - GEK
+          - DDM
+          - DEM
+          - GHC
+          - GHP
+          - GRD
+          - GWE
+          - ITL
+          - IEP
+          - LVL
+          - ZAL
+          - LTL
+          - LUC
+          - LUF
+          - LUL
+          - MGF
+          - MLF
+          - MTL
+          - MRO
+          - MZE
+          - NLG
+          - PLZ
+          - PTE
+          - ROK
+          - STD
+          - CSD
+          - SKK
+          - SIT
+          - RHD
+          - ESA
+          - ESB
+          - SDD
+          - SRG
+          - TJR
+          - TPE
+          - TRL
+          - TMM
+          - UAK
+          - USS
+          - VEB
+          - VEF
+          - YUD
+          - ZRN
+          - ZMK
+          - ZWN
+          - ZWR
+          example: GBP
+        type:
+          type: string
+          description: Type of investment the product
+          enum:
+          - FIXED_TERM_DEPOSIT
+          example: FIXED_TERM_DEPOSIT
+        settlementType:
+          type: string
+          description: Settlement type of the product
+          enum:
+          - SETTLE_TO_PRIMARY_ACCOUNT
+          - SETTLE_TO_VIRTUAL_ACCOUNT
+          example: SETTLE_TO_VIRTUAL_ACCOUNT
+        provider:
+          description: Provider of the product
+          allOf:
+          - $ref: '#/components/schemas/PartnerProductProviderResponse'
+        planetImpact:
+          description: Planet impact of the product
+          allOf:
+          - $ref: '#/components/schemas/PartnerProductPlanetImpactResponse'
+        createdOn:
+          format: date-time
+          type: string
+          description: Creation timestamp of the product
+          example: '2025-01-01T10:32:01.162Z'
+        updatedOn:
+          format: date-time
+          type: string
+          description: Creation timestamp of the product
+          example: '2025-01-01T10:32:01.162Z'
+      required:
+      - id
+      - name
+      - calculationMethod
+      - currencyCode
+      - type
+      - settlementType
+      - provider
+      - planetImpact
+      - createdOn
+    PartnerBusinessScheduleWorkingDaysOfWeekResponse:
+      type: object
+      properties:
+        monday:
+          type: boolean
+          example: true
+          description: Monday of week
+        tuesday:
+          type: boolean
+          example: true
+          description: Tuesday of week
+        wednesday:
+          type: boolean
+          example: true
+          description: Wednesday of week
+        thursday:
+          type: boolean
+          example: true
+          description: Thursday of week
+        friday:
+          type: boolean
+          example: true
+          description: Friday of week
+        saturday:
+          type: boolean
+          example: false
+          description: Saturday of week
+        sunday:
+          type: boolean
+          example: false
+          description: Sunday of week
+      required:
+      - monday
+      - tuesday
+      - wednesday
+      - thursday
+      - friday
+      - saturday
+      - sunday
+    PartnerProductPlanetImpactResponse:
+      type: object
+      properties:
+        co2AvoidanceRatio:
+          type: number
+          example: 0.25
+          description: Carbon avoidance ratio
+        cleanWaterImpactRatio:
+          type: number
+          example: 0.4
+          description: Clean water generation ratio
+      required:
+      - co2AvoidanceRatio
+      - cleanWaterImpactRatio
+    PartnerValidationFieldError:
+      type: object
+      properties:
+        message:
+          type: string
+        path:
+          type:
+          - string
+          - 'null'
+      required:
+      - message
+    PartnerProductActivityProvisionResult:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        reason:
+          $ref: '#/components/schemas/Error'
+        paymentId:
+          type: string
+          example: 1489dd60-aa06-48a6-a267-e7d4a9a84200
+          format: uuid
+      required:
+      - success
+    PartnerCreateSubscriptionRequest:
+      type: object
+      properties:
+        customerId:
+          type: string
+          description: Customer ID that will be the account owner.
+          example: a2b9649e-df7f-4349-adff-1c57283fef10
+          format: uuid
+        idempotencyKey:
+          type: string
+          description: A unique idempotency key to prevent duplicate subscription.
+          example: 1483d25d-3f00-4d39-90ce-2379a130becd
+          format: uuid
+        externalReference:
+          type:
+          - string
+          - 'null'
+          description: Reference identifier provided by partner.
+          example: ae588135-0391-42a8-a4e4-e8e7645fa707
+          format: uuid
+        primaryAccountId:
+          type: string
+          description: The primary account id under which the virtual account will be created.
+          example: e0cab2dd-739f-43de-b131-3e423e935bf1
+          format: uuid
+        productVariantId:
+          type: string
+          description: The product variant id which will be subscribed.
+          example: 6929c0f8a3fc67ff7fa8ecd1
+        amount:
+          type: number
+          description: Amount in minor units (e.g. 129 for £1.29)
+          example: 129
+      required:
+      - customerId
+      - idempotencyKey
+      - primaryAccountId
+      - productVariantId
+      - amount
+    PartnerProductActivityResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 4fc0b733-9bc0-48dc-9fcd-e28ed85a6dd7
+          description: Unique identifier of the activity
+          format: uuid
+        phase:
+          type: string
+          description: Phase
+          enum:
+          - FUNDS_COLLECTION
+          - FUNDS_PLACEMENT
+          - FUNDS_SETTLEMENT
+          - EARLY_WITHDRAWAL
+          example: FUNDS_COLLECTION
+        processingStatus:
+          type: string
+          description: Processing status
+          enum:
+          - INITIALIZED
+          - ACCEPTED
+          - FAILED
+          - REINITIALIZED
+          example: INITIALIZED
+        provisionRequest:
+          description: Provision request
+          type: array
+          items:
+            $ref: '#/components/schemas/PartnerProductActivityProvisionRequest'
+        provisionResult:
+          description: Provision result
+          type: array
+          items:
+            $ref: '#/components/schemas/PartnerProductActivityProvisionResult'
+        createDate:
+          format: date-time
+          type: string
+          description: Create date
+          example: '2026-04-13T14:39:42.464Z'
+      required:
+      - id
+      - phase
+      - processingStatus
+      - createDate
+    PartnerSubscriptionResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: add57586-1ed7-4374-9e56-c62f17fe2426
+          description: Unique identifier of the subscription
+          format: uuid
+        amount:
+          type: number
+          description: Subscription amount in minor units (e.g. 129 for £1.29)
+          example: 129
+        currencyCode:
+          type: string
+          description: Currency code
+          enum:
+          - AFN
+          - EUR
+          - ALL
+          - DZD
+          - USD
+          - AOA
+          - XCD
+          - ARS
+          - AMD
+          - AWG
+          - AUD
+          - AZN
+          - BSD
+          - BHD
+          - BDT
+          - BBD
+          - BYN
+          - BZD
+          - XOF
+          - BMD
+          - INR
+          - BTN
+          - BOB
+          - BOV
+          - BAM
+          - BWP
+          - NOK
+          - BRL
+          - BND
+          - BGN
+          - BIF
+          - CVE
+          - KHR
+          - XAF
+          - CAD
+          - KYD
+          - CLP
+          - CLF
+          - CNY
+          - COP
+          - COU
+          - KMF
+          - CDF
+          - NZD
+          - CRC
+          - HRK
+          - CUP
+          - CUC
+          - ANG
+          - CZK
+          - DKK
+          - DJF
+          - DOP
+          - EGP
+          - SVC
+          - ERN
+          - SZL
+          - ETB
+          - FKP
+          - FJD
+          - XPF
+          - GMD
+          - GEL
+          - GHS
+          - GIP
+          - GTQ
+          - GBP
+          - GNF
+          - GYD
+          - HTG
+          - HNL
+          - HKD
+          - HUF
+          - ISK
+          - IDR
+          - XDR
+          - IRR
+          - IQD
+          - ILS
+          - JMD
+          - JPY
+          - JOD
+          - KZT
+          - KES
+          - KPW
+          - KRW
+          - KWD
+          - KGS
+          - LAK
+          - LBP
+          - LSL
+          - ZAR
+          - LRD
+          - LYD
+          - CHF
+          - MOP
+          - MKD
+          - MGA
+          - MWK
+          - MYR
+          - MVR
+          - MRU
+          - MUR
+          - XUA
+          - MXN
+          - MXV
+          - MDL
+          - MNT
+          - MAD
+          - MZN
+          - MMK
+          - NAD
+          - NPR
+          - NIO
+          - NGN
+          - OMR
+          - PKR
+          - PAB
+          - PGK
+          - PYG
+          - PEN
+          - PHP
+          - PLN
+          - QAR
+          - RON
+          - RUB
+          - RWF
+          - WST
+          - STN
+          - SAR
+          - RSD
+          - SCR
+          - SLL
+          - SGD
+          - XSU
+          - SBD
+          - SOS
+          - SSP
+          - LKR
+          - SDG
+          - SRD
+          - SEK
+          - CHE
+          - CHW
+          - SYP
+          - TWD
+          - TJS
+          - THB
+          - TOP
+          - TTD
+          - TND
+          - TRY
+          - TMT
+          - UGX
+          - UAH
+          - AED
+          - USN
+          - UYU
+          - UYI
+          - UYW
+          - UZS
+          - VUV
+          - VES
+          - VND
+          - YER
+          - ZMW
+          - ZWL
+          - XBA
+          - XBB
+          - XBC
+          - XBD
+          - XTS
+          - XXX
+          - XAU
+          - XPD
+          - XPT
+          - XAG
+          - AFA
+          - FIM
+          - ADP
+          - ESP
+          - FRF
+          - AOK
+          - AOR
+          - RUR
+          - ATS
+          - AYM
+          - AZM
+          - BYB
+          - BYR
+          - BEC
+          - BEF
+          - BEL
+          - BAD
+          - BRB
+          - BRR
+          - BGJ
+          - CYP
+          - CSK
+          - ECS
+          - ECV
+          - GQE
+          - EEK
+          - XEU
+          - GEK
+          - DDM
+          - DEM
+          - GHC
+          - GHP
+          - GRD
+          - GWE
+          - ITL
+          - IEP
+          - LVL
+          - ZAL
+          - LTL
+          - LUC
+          - LUF
+          - LUL
+          - MGF
+          - MLF
+          - MTL
+          - MRO
+          - MZE
+          - NLG
+          - PLZ
+          - PTE
+          - ROK
+          - STD
+          - CSD
+          - SKK
+          - SIT
+          - RHD
+          - ESA
+          - ESB
+          - SDD
+          - SRG
+          - TJR
+          - TPE
+          - TRL
+          - TMM
+          - UAK
+          - USS
+          - VEB
+          - VEF
+          - YUD
+          - ZRN
+          - ZMK
+          - ZWN
+          - ZWR
+          example: GBP
+        primaryAccountId:
+          type: string
+          description: Parent account id
+          example: e0cab2dd-739f-43de-b131-3e423e935bf1
+          format: uuid
+        virtualAccountId:
+          type: string
+          description: Virtual account id
+          example: ae66fcb2-2852-4568-990d-accc78572e4d
+          format: uuid
+        customerId:
+          type: string
+          description: Customer id
+          example: a2b9649e-df7f-4349-adff-1c57283fef10
+          format: uuid
+        productVariantId:
+          type: string
+          description: Product variant id
+          example: 6929c0f8a3fc67ff7fa8ecd1
+        productVariant:
+          description: Product variant
+          allOf:
+          - $ref: '#/components/schemas/PartnerProductVariantResponse'
+        collectionDate:
+          format: date-time
+          type: string
+          example: '2026-12-26T14:00:00.000Z'
+          description: Settlement date
+        placementDate:
+          format: date-time
+          type: string
+          example: '2026-12-27T00:00:00.000Z'
+          description: Settlement date
+        maturityDate:
+          format: date-time
+          type: string
+          example: '2026-12-28T00:00:00.000Z'
+          description: Settlement date
+        settlementDate:
+          format: date-time
+          type: string
+          example: '2026-12-29T00:00:00.000Z'
+          description: Settlement date
+        returns:
+          type: number
+          description: Expected return amount in minor units (e.g. 129 for £1.29)
+          example: 129
+        co2Avoided:
+          type: number
+          description: Describes how much co2 avoided
+        cleanWaterImpacted:
+          type: number
+          description: Describes how much clean water generated
+        state:
+          type: string
+          description: Investment state
+          enum:
+          - UNKNOWN
+          - PENDING
+          - CREATED
+          - EARLY_WITHDRAWAL
+          - COMPLETED
+          - FAILED
+          example: CREATED
+        progress:
+          type: number
+          description: Progressed percentage of the investment period lifecycle for this subscription
+          example: 100
+        activities:
+          description: Activities related with subscription
+          type: array
+          items:
+            $ref: '#/components/schemas/PartnerProductActivityResponse'
+        createDate:
+          format: date-time
+          type: string
+          description: Create date
+          example: '2026-04-13T14:39:42.464Z'
+        updateDate:
+          format: date-time
+          type: string
+          description: Update date
+          example: '2026-04-13T14:39:45.464Z'
+      required:
+      - id
+      - amount
+      - currencyCode
+      - primaryAccountId
+      - virtualAccountId
+      - customerId
+      - productVariantId
+      - collectionDate
+      - placementDate
+      - maturityDate
+      - settlementDate
+      - returns
+      - createDate
+    PartnerProductVariantReturnsResponse:
+      type: object
+      properties:
+        principal:
+          type: number
+          description: Principal amount used for return calculation.
+          example: 100
+        collectionDate:
+          format: date-time
+          type: string
+          description: Estimated collection date.
+          example: '2026-06-23T13:28:01.581Z'
+        placementDate:
+          format: date-time
+          type: string
+          description: Estimated placement date.
+          example: '2026-06-23T13:30:01.581Z'
+        maturityDate:
+          format: date-time
+          type: string
+          description: Estimated maturity date.
+          example: '2026-06-23T13:32:01.581Z'
+        settlementDate:
+          format: date-time
+          type: string
+          description: Estimated settlement date.
+          example: '2026-06-23T13:32:01.581Z'
+        returns:
+          type: number
+          description: Calculated return amount.
+          example: 250
+        co2Avoided:
+          type:
+          - number
+          - 'null'
+          description: Estimated CO2 avoided.
+          example: 0
+        cleanWaterImpacted:
+          type:
+          - number
+          - 'null'
+          description: Estimated clean water impacted.
+          example: 0
+      required:
+      - principal
+      - collectionDate
+      - placementDate
+      - maturityDate
+      - settlementDate
+      - returns
+    Error:
+      type: object
+      properties: {}
+    PartnerProductActivityProvisionRequest:
+      type: object
+      properties:
+        expectedReturnsPaymentId:
+          type: string
+          example: 1489dd60-aa06-48a6-a267-e7d4a9a84200
+          format: uuid
+        reason:
+          type: string
+          enum:
+          - COLLECTION
+          - PLACEMENT
+          - SETTLEMENT
+          - EXPECTED_RETURN
+          - CANCEL_EXPECTED_RETURN
+          - ACTUAL_RETURN
+          example: COLLECTION
+      required:
+      - reason
+    PartnerProductProviderResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 6929ae49a3fc67ff7fa8ec68
+          description: Unique identifier of the product provider
+        name:
+          type: string
+          example: BANK_OF_ENGLAND
+          description: Name of the product provider
+        region:
+          type: string
+          example: UK_ENGLAND
+          description: Region of the product provider
+        businessSchedule:
+          description: Specifies working days of week and non-working days
+          allOf:
+          - $ref: '#/components/schemas/PartnerBusinessScheduleResponse'
+        imageUrl:
+          type: string
+          description: Image url of the product provider
+      required:
+      - id
+      - name
+      - region
+      - businessSchedule
+    PartnerCommonErrorResponse:
+      type: object
+      properties:
+        errorType:
+          type: string
+          enum:
+          - VALIDATION_ERROR
+          - FORBIDDEN
+          - NOT_FOUND
+          - UNAUTHORIZED
+          - PRECONDITION_FAILED
+          - REQUEST_TIMEOUT
+          - SERVICE_UNAVAILABLE
+          - UNIDENTIFIED
+          - TECHNICAL_ERROR
+        reason:
+          type:
+          - string
+          - 'null'
+        validationFailures:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PartnerValidationFieldError'
+      required:
+      - errorType
+    PartnerBusinessScheduleResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 6929a84aa3fc67ff7fa8ec46
+          description: Unique identifier of the business schedule
+        region:
+          type: string
+          example: UK_ENGLAND
+          description: Region
+        workingDaysOfWeek:
+          description: Week day model to specify working days
+          allOf:
+          - $ref: '#/components/schemas/PartnerBusinessScheduleWorkingDaysOfWeekResponse'
+        nonWorkingDaysOfYear:
+          description: Non working days of the year
+          example:
+          - '2026-01-01'
+          - '2026-12-28'
+          type: array
+          items:
+            type: array
+      required:
+      - id
+      - region
+      - workingDaysOfWeek
+      - nonWorkingDaysOfYear
+    PartnerProductVariantResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 6929c0f8a3fc67ff7fa8ecd1
+          description: Unique identifier of the product variant
+        name:
+          type: string
+          example: EPR Product - 3 Months
+          description: Name of the financial product variant
+        duration:
+          type: number
+          example: 3
+          description: Duration value of the product variant (e.g. 3)
+        durationType:
+          type: string
+          enum:
+          - MINUTE
+          - HOUR
+          - DAY
+          - MONTH
+          - YEAR
+          example: MONTH
+          description: Unit of duration (e.g. DAY, MONTH, YEAR)
+        rate:
+          type: number
+          example: 4.62
+          description: Calculated rate of the product variant based on calculationMethod
+        rateUnit:
+          type: string
+          description: Unit of the rate
+          enum:
+          - BPS
+          - PERCENTAGE
+          - DECIMAL
+          example: PERCENTAGE
+        grossRate:
+          type: number
+          example: 4.5
+          description: Gross rate of the product variant
+        grossRateUnit:
+          type: string
+          description: Unit of the gross rate
+          enum:
+          - BPS
+          - PERCENTAGE
+          - DECIMAL
+          example: PERCENTAGE
+        validFrom:
+          format: date-time
+          type: string
+          example: '2026-01-01T00:00:00.000Z'
+          description: Start date when the product variant is valid
+        validUntil:
+          format: date-time
+          type: string
+          example: '2026-12-31T23:59:59.000Z'
+          description: End date when the product variant is no longer valid
+        maxCapacity:
+          type: number
+          example: 1000000
+          description: Maximum total capacity for this product variant
+        minDeposit:
+          type: number
+          example: 1000
+          description: Minimum deposit amount allowed
+        maxDeposit:
+          type: number
+          example: 50000
+          description: Maximum deposit amount allowed per transaction
+        minReturn:
+          type: number
+          example: 50
+          description: Minimum guaranteed return amount
+        maxDepositPerCustomer:
+          type: number
+          example: 200000
+          description: Maximum deposit allowed per customer
+        placementCutOffTimeDaysOfWeek:
+          example: []
+          description: Allowed days of the week for placement cutoff
+          type: array
+          items:
+            type: string
+        placementCutOffTimeLength:
+          type: number
+          example: 2
+          description: Length value for placement cutoff time (e.g. 2 hours/days depending on type)
+        placementCutOffTimeReferenceDate:
+          format: date-time
+          type: string
+          description: Reference point used for placement cutoff calculation
+          example: '2026-04-13T00:00:00.000Z'
+        placementCutOffTimeType:
+          type: string
+          enum:
+          - MINUTE
+          - HOUR
+          - DAY
+          - MONTH
+          - YEAR
+          example: DAY
+          description: Type of placement cutoff time
+        placementCutOffTimeWeekInterval:
+          type: number
+          example: 1
+          description: Week interval for placement cutoff scheduling
+        placementLeadTimeType:
+          type: string
+          enum:
+          - MINUTE
+          - HOUR
+          - DAY
+          - MONTH
+          - YEAR
+          example: DAY
+          description: Type of placement lead time
+        placementLeadTimeLength:
+          type: number
+          example: 1
+          description: Number of units for placement lead time
+        settlementLeadTimeType:
+          type: string
+          enum:
+          - MINUTE
+          - HOUR
+          - DAY
+          - MONTH
+          - YEAR
+          example: DAY
+          description: Type of settlement lead time
+        settlementLeadTimeLength:
+          type: number
+          example: 2
+          description: Number of units for settlement lead time
+        accrualStartOffsetLength:
+          type: number
+          example: 0
+          description: Offset before accrual starts
+        accrualStartOffsetType:
+          type: string
+          enum:
+          - MINUTE
+          - HOUR
+          - DAY
+          - MONTH
+          - YEAR
+          example: DAY
+          description: Unit type for accrual start offset
+        maturityTimeLength:
+          type: number
+          example: 1
+          description: Maturity time length after duration ends
+        maturityTimeType:
+          type: string
+          enum:
+          - MINUTE
+          - HOUR
+          - DAY
+          - MONTH
+          - YEAR
+          example: DAY
+          description: Unit of maturity time
+        eligibleCountries:
+          type: array
+          example:
+          - GBR
+          description: List of eligible country codes.
+          items:
+            type: string
+            enum:
+            - AFG
+            - ALA
+            - ALB
+            - DZA
+            - ASM
+            - AND
+            - AGO
+            - AIA
+            - ATA
+            - ATG
+            - ARG
+            - ARM
+            - ABW
+            - AUS
+            - AUT
+            - AZE
+            - BHS
+            - BHR
+            - BGD
+            - BRB
+            - BLR
+            - BEL
+            - BLZ
+            - BEN
+            - BMU
+            - BTN
+            - BOL
+            - BES
+            - BIH
+            - BWA
+            - BVT
+            - BRA
+            - IOT
+            - BRN
+            - BGR
+            - BFA
+            - BDI
+            - CPV
+            - KHM
+            - CMR
+            - CAN
+            - CYM
+            - CAF
+            - TCD
+            - CHL
+            - CHN
+            - CXR
+            - CCK
+            - COL
+            - COM
+            - COG
+            - COD
+            - COK
+            - CRI
+            - CIV
+            - HRV
+            - CUB
+            - CUW
+            - CYP
+            - CZE
+            - DNK
+            - DJI
+            - DMA
+            - DOM
+            - ECU
+            - EGY
+            - SLV
+            - GNQ
+            - ERI
+            - EST
+            - SWZ
+            - ETH
+            - FLK
+            - FRO
+            - FJI
+            - FIN
+            - FRA
+            - GUF
+            - PYF
+            - ATF
+            - GAB
+            - GMB
+            - GEO
+            - DEU
+            - GHA
+            - GIB
+            - GRC
+            - GRL
+            - GRD
+            - GLP
+            - GUM
+            - GTM
+            - GGY
+            - GIN
+            - GNB
+            - GUY
+            - HTI
+            - HMD
+            - VAT
+            - HND
+            - HKG
+            - HUN
+            - ISL
+            - IND
+            - IDN
+            - IRN
+            - IRQ
+            - IRL
+            - IMN
+            - ISR
+            - ITA
+            - JAM
+            - JPN
+            - JEY
+            - JOR
+            - KAZ
+            - KEN
+            - KIR
+            - PRK
+            - KOR
+            - KWT
+            - KGZ
+            - LAO
+            - LVA
+            - LBN
+            - LSO
+            - LBR
+            - LBY
+            - LIE
+            - LTU
+            - LUX
+            - MAC
+            - MDG
+            - MWI
+            - MYS
+            - MDV
+            - MLI
+            - MLT
+            - MHL
+            - MTQ
+            - MRT
+            - MUS
+            - MYT
+            - MEX
+            - FSM
+            - MDA
+            - MCO
+            - MNG
+            - MNE
+            - MSR
+            - MAR
+            - MOZ
+            - MMR
+            - NAM
+            - NRU
+            - NPL
+            - NLD
+            - NCL
+            - NZL
+            - NIC
+            - NER
+            - NGA
+            - NIU
+            - NFK
+            - MKD
+            - MNP
+            - NOR
+            - OMN
+            - PAK
+            - PLW
+            - PSE
+            - PAN
+            - PNG
+            - PRY
+            - PER
+            - PHL
+            - PCN
+            - POL
+            - PRT
+            - PRI
+            - QAT
+            - REU
+            - ROU
+            - RUS
+            - RWA
+            - BLM
+            - SHN
+            - KNA
+            - LCA
+            - MAF
+            - SPM
+            - VCT
+            - WSM
+            - SMR
+            - STP
+            - SAU
+            - SEN
+            - SRB
+            - SYC
+            - SLE
+            - SGP
+            - SXM
+            - SVK
+            - SVN
+            - SLB
+            - SOM
+            - ZAF
+            - SGS
+            - SSD
+            - ESP
+            - LKA
+            - SDN
+            - SUR
+            - SJM
+            - SWE
+            - CHE
+            - SYR
+            - TWN
+            - TJK
+            - TZA
+            - THA
+            - TLS
+            - TGO
+            - TKL
+            - TON
+            - TTO
+            - TUN
+            - TUR
+            - TKM
+            - TCA
+            - TUV
+            - UGA
+            - UKR
+            - ARE
+            - GBR
+            - USA
+            - UMI
+            - URY
+            - UZB
+            - VUT
+            - VEN
+            - VNM
+            - VGB
+            - VIR
+            - WLF
+            - ESH
+            - YEM
+            - ZMB
+            - ZWE
+            - XXK
+            - XKX
+        eligibleCustomerTypes:
+          type: array
+          example:
+          - PERSONAL
+          description: Eligible customer types for this product variant
+          items:
+            type: string
+            enum:
+            - PERSONAL
+            - BUSINESS
+        isPopular:
+          type: boolean
+          example: true
+          description: Indicates whether the product variant is marked as popular
+        sdgContributions:
+          type: array
+          example:
+          - SDG_1
+          - SDG_2
+          description: Sustainable Development Goals (SDG) contributions associated with this product variant
+          items:
+            type: string
+            enum:
+            - SDG_1
+            - SDG_2
+            - SDG_3
+            - SDG_4
+            - SDG_5
+            - SDG_6
+            - SDG_7
+            - SDG_8
+            - SDG_9
+            - SDG_10
+            - SDG_11
+            - SDG_12
+            - SDG_13
+            - SDG_14
+            - SDG_15
+            - SDG_16
+            - SDG_17
+        product:
+          description: Product of this product variant
+          allOf:
+          - $ref: '#/components/schemas/PartnerProductResponse'
+        createdOn:
+          format: date-time
+          type: string
+          description: Creation timestamp of the product variant
+          example: '2025-01-01T10:32:01.162Z'
+        updatedOn:
+          format: date-time
+          type: string
+          description: Creation timestamp of the product variant
+          example: '2025-01-01T10:32:01.162Z'
+        deleted:
+          type: boolean
+          example: false
+          description: Indicates whether the product variant is deleted
+      required:
+      - id
+      - name
+      - duration
+      - durationType
+      - rate
+      - rateUnit
+      - grossRate
+      - grossRateUnit
+      - validFrom
+      - minDeposit
+      - product
+      - createdOn
+    Pagination:
+      type: object
+      properties: {}

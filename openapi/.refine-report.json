@@ -1,13 +1,21 @@
 {
   "provider": "algbra",
   "sources": [
-    "_original/algbra-account-transaction-api-openapi.yml"
+    "_original/algbra-openapi.json"
   ],
   "outputs": [
-    "algbra-account-access-api-openapi.yml",
     "algbra-accounts-api-openapi.yml",
-    "algbra-balances-api-openapi.yml",
-    "algbra-beneficiaries-api-openapi.yml",
+    "algbra-automated-payments-api-openapi.yml",
+    "algbra-cards-api-openapi.yml",
+    "algbra-compliance-api-openapi.yml",
+    "algbra-customers-api-openapi.yml",
+    "algbra-investments-api-openapi.yml",
+    "algbra-onboarding-prospects-business-api-openapi.yml",
+    "algbra-onboarding-prospects-personal-api-openapi.yml",
+    "algbra-partner-api-openapi.yml",
+    "algbra-partners-api-openapi.yml",
+    "algbra-payment-simulations-api-openapi.yml",
+    "algbra-payments-api-openapi.yml",
     "algbra-transactions-api-openapi.yml"
   ],
   "archived": [],
@@ -15,19 +23,24 @@
   "warnings": [],
   "notes": [
     "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
-    "algbra-account-transaction-api-openapi.yml: upgraded swagger 2.0 -> OpenAPI 3.2.0",
-    "algbra-account-transaction-api-openapi.yml: declared missing tag: Account Access",
-    "algbra-account-transaction-api-openapi.yml: declared missing tag: Accounts",
-    "algbra-account-transaction-api-openapi.yml: declared missing tag: Balances",
-    "algbra-account-transaction-api-openapi.yml: declared missing tag: Beneficiaries",
-    "algbra-account-transaction-api-openapi.yml: declared missing tag: Transactions",
-    "apis.yml register: already-registered"
+    "algbra-openapi.json: upgraded openapi 3.0.0 -> OpenAPI 3.2.0",
+    "algbra-openapi.json: tagged paths GET /v1/partner/prospects/personal/questionnaire -> Partner",
+    "algbra-openapi.json: tagged paths POST /v1/partner/prospects/personal/questionnaire -> Partner",
+    "algbra-openapi.json: tagged paths POST /v1/partner/prospects/personal/compliance/{prospectId}/start-checks -> Partner",
+    "algbra-openapi.json: declared missing tag: Accounts",
+    "algbra-openapi.json: declared missing tag: Automated Payments",
+    "algbra-openapi.json: declared missing tag: Cards",
+    "algbra-openapi.json: declared missing tag: Compliance",
+    "algbra-openapi.json: declared missing tag: Customers",
+    "algbra-openapi.json: declared missing tag: Investments",
+    "algbra-openapi.json: declared missing tag: Onboarding Prospects - Business",
+    "algbra-openapi.json: declared missing tag: Onboarding Prospects - Personal",
+    "algbra-openapi.json: declared missing tag: Partner",
+    "algbra-openapi.json: declared missing tag: Partners",
+    "algbra-openapi.json: declared missing tag: Payment Simulations",
+    "algbra-openapi.json: declared missing tag: Payments",
+    "algbra-openapi.json: declared missing tag: Transactions",
+    "apis.yml register: written (+11 apis, 16 total)"
   ],
-  "skipped": [
-    "algbra-account-access-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "algbra-accounts-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "algbra-balances-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "algbra-beneficiaries-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "algbra-transactions-api-openapi.yml: previously refined output, superseded by openapi/_original/"
-  ]
+  "skipped": []
 }

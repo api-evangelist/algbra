@@ -1,0 +1,1943 @@
+openapi: 3.2.0
+info:
+  title: Horizon Link - API Docs Onboarding Prospects - Business API
+  description: ''
+  version: '1.0'
+  contact: {}
+servers:
+- url: api-url
+tags:
+- name: Onboarding Prospects - Business
+paths:
+  /v1/partner/prospects/business:
+    get:
+      operationId: BusinessProspectController_getBusinessProspects
+      summary: Get business prospects
+      parameters:
+      - name: states
+        required: false
+        in: query
+        description: List of prospects states to filter prospects. When omitted, prospects in any state are returned.
+        example:
+        - IDLE
+        schema:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+            enum:
+            - IDLE
+            - VERIFICATION_PENDING
+            - PROVIDING_KYC_DATA
+            - AWAITING_QUESTIONNAIRE
+            - COLLECT_DOCS
+            - UNDER_REVIEW
+            - AWAITING_KYC_RESULT
+            - KYC_FAILED
+            - AWAITING_CUSTOMER_CREATION
+            - ONBOARDED
+            - ONBOARDING_FAILED
+            - DUPLICATE_KYC_DATA
+            - REJECTED
+            - UNKNOWN
+      - name: searchKeyword
+        required: false
+        in: query
+        description: Search in names and emails.
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: page
+        required: true
+        in: query
+        description: Page number for paginated results.
+        example: 1
+        schema:
+          default: 1
+          type: number
+      - name: limit
+        required: true
+        in: query
+        description: Number of prospects per page.
+        example: 10
+        schema:
+          maximum: 100
+          default: 10
+          type: number
+      - name: authorization
+        in: header
+        description: Authorization header containing your API Token
+        schema:
+          type: string
+      - name: x-alg-nonce
+        in: header
+        description: Nonce used to generate the payload signature
+        schema:
+          type: string
+      - name: x-alg-signature
+        in: header
+        description: Payload signature
+        schema:
+          type: string
+      - name: date
+        in: header
+        description: Date of the request un UTC/GMT
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List of business prospects available to the partner
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/Pagination'
+                - properties:
+                    items:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/PartnerBusinessProspectResponse'
+                    meta:
+                      type: object
+                      properties:
+                        currentPage:
+                          type: number
+                          example: 1
+                        itemCount:
+                          type: number
+                          example: 10
+                        itemsPerPage:
+                          type: number
+                          example: 10
+                        totalItems:
+                          type: number
+                          example: 100
+                        totalPages:
+                          type: number
+                          example: 10
+        '400':
+          description: Input validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+      tags:
+      - Onboarding Prospects - Business
+    post:
+      operationId: BusinessProspectController_createBusinessProspect
+      summary: Create business prospect
+      parameters:
+      - name: authorization
+        in: header
+        description: Authorization header containing your API Token
+        schema:
+          type: string
+      - name: x-alg-nonce
+        in: header
+        description: Nonce used to generate the payload signature
+        schema:
+          type: string
+      - name: x-alg-signature
+        in: header
+        description: Payload signature
+        schema:
+          type: string
+      - name: date
+        in: header
+        description: Date of the request un UTC/GMT
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PartnerCreateBusinessProspectRequest'
+      responses:
+        '201':
+          description: Creates a business prospect.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerBusinessProspectDetailedResponse'
+        '400':
+          description: Input validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+      tags:
+      - Onboarding Prospects - Business
+  /v1/partner/prospects/business/externalReference/{externalReference}:
+    get:
+      operationId: BusinessProspectController_getBusinessProspectByExternalId
+      summary: Get business prospect by externalId
+      parameters:
+      - name: externalReference
+        required: true
+        in: path
+        schema:
+          type: string
+      - name: authorization
+        in: header
+        description: Authorization header containing your API Token
+        schema:
+          type: string
+      - name: x-alg-nonce
+        in: header
+        description: Nonce used to generate the payload signature
+        schema:
+          type: string
+      - name: x-alg-signature
+        in: header
+        description: Payload signature
+        schema:
+          type: string
+      - name: date
+        in: header
+        description: Date of the request un UTC/GMT
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Get business prospects by externalId.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerBusinessProspectDetailedResponse'
+        '400':
+          description: Input validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+        '404':
+          description: Prospect not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+      tags:
+      - Onboarding Prospects - Business
+  /v1/partner/prospects/business/{prospectId}:
+    patch:
+      operationId: BusinessProspectController_updateBusinessProspect
+      summary: Update business prospect partially
+      parameters:
+      - name: prospectId
+        required: true
+        in: path
+        schema:
+          type: string
+      - name: authorization
+        in: header
+        description: Authorization header containing your API Token
+        schema:
+          type: string
+      - name: x-alg-nonce
+        in: header
+        description: Nonce used to generate the payload signature
+        schema:
+          type: string
+      - name: x-alg-signature
+        in: header
+        description: Payload signature
+        schema:
+          type: string
+      - name: date
+        in: header
+        description: Date of the request un UTC/GMT
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PartnerUpdateBusinessProspectRequest'
+      responses:
+        '200':
+          description: Updates a business prospect partially.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerBusinessProspectDetailedResponse'
+        '400':
+          description: Input validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+      tags:
+      - Onboarding Prospects - Business
+    get:
+      operationId: BusinessProspectController_getBusinessProspectById
+      summary: Get business prospect by id
+      parameters:
+      - name: prospectId
+        required: true
+        in: path
+        schema:
+          type: string
+      - name: authorization
+        in: header
+        description: Authorization header containing your API Token
+        schema:
+          type: string
+      - name: x-alg-nonce
+        in: header
+        description: Nonce used to generate the payload signature
+        schema:
+          type: string
+      - name: x-alg-signature
+        in: header
+        description: Payload signature
+        schema:
+          type: string
+      - name: date
+        in: header
+        description: Date of the request un UTC/GMT
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Get business prospects by id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerBusinessProspectDetailedResponse'
+        '400':
+          description: Input validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+        '404':
+          description: Prospect not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+      tags:
+      - Onboarding Prospects - Business
+components:
+  schemas:
+    PartnerAddressFreeformRequest:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - STRUCTURED
+          - FREEFORM
+        line1:
+          type:
+          - string
+          - 'null'
+          example: ''
+          maxLength: 50
+        line2:
+          type:
+          - string
+          - 'null'
+          example: ''
+          maxLength: 50
+        line3:
+          type:
+          - string
+          - 'null'
+          example: ''
+          maxLength: 50
+        state:
+          type:
+          - string
+          - 'null'
+          example: ''
+        postcode:
+          type: string
+          example: SW1A 2AB
+        country:
+          type: string
+          enum:
+          - AFG
+          - ALA
+          - ALB
+          - DZA
+          - ASM
+          - AND
+          - AGO
+          - AIA
+          - ATA
+          - ATG
+          - ARG
+          - ARM
+          - ABW
+          - AUS
+          - AUT
+          - AZE
+          - BHS
+          - BHR
+          - BGD
+          - BRB
+          - BLR
+          - BEL
+          - BLZ
+          - BEN
+          - BMU
+          - BTN
+          - BOL
+          - BES
+          - BIH
+          - BWA
+          - BVT
+          - BRA
+          - IOT
+          - BRN
+          - BGR
+          - BFA
+          - BDI
+          - CPV
+          - KHM
+          - CMR
+          - CAN
+          - CYM
+          - CAF
+          - TCD
+          - CHL
+          - CHN
+          - CXR
+          - CCK
+          - COL
+          - COM
+          - COG
+          - COD
+          - COK
+          - CRI
+          - CIV
+          - HRV
+          - CUB
+          - CUW
+          - CYP
+          - CZE
+          - DNK
+          - DJI
+          - DMA
+          - DOM
+          - ECU
+          - EGY
+          - SLV
+          - GNQ
+          - ERI
+          - EST
+          - SWZ
+          - ETH
+          - FLK
+          - FRO
+          - FJI
+          - FIN
+          - FRA
+          - GUF
+          - PYF
+          - ATF
+          - GAB
+          - GMB
+          - GEO
+          - DEU
+          - GHA
+          - GIB
+          - GRC
+          - GRL
+          - GRD
+          - GLP
+          - GUM
+          - GTM
+          - GGY
+          - GIN
+          - GNB
+          - GUY
+          - HTI
+          - HMD
+          - VAT
+          - HND
+          - HKG
+          - HUN
+          - ISL
+          - IND
+          - IDN
+          - IRN
+          - IRQ
+          - IRL
+          - IMN
+          - ISR
+          - ITA
+          - JAM
+          - JPN
+          - JEY
+          - JOR
+          - KAZ
+          - KEN
+          - KIR
+          - PRK
+          - KOR
+          - KWT
+          - KGZ
+          - LAO
+          - LVA
+          - LBN
+          - LSO
+          - LBR
+          - LBY
+          - LIE
+          - LTU
+          - LUX
+          - MAC
+          - MDG
+          - MWI
+          - MYS
+          - MDV
+          - MLI
+          - MLT
+          - MHL
+          - MTQ
+          - MRT
+          - MUS
+          - MYT
+          - MEX
+          - FSM
+          - MDA
+          - MCO
+          - MNG
+          - MNE
+          - MSR
+          - MAR
+          - MOZ
+          - MMR
+          - NAM
+          - NRU
+          - NPL
+          - NLD
+          - NCL
+          - NZL
+          - NIC
+          - NER
+          - NGA
+          - NIU
+          - NFK
+          - MKD
+          - MNP
+          - NOR
+          - OMN
+          - PAK
+          - PLW
+          - PSE
+          - PAN
+          - PNG
+          - PRY
+          - PER
+          - PHL
+          - PCN
+          - POL
+          - PRT
+          - PRI
+          - QAT
+          - REU
+          - ROU
+          - RUS
+          - RWA
+          - BLM
+          - SHN
+          - KNA
+          - LCA
+          - MAF
+          - SPM
+          - VCT
+          - WSM
+          - SMR
+          - STP
+          - SAU
+          - SEN
+          - SRB
+          - SYC
+          - SLE
+          - SGP
+          - SXM
+          - SVK
+          - SVN
+          - SLB
+          - SOM
+          - ZAF
+          - SGS
+          - SSD
+          - ESP
+          - LKA
+          - SDN
+          - SUR
+          - SJM
+          - SWE
+          - CHE
+          - SYR
+          - TWN
+          - TJK
+          - TZA
+          - THA
+          - TLS
+          - TGO
+          - TKL
+          - TON
+          - TTO
+          - TUN
+          - TUR
+          - TKM
+          - TCA
+          - TUV
+          - UGA
+          - UKR
+          - ARE
+          - GBR
+          - USA
+          - UMI
+          - URY
+          - UZB
+          - VUT
+          - VEN
+          - VNM
+          - VGB
+          - VIR
+          - WLF
+          - ESH
+          - YEM
+          - ZMB
+          - ZWE
+          - XXK
+          - XKX
+          example: GBR
+      required:
+      - type
+      - postcode
+      - country
+    PartnerValidationFieldError:
+      type: object
+      properties:
+        message:
+          type: string
+        path:
+          type:
+          - string
+          - 'null'
+      required:
+      - message
+    PartnerBusinessDirectorPayload:
+      type: object
+      properties:
+        firstName:
+          type:
+          - string
+          - 'null'
+          example: John
+        middleName:
+          type:
+          - string
+          - 'null'
+          example: James
+        lastName:
+          type:
+          - string
+          - 'null'
+          example: Doe
+        dateOfBirth:
+          type:
+          - string
+          - 'null'
+          format: date
+    PartnerAddressStructuredResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+          enum:
+          - STRUCTURED
+          - FREEFORM
+        flatNumber:
+          type: string
+          example: ''
+        buildingNumber:
+          type: string
+          example: '10'
+        buildingName:
+          type: string
+          example: ''
+        street:
+          type: string
+          example: Downling
+        subStreet:
+          type: string
+          example: ''
+        town:
+          type: string
+          example: London
+        state:
+          type: string
+          example: TX
+          description: Two character state code, when country is USA this field is required
+        postcode:
+          type: string
+          example: SW1A 2AB
+        country:
+          type: string
+          enum:
+          - AFG
+          - ALA
+          - ALB
+          - DZA
+          - ASM
+          - AND
+          - AGO
+          - AIA
+          - ATA
+          - ATG
+          - ARG
+          - ARM
+          - ABW
+          - AUS
+          - AUT
+          - AZE
+          - BHS
+          - BHR
+          - BGD
+          - BRB
+          - BLR
+          - BEL
+          - BLZ
+          - BEN
+          - BMU
+          - BTN
+          - BOL
+          - BES
+          - BIH
+          - BWA
+          - BVT
+          - BRA
+          - IOT
+          - BRN
+          - BGR
+          - BFA
+          - BDI
+          - CPV
+          - KHM
+          - CMR
+          - CAN
+          - CYM
+          - CAF
+          - TCD
+          - CHL
+          - CHN
+          - CXR
+          - CCK
+          - COL
+          - COM
+          - COG
+          - COD
+          - COK
+          - CRI
+          - CIV
+          - HRV
+          - CUB
+          - CUW
+          - CYP
+          - CZE
+          - DNK
+          - DJI
+          - DMA
+          - DOM
+          - ECU
+          - EGY
+          - SLV
+          - GNQ
+          - ERI
+          - EST
+          - SWZ
+          - ETH
+          - FLK
+          - FRO
+          - FJI
+          - FIN
+          - FRA
+          - GUF
+          - PYF
+          - ATF
+          - GAB
+          - GMB
+          - GEO
+          - DEU
+          - GHA
+          - GIB
+          - GRC
+          - GRL
+          - GRD
+          - GLP
+          - GUM
+          - GTM
+          - GGY
+          - GIN
+          - GNB
+          - GUY
+          - HTI
+          - HMD
+          - VAT
+          - HND
+          - HKG
+          - HUN
+          - ISL
+          - IND
+          - IDN
+          - IRN
+          - IRQ
+          - IRL
+          - IMN
+          - ISR
+          - ITA
+          - JAM
+          - JPN
+          - JEY
+          - JOR
+          - KAZ
+          - KEN
+          - KIR
+          - PRK
+          - KOR
+          - KWT
+          - KGZ
+          - LAO
+          - LVA
+          - LBN
+          - LSO
+          - LBR
+          - LBY
+          - LIE
+          - LTU
+          - LUX
+          - MAC
+          - MDG
+          - MWI
+          - MYS
+          - MDV
+          - MLI
+          - MLT
+          - MHL
+          - MTQ
+          - MRT
+          - MUS
+          - MYT
+          - MEX
+          - FSM
+          - MDA
+          - MCO
+          - MNG
+          - MNE
+          - MSR
+          - MAR
+          - MOZ
+          - MMR
+          - NAM
+          - NRU
+          - NPL
+          - NLD
+          - NCL
+          - NZL
+          - NIC
+          - NER
+          - NGA
+          - NIU
+          - NFK
+          - MKD
+          - MNP
+          - NOR
+          - OMN
+          - PAK
+          - PLW
+          - PSE
+          - PAN
+          - PNG
+          - PRY
+          - PER
+          - PHL
+          - PCN
+          - POL
+          - PRT
+          - PRI
+          - QAT
+          - REU
+          - ROU
+          - RUS
+          - RWA
+          - BLM
+          - SHN
+          - KNA
+          - LCA
+          - MAF
+          - SPM
+          - VCT
+          - WSM
+          - SMR
+          - STP
+          - SAU
+          - SEN
+          - SRB
+          - SYC
+          - SLE
+          - SGP
+          - SXM
+          - SVK
+          - SVN
+          - SLB
+          - SOM
+          - ZAF
+          - SGS
+          - SSD
+          - ESP
+          - LKA
+          - SDN
+          - SUR
+          - SJM
+          - SWE
+          - CHE
+          - SYR
+          - TWN
+          - TJK
+          - TZA
+          - THA
+          - TLS
+          - TGO
+          - TKL
+          - TON
+          - TTO
+          - TUN
+          - TUR
+          - TKM
+          - TCA
+          - TUV
+          - UGA
+          - UKR
+          - ARE
+          - GBR
+          - USA
+          - UMI
+          - URY
+          - UZB
+          - VUT
+          - VEN
+          - VNM
+          - VGB
+          - VIR
+          - WLF
+          - ESH
+          - YEM
+          - ZMB
+          - ZWE
+          - XXK
+          - XKX
+          example: GBR
+      required:
+      - id
+      - type
+      - flatNumber
+      - buildingNumber
+      - buildingName
+      - street
+      - subStreet
+      - town
+      - state
+      - postcode
+      - country
+    PartnerOnboardingStateResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        state:
+          type: string
+          enum:
+          - IDLE
+          - VERIFICATION_PENDING
+          - PROVIDING_KYC_DATA
+          - AWAITING_QUESTIONNAIRE
+          - COLLECT_DOCS
+          - UNDER_REVIEW
+          - AWAITING_KYC_RESULT
+          - KYC_FAILED
+          - AWAITING_CUSTOMER_CREATION
+          - ONBOARDED
+          - ONBOARDING_FAILED
+          - DUPLICATE_KYC_DATA
+          - REJECTED
+          - UNKNOWN
+        createDate:
+          format: date-time
+          type: string
+      required:
+      - id
+      - state
+      - createDate
+    PartnerAddressFreeformResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+          enum:
+          - STRUCTURED
+          - FREEFORM
+        line1:
+          type: string
+          example: ''
+        line2:
+          type: string
+          example: ''
+        line3:
+          type: string
+          example: ''
+        state:
+          type: string
+          example: TX
+          description: Two character state code, when country is USA this field is required
+        postcode:
+          type: string
+          example: SW1A 2AB
+        country:
+          type: string
+          enum:
+          - AFG
+          - ALA
+          - ALB
+          - DZA
+          - ASM
+          - AND
+          - AGO
+          - AIA
+          - ATA
+          - ATG
+          - ARG
+          - ARM
+          - ABW
+          - AUS
+          - AUT
+          - AZE
+          - BHS
+          - BHR
+          - BGD
+          - BRB
+          - BLR
+          - BEL
+          - BLZ
+          - BEN
+          - BMU
+          - BTN
+          - BOL
+          - BES
+          - BIH
+          - BWA
+          - BVT
+          - BRA
+          - IOT
+          - BRN
+          - BGR
+          - BFA
+          - BDI
+          - CPV
+          - KHM
+          - CMR
+          - CAN
+          - CYM
+          - CAF
+          - TCD
+          - CHL
+          - CHN
+          - CXR
+          - CCK
+          - COL
+          - COM
+          - COG
+          - COD
+          - COK
+          - CRI
+          - CIV
+          - HRV
+          - CUB
+          - CUW
+          - CYP
+          - CZE
+          - DNK
+          - DJI
+          - DMA
+          - DOM
+          - ECU
+          - EGY
+          - SLV
+          - GNQ
+          - ERI
+          - EST
+          - SWZ
+          - ETH
+          - FLK
+          - FRO
+          - FJI
+          - FIN
+          - FRA
+          - GUF
+          - PYF
+          - ATF
+          - GAB
+          - GMB
+          - GEO
+          - DEU
+          - GHA
+          - GIB
+          - GRC
+          - GRL
+          - GRD
+          - GLP
+          - GUM
+          - GTM
+          - GGY
+          - GIN
+          - GNB
+          - GUY
+          - HTI
+          - HMD
+          - VAT
+          - HND
+          - HKG
+          - HUN
+          - ISL
+          - IND
+          - IDN
+          - IRN
+          - IRQ
+          - IRL
+          - IMN
+          - ISR
+          - ITA
+          - JAM
+          - JPN
+          - JEY
+          - JOR
+          - KAZ
+          - KEN
+          - KIR
+          - PRK
+          - KOR
+          - KWT
+          - KGZ
+          - LAO
+          - LVA
+          - LBN
+          - LSO
+          - LBR
+          - LBY
+          - LIE
+          - LTU
+          - LUX
+          - MAC
+          - MDG
+          - MWI
+          - MYS
+          - MDV
+          - MLI
+          - MLT
+          - MHL
+          - MTQ
+          - MRT
+          - MUS
+          - MYT
+          - MEX
+          - FSM
+          - MDA
+          - MCO
+          - MNG
+          - MNE
+          - MSR
+          - MAR
+          - MOZ
+          - MMR
+          - NAM
+          - NRU
+          - NPL
+          - NLD
+          - NCL
+          - NZL
+          - NIC
+          - NER
+          - NGA
+          - NIU
+          - NFK
+          - MKD
+          - MNP
+          - NOR
+          - OMN
+          - PAK
+          - PLW
+          - PSE
+          - PAN
+          - PNG
+          - PRY
+          - PER
+          - PHL
+          - PCN
+          - POL
+          - PRT
+          - PRI
+          - QAT
+          - REU
+          - ROU
+          - RUS
+          - RWA
+          - BLM
+          - SHN
+          - KNA
+          - LCA
+          - MAF
+          - SPM
+          - VCT
+          - WSM
+          - SMR
+          - STP
+          - SAU
+          - SEN
+          - SRB
+          - SYC
+          - SLE
+          - SGP
+          - SXM
+          - SVK
+          - SVN
+          - SLB
+          - SOM
+          - ZAF
+          - SGS
+          - SSD
+          - ESP
+          - LKA
+          - SDN
+          - SUR
+          - SJM
+          - SWE
+          - CHE
+          - SYR
+          - TWN
+          - TJK
+          - TZA
+          - THA
+          - TLS
+          - TGO
+          - TKL
+          - TON
+          - TTO
+          - TUN
+          - TUR
+          - TKM
+          - TCA
+          - TUV
+          - UGA
+          - UKR
+          - ARE
+          - GBR
+          - USA
+          - UMI
+          - URY
+          - UZB
+          - VUT
+          - VEN
+          - VNM
+          - VGB
+          - VIR
+          - WLF
+          - ESH
+          - YEM
+          - ZMB
+          - ZWE
+          - XXK
+          - XKX
+          example: GBR
+      required:
+      - id
+      - type
+      - line1
+      - line2
+      - line3
+      - state
+      - postcode
+      - country
+    PartnerBusinessProspectResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier of the prospect
+          example: a2b9649e-df7f-4349-adff-1c57283fef10
+        externalReference:
+          type:
+          - string
+          - 'null'
+          description: External unique reference on partners platform
+        legalEntityName:
+          type: string
+          example: Algbra Group Limited
+        legalEntityType:
+          type: string
+          example: LIMITED_COMPANY
+          enum:
+          - SOLE_TRADER
+          - UNINCORPORATED_ASSOCIATION
+          - PARTNERSHIP
+          - LIMITED_PARTNERSHIP
+          - TRUST
+          - LIMITED_COMPANY
+          - LIMITED_LIABILITY_PARTNERSHIP
+          - COMMUNITY_INTEREST_COMPANY
+          - CHARITABLE_INCORPORATED_ORGANIZATION
+          - CO_OPERATIVE_SOCIETY
+          - COMMUNITY_BENEFIT_SOCIETY
+          - BUILDING_SOCIETY_BUILDING
+          - CREDIT_UNION
+          - FRIENDLY_SOCIETY
+        email:
+          type: string
+          example: john.doe@algbra.com
+        phoneNumber:
+          type: string
+          example: '+447101231111'
+        address:
+          oneOf:
+          - $ref: '#/components/schemas/PartnerAddressFreeformResponse'
+          - $ref: '#/components/schemas/PartnerAddressStructuredResponse'
+        onboardingState:
+          type: string
+          enum:
+          - IDLE
+          - VERIFICATION_PENDING
+          - PROVIDING_KYC_DATA
+          - AWAITING_QUESTIONNAIRE
+          - COLLECT_DOCS
+          - UNDER_REVIEW
+          - AWAITING_KYC_RESULT
+          - KYC_FAILED
+          - AWAITING_CUSTOMER_CREATION
+          - ONBOARDED
+          - ONBOARDING_FAILED
+          - DUPLICATE_KYC_DATA
+          - REJECTED
+          - UNKNOWN
+        createDate:
+          format: date-time
+          type: string
+      required:
+      - id
+      - legalEntityName
+      - legalEntityType
+      - email
+      - phoneNumber
+      - onboardingState
+      - createDate
+    PartnerCommonErrorResponse:
+      type: object
+      properties:
+        errorType:
+          type: string
+          enum:
+          - VALIDATION_ERROR
+          - FORBIDDEN
+          - NOT_FOUND
+          - UNAUTHORIZED
+          - PRECONDITION_FAILED
+          - REQUEST_TIMEOUT
+          - SERVICE_UNAVAILABLE
+          - UNIDENTIFIED
+          - TECHNICAL_ERROR
+        reason:
+          type:
+          - string
+          - 'null'
+        validationFailures:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PartnerValidationFieldError'
+      required:
+      - errorType
+    PartnerCreateBusinessProspectRequest:
+      type: object
+      properties:
+        externalReference:
+          type:
+          - string
+          - 'null'
+          description: External unique prospect reference on partners platform
+        externalAccountReference:
+          type:
+          - string
+          - 'null'
+          description: External unique account reference on partners platform
+        legalEntityName:
+          type: string
+          example: Algbra Group Limited
+        legalEntityType:
+          type: string
+          example: LIMITED_COMPANY
+          enum:
+          - SOLE_TRADER
+          - UNINCORPORATED_ASSOCIATION
+          - PARTNERSHIP
+          - LIMITED_PARTNERSHIP
+          - TRUST
+          - LIMITED_COMPANY
+          - LIMITED_LIABILITY_PARTNERSHIP
+          - COMMUNITY_INTEREST_COMPANY
+          - CHARITABLE_INCORPORATED_ORGANIZATION
+          - CO_OPERATIVE_SOCIETY
+          - COMMUNITY_BENEFIT_SOCIETY
+          - BUILDING_SOCIETY_BUILDING
+          - CREDIT_UNION
+          - FRIENDLY_SOCIETY
+        email:
+          type: string
+          example: john.doe@algbra.com
+        address:
+          oneOf:
+          - $ref: '#/components/schemas/PartnerAddressFreeformRequest'
+          - $ref: '#/components/schemas/PartnerAddressStructuredRequest'
+        phoneNumber:
+          type:
+          - string
+          - 'null'
+          example: '+447101231111'
+          description: Phone number with no special characters or spaces
+        identificationNumber:
+          type:
+          - string
+          - 'null'
+          example: ''
+          description: National Id Number, SSN or similar
+        director:
+          allOf:
+          - $ref: '#/components/schemas/PartnerBusinessDirectorPayload'
+      required:
+      - legalEntityName
+      - legalEntityType
+      - email
+    PartnerBusinessProspectDetailedResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier of the prospect
+          example: a2b9649e-df7f-4349-adff-1c57283fef10
+        externalReference:
+          type:
+          - string
+          - 'null'
+          description: External unique reference on partners platform
+        legalEntityName:
+          type: string
+          example: Algbra Group Limited
+        legalEntityType:
+          type: string
+          example: LIMITED_COMPANY
+          enum:
+          - SOLE_TRADER
+          - UNINCORPORATED_ASSOCIATION
+          - PARTNERSHIP
+          - LIMITED_PARTNERSHIP
+          - TRUST
+          - LIMITED_COMPANY
+          - LIMITED_LIABILITY_PARTNERSHIP
+          - COMMUNITY_INTEREST_COMPANY
+          - CHARITABLE_INCORPORATED_ORGANIZATION
+          - CO_OPERATIVE_SOCIETY
+          - COMMUNITY_BENEFIT_SOCIETY
+          - BUILDING_SOCIETY_BUILDING
+          - CREDIT_UNION
+          - FRIENDLY_SOCIETY
+        email:
+          type: string
+          example: john.doe@algbra.com
+        phoneNumber:
+          type: string
+          example: '+447101231111'
+        address:
+          oneOf:
+          - $ref: '#/components/schemas/PartnerAddressFreeformResponse'
+          - $ref: '#/components/schemas/PartnerAddressStructuredResponse'
+        onboardingState:
+          type: string
+          enum:
+          - IDLE
+          - VERIFICATION_PENDING
+          - PROVIDING_KYC_DATA
+          - AWAITING_QUESTIONNAIRE
+          - COLLECT_DOCS
+          - UNDER_REVIEW
+          - AWAITING_KYC_RESULT
+          - KYC_FAILED
+          - AWAITING_CUSTOMER_CREATION
+          - ONBOARDED
+          - ONBOARDING_FAILED
+          - DUPLICATE_KYC_DATA
+          - REJECTED
+          - UNKNOWN
+        createDate:
+          format: date-time
+          type: string
+        director:
+          allOf:
+          - $ref: '#/components/schemas/PartnerBusinessDirectorPayload'
+        identificationNumber:
+          type:
+          - string
+          - 'null'
+          description: National Id Number, SSN or similar
+          example: ''
+        onboardingStates:
+          type: array
+          items:
+            $ref: '#/components/schemas/PartnerOnboardingStateResponse'
+      required:
+      - id
+      - legalEntityName
+      - legalEntityType
+      - email
+      - phoneNumber
+      - onboardingState
+      - createDate
+      - onboardingStates
+    PartnerUpdateBusinessProspectRequest:
+      type: object
+      properties:
+        legalEntityName:
+          type:
+          - string
+          - 'null'
+          example: Algbra Group Limited
+        legalEntityType:
+          type:
+          - string
+          - 'null'
+          example: LIMITED_COMPANY
+          enum:
+          - SOLE_TRADER
+          - UNINCORPORATED_ASSOCIATION
+          - PARTNERSHIP
+          - LIMITED_PARTNERSHIP
+          - TRUST
+          - LIMITED_COMPANY
+          - LIMITED_LIABILITY_PARTNERSHIP
+          - COMMUNITY_INTEREST_COMPANY
+          - CHARITABLE_INCORPORATED_ORGANIZATION
+          - CO_OPERATIVE_SOCIETY
+          - COMMUNITY_BENEFIT_SOCIETY
+          - BUILDING_SOCIETY_BUILDING
+          - CREDIT_UNION
+          - FRIENDLY_SOCIETY
+        email:
+          type:
+          - string
+          - 'null'
+          example: john.doe@algbra.com
+        address:
+          oneOf:
+          - $ref: '#/components/schemas/PartnerAddressFreeformRequest'
+          - $ref: '#/components/schemas/PartnerAddressStructuredRequest'
+        phoneNumber:
+          type:
+          - string
+          - 'null'
+          example: '+447101231111'
+          description: Phone number with no special characters or spaces
+        identificationNumber:
+          type:
+          - string
+          - 'null'
+          example: ''
+          description: National Id Number, SSN or similar
+        director:
+          allOf:
+          - $ref: '#/components/schemas/PartnerBusinessDirectorPayload'
+    PartnerAddressStructuredRequest:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - STRUCTURED
+          - FREEFORM
+        flatNumber:
+          type:
+          - string
+          - 'null'
+          example: ''
+          maxLength: 25
+        buildingNumber:
+          type:
+          - string
+          - 'null'
+          example: '10'
+          maxLength: 25
+        buildingName:
+          type:
+          - string
+          - 'null'
+          example: ''
+          maxLength: 50
+        street:
+          type:
+          - string
+          - 'null'
+          example: Downling
+          maxLength: 50
+        subStreet:
+          type:
+          - string
+          - 'null'
+          example: ''
+          maxLength: 50
+        town:
+          type:
+          - string
+          - 'null'
+          example: London
+          maxLength: 50
+        state:
+          type:
+          - string
+          - 'null'
+          example: ''
+          maxLength: 50
+        postcode:
+          type: string
+          example: SW1A 2AB
+        country:
+          type: string
+          enum:
+          - AFG
+          - ALA
+          - ALB
+          - DZA
+          - ASM
+          - AND
+          - AGO
+          - AIA
+          - ATA
+          - ATG
+          - ARG
+          - ARM
+          - ABW
+          - AUS
+          - AUT
+          - AZE
+          - BHS
+          - BHR
+          - BGD
+          - BRB
+          - BLR
+          - BEL
+          - BLZ
+          - BEN
+          - BMU
+          - BTN
+          - BOL
+          - BES
+          - BIH
+          - BWA
+          - BVT
+          - BRA
+          - IOT
+          - BRN
+          - BGR
+          - BFA
+          - BDI
+          - CPV
+          - KHM
+          - CMR
+          - CAN
+          - CYM
+          - CAF
+          - TCD
+          - CHL
+          - CHN
+          - CXR
+          - CCK
+          - COL
+          - COM
+          - COG
+          - COD
+          - COK
+          - CRI
+          - CIV
+          - HRV
+          - CUB
+          - CUW
+          - CYP
+          - CZE
+          - DNK
+          - DJI
+          - DMA
+          - DOM
+          - ECU
+          - EGY
+          - SLV
+          - GNQ
+          - ERI
+          - EST
+          - SWZ
+          - ETH
+          - FLK
+          - FRO
+          - FJI
+          - FIN
+          - FRA
+          - GUF
+          - PYF
+          - ATF
+          - GAB
+          - GMB
+          - GEO
+          - DEU
+          - GHA
+          - GIB
+          - GRC
+          - GRL
+          - GRD
+          - GLP
+          - GUM
+          - GTM
+          - GGY
+          - GIN
+          - GNB
+          - GUY
+          - HTI
+          - HMD
+          - VAT
+          - HND
+          - HKG
+          - HUN
+          - ISL
+          - IND
+          - IDN
+          - IRN
+          - IRQ
+          - IRL
+          - IMN
+          - ISR
+          - ITA
+          - JAM
+          - JPN
+          - JEY
+          - JOR
+          - KAZ
+          - KEN
+          - KIR
+          - PRK
+          - KOR
+          - KWT
+          - KGZ
+          - LAO
+          - LVA
+          - LBN
+          - LSO
+          - LBR
+          - LBY
+          - LIE
+          - LTU
+          - LUX
+          - MAC
+          - MDG
+          - MWI
+          - MYS
+          - MDV
+          - MLI
+          - MLT
+          - MHL
+          - MTQ
+          - MRT
+          - MUS
+          - MYT
+          - MEX
+          - FSM
+          - MDA
+          - MCO
+          - MNG
+          - MNE
+          - MSR
+          - MAR
+          - MOZ
+          - MMR
+          - NAM
+          - NRU
+          - NPL
+          - NLD
+          - NCL
+          - NZL
+          - NIC
+          - NER
+          - NGA
+          - NIU
+          - NFK
+          - MKD
+          - MNP
+          - NOR
+          - OMN
+          - PAK
+          - PLW
+          - PSE
+          - PAN
+          - PNG
+          - PRY
+          - PER
+          - PHL
+          - PCN
+          - POL
+          - PRT
+          - PRI
+          - QAT
+          - REU
+          - ROU
+          - RUS
+          - RWA
+          - BLM
+          - SHN
+          - KNA
+          - LCA
+          - MAF
+          - SPM
+          - VCT
+          - WSM
+          - SMR
+          - STP
+          - SAU
+          - SEN
+          - SRB
+          - SYC
+          - SLE
+          - SGP
+          - SXM
+          - SVK
+          - SVN
+          - SLB
+          - SOM
+          - ZAF
+          - SGS
+          - SSD
+          - ESP
+          - LKA
+          - SDN
+          - SUR
+          - SJM
+          - SWE
+          - CHE
+          - SYR
+          - TWN
+          - TJK
+          - TZA
+          - THA
+          - TLS
+          - TGO
+          - TKL
+          - TON
+          - TTO
+          - TUN
+          - TUR
+          - TKM
+          - TCA
+          - TUV
+          - UGA
+          - UKR
+          - ARE
+          - GBR
+          - USA
+          - UMI
+          - URY
+          - UZB
+          - VUT
+          - VEN
+          - VNM
+          - VGB
+          - VIR
+          - WLF
+          - ESH
+          - YEM
+          - ZMB
+          - ZWE
+          - XXK
+          - XKX
+          example: GBR
+      required:
+      - type
+      - postcode
+      - country
+    Pagination:
+      type: object
+      properties: {}

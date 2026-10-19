@@ -1,0 +1,493 @@
+openapi: 3.2.0
+info:
+  title: Horizon Link - API Docs Partner API
+  description: ''
+  version: '1.0'
+  contact: {}
+servers:
+- url: api-url
+tags:
+- name: Partner
+paths:
+  /v1/partner/prospects/personal/questionnaire:
+    get:
+      operationId: PersonalProspectControllerDeprecated_getQuestionnaire
+      summary: Personal prospect controller deprecated get questionnaire
+      deprecated: true
+      description: Will be removed
+      parameters:
+      - name: customerId
+        required: true
+        in: query
+        schema:
+          type: string
+      - name: sourceId
+        required: true
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+      - Partner
+      x-summary-source: derived
+    post:
+      operationId: PersonalProspectControllerDeprecated_submitQuestionnaire
+      summary: Personal prospect controller deprecated submit questionnaire
+      deprecated: true
+      description: Will be removed
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PartnerQuestionnaireQuestionAnswerRequest'
+      responses:
+        '201':
+          description: ''
+      tags:
+      - Partner
+      x-summary-source: derived
+  /v1/partner/prospects/personal/compliance/{prospectId}/start-checks:
+    post:
+      operationId: PersonalProspectControllerDeprecated_startComplianceChecks
+      summary: Personal prospect controller deprecated start compliance checks
+      deprecated: true
+      description: Will be removed
+      parameters:
+      - name: prospectId
+        required: true
+        in: path
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PartnerStartPersonalComplianceChecksRequest'
+      responses:
+        '201':
+          description: ''
+      tags:
+      - Partner
+      x-summary-source: derived
+components:
+  schemas:
+    PartnerComplianceCheckItemEvidence:
+      type: object
+      properties:
+        externalEvidenceId:
+          type: string
+          example: '123456789'
+        type:
+          type: string
+          enum:
+          - BILL
+          - PASSPORT
+          - RESIDENCY_PERMIT
+          - BIRTH_CERTIFICATE
+          - ID_CARD
+          - BANK_STATEMENT
+          - TAX_RETURNS
+          - ACCOUNTING_DOCS
+          - FACE_RECORDING
+          - VOTER_ID
+          - DRIVING_LICENCE
+          - WORK_PERMIT
+          - OTHER
+          - DRIVING_LICENSE
+          - EGOV_DOC
+          - UK_SHARE_CODE
+        providedBy:
+          type: string
+          enum:
+          - CUSTOMER
+          - PARTNER
+        issuingCountry:
+          type: string
+          enum:
+          - AFG
+          - ALA
+          - ALB
+          - DZA
+          - ASM
+          - AND
+          - AGO
+          - AIA
+          - ATA
+          - ATG
+          - ARG
+          - ARM
+          - ABW
+          - AUS
+          - AUT
+          - AZE
+          - BHS
+          - BHR
+          - BGD
+          - BRB
+          - BLR
+          - BEL
+          - BLZ
+          - BEN
+          - BMU
+          - BTN
+          - BOL
+          - BES
+          - BIH
+          - BWA
+          - BVT
+          - BRA
+          - IOT
+          - BRN
+          - BGR
+          - BFA
+          - BDI
+          - CPV
+          - KHM
+          - CMR
+          - CAN
+          - CYM
+          - CAF
+          - TCD
+          - CHL
+          - CHN
+          - CXR
+          - CCK
+          - COL
+          - COM
+          - COG
+          - COD
+          - COK
+          - CRI
+          - CIV
+          - HRV
+          - CUB
+          - CUW
+          - CYP
+          - CZE
+          - DNK
+          - DJI
+          - DMA
+          - DOM
+          - ECU
+          - EGY
+          - SLV
+          - GNQ
+          - ERI
+          - EST
+          - SWZ
+          - ETH
+          - FLK
+          - FRO
+          - FJI
+          - FIN
+          - FRA
+          - GUF
+          - PYF
+          - ATF
+          - GAB
+          - GMB
+          - GEO
+          - DEU
+          - GHA
+          - GIB
+          - GRC
+          - GRL
+          - GRD
+          - GLP
+          - GUM
+          - GTM
+          - GGY
+          - GIN
+          - GNB
+          - GUY
+          - HTI
+          - HMD
+          - VAT
+          - HND
+          - HKG
+          - HUN
+          - ISL
+          - IND
+          - IDN
+          - IRN
+          - IRQ
+          - IRL
+          - IMN
+          - ISR
+          - ITA
+          - JAM
+          - JPN
+          - JEY
+          - JOR
+          - KAZ
+          - KEN
+          - KIR
+          - PRK
+          - KOR
+          - KWT
+          - KGZ
+          - LAO
+          - LVA
+          - LBN
+          - LSO
+          - LBR
+          - LBY
+          - LIE
+          - LTU
+          - LUX
+          - MAC
+          - MDG
+          - MWI
+          - MYS
+          - MDV
+          - MLI
+          - MLT
+          - MHL
+          - MTQ
+          - MRT
+          - MUS
+          - MYT
+          - MEX
+          - FSM
+          - MDA
+          - MCO
+          - MNG
+          - MNE
+          - MSR
+          - MAR
+          - MOZ
+          - MMR
+          - NAM
+          - NRU
+          - NPL
+          - NLD
+          - NCL
+          - NZL
+          - NIC
+          - NER
+          - NGA
+          - NIU
+          - NFK
+          - MKD
+          - MNP
+          - NOR
+          - OMN
+          - PAK
+          - PLW
+          - PSE
+          - PAN
+          - PNG
+          - PRY
+          - PER
+          - PHL
+          - PCN
+          - POL
+          - PRT
+          - PRI
+          - QAT
+          - REU
+          - ROU
+          - RUS
+          - RWA
+          - BLM
+          - SHN
+          - KNA
+          - LCA
+          - MAF
+          - SPM
+          - VCT
+          - WSM
+          - SMR
+          - STP
+          - SAU
+          - SEN
+          - SRB
+          - SYC
+          - SLE
+          - SGP
+          - SXM
+          - SVK
+          - SVN
+          - SLB
+          - SOM
+          - ZAF
+          - SGS
+          - SSD
+          - ESP
+          - LKA
+          - SDN
+          - SUR
+          - SJM
+          - SWE
+          - CHE
+          - SYR
+          - TWN
+          - TJK
+          - TZA
+          - THA
+          - TLS
+          - TGO
+          - TKL
+          - TON
+          - TTO
+          - TUN
+          - TUR
+          - TKM
+          - TCA
+          - TUV
+          - UGA
+          - UKR
+          - ARE
+          - GBR
+          - USA
+          - UMI
+          - URY
+          - UZB
+          - VUT
+          - VEN
+          - VNM
+          - VGB
+          - VIR
+          - WLF
+          - ESH
+          - YEM
+          - ZMB
+          - ZWE
+          - XXK
+          - XKX
+          example: GBR
+        side:
+          type: string
+          enum:
+          - FRONT
+          - BACK
+        kind:
+          type: string
+          enum:
+          - IMAGE
+          - VIDEO
+      required:
+      - externalEvidenceId
+      - type
+      - providedBy
+      - kind
+    PartnerQuestionnaireQuestionAnswer:
+      type: object
+      properties:
+        questionKey:
+          type: string
+        options:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        text:
+          type:
+          - string
+          - 'null'
+      required:
+      - questionKey
+      - options
+      - text
+    PartnerComplianceCheckItem:
+      type: object
+      properties:
+        key:
+          type: object
+          description: Required attribute key
+          example: true
+        verified:
+          type: boolean
+          description: Indicates where the verification result is successful
+          example: true
+        processType:
+          type: string
+          description: Indicates where a verification decision is made automatically or manually
+          enum:
+          - MANUAL
+          - AUTOMATIC
+        remarks:
+          description: Additional comments about the compliance check item
+          example:
+          - Prospective customer provided multiple bank statements as address proof from AAA Bank and BBB Financial institution
+          - The customer manually provided a passport scan after the automated check failed with the expired ID document
+          type: array
+          items:
+            type: array
+        properties:
+          description: Supplementary data from the verification documents
+          example:
+          - key: passport_number
+            value: ALG123456
+          type:
+          - array
+          - 'null'
+          items:
+            type: array
+        evidence:
+          type:
+          - array
+          - 'null'
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/PartnerComplianceCheckItemEvidence'
+            - $ref: '#/components/schemas/PartnerComplianceCheckItemEvidenceExternal'
+      required:
+      - key
+      - verified
+      - processType
+      - remarks
+    PartnerStartPersonalComplianceChecksRequest:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/PartnerComplianceCheckItem'
+      required:
+      - items
+    PartnerQuestionnaireQuestionAnswerRequest:
+      type: object
+      properties:
+        entityId:
+          type: string
+          description: Unique entityId identifier (prospect or customer id)
+          format: uuid
+        source:
+          type: string
+          enum:
+          - NONE
+          - ONBOARDING
+          - PERIODIC_REVIEW
+          - CUSTOMER_TASK
+        sourceId:
+          type:
+          - string
+          - 'null'
+        answers:
+          type: array
+          items:
+            $ref: '#/components/schemas/PartnerQuestionnaireQuestionAnswer'
+      required:
+      - entityId
+      - source
+      - sourceId
+      - answers
+    PartnerComplianceCheckItemEvidenceExternal:
+      type: object
+      properties:
+        externalEvidenceId:
+          type: string
+          example: '123456789'
+        externalProvider:
+          type: string
+          example: ONFIDO
+      required:
+      - externalEvidenceId
+      - externalProvider

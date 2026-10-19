@@ -1,0 +1,101 @@
+openapi: 3.2.0
+info:
+  title: Horizon Link - API Docs Partners API
+  description: ''
+  version: '1.0'
+  contact: {}
+servers:
+- url: api-url
+tags:
+- name: Partners
+paths:
+  /v1/partner/test:
+    post:
+      operationId: PartnerController_postTest
+      parameters:
+      - name: authorization
+        in: header
+        description: Authorization header containing your API Token
+        schema:
+          type: string
+      - name: x-alg-nonce
+        in: header
+        description: Nonce used to generate the payload signature
+        schema:
+          type: string
+      - name: x-alg-signature
+        in: header
+        description: Payload signature
+        schema:
+          type: string
+      - name: date
+        in: header
+        description: Date of the request un UTC/GMT
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PartnerTestRequest'
+      responses:
+        '201':
+          description: Returns message
+          content:
+            application/json:
+              schema:
+                type: string
+      tags:
+      - Partners
+      summary: Partner controller post test
+      x-summary-source: derived
+  /v1/partner/webhook-test:
+    post:
+      operationId: PartnerController_webhookTest
+      parameters:
+      - name: authorization
+        in: header
+        description: Authorization header containing your API Token
+        schema:
+          type: string
+      - name: x-alg-nonce
+        in: header
+        description: Nonce used to generate the payload signature
+        schema:
+          type: string
+      - name: x-alg-signature
+        in: header
+        description: Payload signature
+        schema:
+          type: string
+      - name: date
+        in: header
+        description: Date of the request un UTC/GMT
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PartnerTestRequest'
+      responses:
+        '201':
+          description: ''
+      tags:
+      - Partners
+      summary: Partner controller webhook test
+      x-summary-source: derived
+components:
+  schemas:
+    PartnerTestRequest:
+      type: object
+      properties:
+        message:
+          type: string
+          format: string
+          maximum: 100
+          example: Hello
+      required:
+      - message

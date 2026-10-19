@@ -1,446 +1,3382 @@
 openapi: 3.2.0
 info:
-  title: Account and Transaction API Specification Accounts API
-  description: Swagger for Account and Transaction API Specification
-  termsOfService: https://tell.money/api_terms
-  contact:
-    name: Tell Connect Support
-    email: tpp_support@tell.money
-  version: v3.1.0
+  title: Horizon Link - API Docs Accounts API
+  description: ''
+  version: '1.0'
+  contact: {}
 servers:
-- url: https://secure.tell.systems/algbra/open-banking/v3.1/aisp
+- url: api-url
 tags:
 - name: Accounts
 paths:
-  /accounts:
-    get:
+  /v1/partner/accounts/primary:
+    post:
+      operationId: AccountController_createPrimaryAccount
+      summary: Create a primary account
+      parameters:
+      - name: authorization
+        in: header
+        description: Authorization header containing your API Token
+        schema:
+          type: string
+      - name: x-alg-nonce
+        in: header
+        description: Nonce used to generate the payload signature
+        schema:
+          type: string
+      - name: x-alg-signature
+        in: header
+        description: Payload signature
+        schema:
+          type: string
+      - name: date
+        in: header
+        description: Date of the request un UTC/GMT
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PartnerCreatePrimaryAccountRequest'
+      responses:
+        '201':
+          description: Account successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerPrimaryAccountResponse'
+        '400':
+          description: Input validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
       tags:
       - Accounts
-      summary: Get Accounts
-      operationId: GetAccounts
+  /v1/partner/accounts/virtual:
+    post:
+      operationId: AccountController_createVirtualAccount
+      summary: Create a virtual account
       parameters:
-      - $ref: '#/components/parameters/x-fapi-financial-id-Param'
-      - $ref: '#/components/parameters/x-fapi-customer-last-logged-time-Param'
-      - $ref: '#/components/parameters/x-fapi-customer-ip-address-Param'
-      - $ref: '#/components/parameters/x-fapi-interaction-id-Param'
-      - $ref: '#/components/parameters/AuthorizationParam'
-      - $ref: '#/components/parameters/x-customer-user-agent-Param'
+      - name: authorization
+        in: header
+        description: Authorization header containing your API Token
+        schema:
+          type: string
+      - name: x-alg-nonce
+        in: header
+        description: Nonce used to generate the payload signature
+        schema:
+          type: string
+      - name: x-alg-signature
+        in: header
+        description: Payload signature
+        schema:
+          type: string
+      - name: date
+        in: header
+        description: Date of the request un UTC/GMT
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PartnerCreateVirtualAccountRequest'
       responses:
-        '200':
-          $ref: '#/components/responses/200AccountsRead'
+        '201':
+          description: Account successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerVirtualAccountResponse'
         '400':
-          $ref: '#/components/responses/400ErrorResponse'
+          description: Input validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
         '401':
-          $ref: '#/components/responses/401ErrorResponse'
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
         '403':
-          $ref: '#/components/responses/403ErrorResponse'
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
         '404':
-          $ref: '#/components/responses/404ErrorResponse'
-        '405':
-          $ref: '#/components/responses/405ErrorResponse'
-        '406':
-          $ref: '#/components/responses/406ErrorResponse'
-        '429':
-          $ref: '#/components/responses/429ErrorResponse'
-        '500':
-          $ref: '#/components/responses/500ErrorResponse'
-      security:
-      - PSUOAuth2Security:
-        - accounts
-  /accounts/{AccountId}:
-    get:
+          description: Parent account not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+        '412':
+          description: Precondition failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+        '422':
+          description: Unprocessable entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerAccountErrorResponse'
       tags:
       - Accounts
-      summary: Get Accounts
-      operationId: GetAccountsAccountId
+  /v1/partner/accounts:
+    get:
+      operationId: AccountController_getAllAccounts
+      summary: Get all accounts
       parameters:
-      - $ref: '#/components/parameters/AccountId'
-      - $ref: '#/components/parameters/x-fapi-financial-id-Param'
-      - $ref: '#/components/parameters/x-fapi-customer-last-logged-time-Param'
-      - $ref: '#/components/parameters/x-fapi-customer-ip-address-Param'
-      - $ref: '#/components/parameters/x-fapi-interaction-id-Param'
-      - $ref: '#/components/parameters/AuthorizationParam'
-      - $ref: '#/components/parameters/x-customer-user-agent-Param'
+      - name: types
+        required: false
+        in: query
+        description: List of account type to filter accounts. Multiple types can be specified.
+        example:
+        - PRIMARY
+        schema:
+          default:
+          - PRIMARY
+          - VIRTUAL
+          - PROGRAM
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+            enum:
+            - PRIMARY
+            - VIRTUAL
+            - PROGRAM
+      - name: primaryAccountId
+        required: false
+        in: query
+        description: Primary account ID to filter virtual accounts.
+        example: e0cab2dd-739f-43de-b131-3e423e935bf1
+        schema:
+          format: uuid
+          type:
+          - string
+          - 'null'
+      - name: states
+        required: false
+        in: query
+        description: List of account states to filter results.
+        example:
+        - READY
+        schema:
+          default:
+          - READY
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+            enum:
+            - INITIALIZING
+            - READY
+            - BLOCKED
+            - CLOSED
+            - SUSPENDED
+      - name: page
+        required: true
+        in: query
+        description: Page number for paginated results.
+        example: 1
+        schema:
+          default: 1
+          type: number
+      - name: limit
+        required: true
+        in: query
+        description: Number of accounts per page.
+        example: 10
+        schema:
+          maximum: 100
+          default: 10
+          type: number
+      - name: authorization
+        in: header
+        description: Authorization header containing your API Token
+        schema:
+          type: string
+      - name: x-alg-nonce
+        in: header
+        description: Nonce used to generate the payload signature
+        schema:
+          type: string
+      - name: x-alg-signature
+        in: header
+        description: Payload signature
+        schema:
+          type: string
+      - name: date
+        in: header
+        description: Date of the request un UTC/GMT
+        schema:
+          type: string
       responses:
         '200':
-          $ref: '#/components/responses/200AccountsAccountIdRead'
+          description: List of accounts available to the partner
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/Pagination'
+                - properties:
+                    items:
+                      type: array
+                      items:
+                        oneOf:
+                        - $ref: '#/components/schemas/PartnerPrimaryAccountResponse'
+                        - $ref: '#/components/schemas/PartnerVirtualAccountResponse'
+                        - $ref: '#/components/schemas/PartnerProgramAccountResponse'
+                    meta:
+                      type: object
+                      properties:
+                        currentPage:
+                          type: number
+                          example: 1
+                        itemCount:
+                          type: number
+                          example: 10
+                        itemsPerPage:
+                          type: number
+                          example: 10
+                        totalItems:
+                          type: number
+                          example: 100
+                        totalPages:
+                          type: number
+                          example: 10
         '400':
-          $ref: '#/components/responses/400ErrorResponse'
-        '401':
-          $ref: '#/components/responses/401ErrorResponse'
+          description: Input validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+        '422':
+          description: Unprocessable entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerAccountErrorResponse'
+      tags:
+      - Accounts
+  /v1/partner/accounts/{accountId}:
+    get:
+      operationId: AccountController_getAccountById
+      summary: Get account
+      parameters:
+      - name: accountId
+        required: true
+        in: path
+        schema:
+          type: string
+      - name: authorization
+        in: header
+        description: Authorization header containing your API Token
+        schema:
+          type: string
+      - name: x-alg-nonce
+        in: header
+        description: Nonce used to generate the payload signature
+        schema:
+          type: string
+      - name: x-alg-signature
+        in: header
+        description: Payload signature
+        schema:
+          type: string
+      - name: date
+        in: header
+        description: Date of the request un UTC/GMT
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returns the account details
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/PartnerPrimaryAccountResponse'
+                - $ref: '#/components/schemas/PartnerVirtualAccountResponse'
+                - $ref: '#/components/schemas/PartnerProgramAccountResponse'
+        '400':
+          description: Input validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
         '403':
-          $ref: '#/components/responses/403ErrorResponse'
-        '405':
-          $ref: '#/components/responses/405ErrorResponse'
-        '406':
-          $ref: '#/components/responses/406ErrorResponse'
-        '429':
-          $ref: '#/components/responses/429ErrorResponse'
-        '500':
-          $ref: '#/components/responses/500ErrorResponse'
-      security:
-      - PSUOAuth2Security:
-        - accounts
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+        '404':
+          description: Account not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+        '422':
+          description: Unprocessable entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerAccountErrorResponse'
+      tags:
+      - Accounts
+  /v1/partner/accounts/{accountId}/balance:
+    get:
+      operationId: AccountController_getAccountBalance
+      summary: Get account balance
+      parameters:
+      - name: accountId
+        required: true
+        in: path
+        schema:
+          type: string
+      - name: authorization
+        in: header
+        description: Authorization header containing your API Token
+        schema:
+          type: string
+      - name: x-alg-nonce
+        in: header
+        description: Nonce used to generate the payload signature
+        schema:
+          type: string
+      - name: x-alg-signature
+        in: header
+        description: Payload signature
+        schema:
+          type: string
+      - name: date
+        in: header
+        description: Date of the request un UTC/GMT
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Returns account real-time balance positions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerAccountBalanceResponse'
+        '400':
+          description: Input validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+        '404':
+          description: Account not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+        '422':
+          description: Unprocessable entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerAccountErrorResponse'
+      tags:
+      - Accounts
+  /v1/partner/accounts/virtual/{accountId}:
+    delete:
+      operationId: AccountController_closeVirtualAccount
+      summary: Delete a virtual account
+      parameters:
+      - name: accountId
+        required: true
+        in: path
+        schema:
+          type: string
+      - name: authorization
+        in: header
+        description: Authorization header containing your API Token
+        schema:
+          type: string
+      - name: x-alg-nonce
+        in: header
+        description: Nonce used to generate the payload signature
+        schema:
+          type: string
+      - name: x-alg-signature
+        in: header
+        description: Payload signature
+        schema:
+          type: string
+      - name: date
+        in: header
+        description: Date of the request un UTC/GMT
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PartnerDeleteVirtualAccountRequest'
+      responses:
+        '200':
+          description: Virtual account deleted
+        '400':
+          description: Input validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+        '404':
+          description: Account not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+        '412':
+          description: Precondition failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerCommonErrorResponse'
+        '422':
+          description: Unprocessable entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerAccountErrorResponse'
+      tags:
+      - Accounts
 components:
   schemas:
-    OBExternalAccountIdentification4Code:
-      description: Name of the identification scheme, in a coded form as published in an external list.
-      type: string
-      example:
-      - UK.OBIE.BBAN
-      - UK.OBIE.IBAN
-      - UK.OBIE.PAN
-      - UK.OBIE.Paym
-      - UK.OBIE.SortCodeAccountNumber
-      minLength: 1
-      maxLength: 40
-    AccountId:
-      description: A unique and immutable identifier used to identify the account resource. This identifier has no meaning to the account owner.
-      type: string
-      minLength: 1
-      maxLength: 40
-    Links:
-      type: object
-      description: Links relevant to the payload
-      properties:
-        Self:
-          type: string
-          format: uri
-        First:
-          type: string
-          format: uri
-        Prev:
-          type: string
-          format: uri
-        Next:
-          type: string
-          format: uri
-        Last:
-          type: string
-          format: uri
-      additionalProperties: false
-      required:
-      - Self
-    OBExternalFinancialInstitutionIdentification4Code:
-      description: Name of the identification scheme, in a coded form as published in an external list.
-      type: string
-      example:
-      - UK.OBIE.BICFI
-      minLength: 1
-      maxLength: 40
-    OBReadAccount3:
+    PartnerUKAccount:
       type: object
       properties:
-        Data:
+        sortCode:
+          type: string
+          description: UK domestic bank sort code
+          example: '010102'
+        accountNumber:
+          type: string
+          description: UK domestic bank account number
+          example: '12345678'
+        type:
           type: object
-          properties:
-            Account:
-              items:
-                $ref: '#/components/schemas/OBAccount3'
-              type: array
-              description: Unambiguous identification of the account to which credit and debit entries are made.
-          additionalProperties: false
-        Links:
-          $ref: '#/components/schemas/Links'
-        Meta:
-          $ref: '#/components/schemas/Meta'
+          description: Type of the account
+          example: UK_ACCOUNT
       required:
-      - Data
-      - Links
-      - Meta
-      additionalProperties: false
-    OBExternalAccountType1Code:
-      description: Specifies the type of account (personal or business).
-      type: string
-      enum:
-      - Business
-      - Personal
-    OBBranchAndFinancialInstitutionIdentification5:
-      description: 'Party that manages the account on behalf of the account owner, that is manages the registration and booking of entries on the account, calculates balances on the account and provides information about the account.
-
-        This is the servicer of the beneficiary account.'
+      - sortCode
+      - accountNumber
+      - type
+    PartnerAccountBalanceResponse:
       type: object
       properties:
-        SchemeName:
-          $ref: '#/components/schemas/OBExternalFinancialInstitutionIdentification4Code'
-        Identification:
-          description: Unique and unambiguous identification of the servicing institution.
+        currency:
           type: string
-          minLength: 1
-          maxLength: 35
+          enum:
+          - AFN
+          - EUR
+          - ALL
+          - DZD
+          - USD
+          - AOA
+          - XCD
+          - ARS
+          - AMD
+          - AWG
+          - AUD
+          - AZN
+          - BSD
+          - BHD
+          - BDT
+          - BBD
+          - BYN
+          - BZD
+          - XOF
+          - BMD
+          - INR
+          - BTN
+          - BOB
+          - BOV
+          - BAM
+          - BWP
+          - NOK
+          - BRL
+          - BND
+          - BGN
+          - BIF
+          - CVE
+          - KHR
+          - XAF
+          - CAD
+          - KYD
+          - CLP
+          - CLF
+          - CNY
+          - COP
+          - COU
+          - KMF
+          - CDF
+          - NZD
+          - CRC
+          - HRK
+          - CUP
+          - CUC
+          - ANG
+          - CZK
+          - DKK
+          - DJF
+          - DOP
+          - EGP
+          - SVC
+          - ERN
+          - SZL
+          - ETB
+          - FKP
+          - FJD
+          - XPF
+          - GMD
+          - GEL
+          - GHS
+          - GIP
+          - GTQ
+          - GBP
+          - GNF
+          - GYD
+          - HTG
+          - HNL
+          - HKD
+          - HUF
+          - ISK
+          - IDR
+          - XDR
+          - IRR
+          - IQD
+          - ILS
+          - JMD
+          - JPY
+          - JOD
+          - KZT
+          - KES
+          - KPW
+          - KRW
+          - KWD
+          - KGS
+          - LAK
+          - LBP
+          - LSL
+          - ZAR
+          - LRD
+          - LYD
+          - CHF
+          - MOP
+          - MKD
+          - MGA
+          - MWK
+          - MYR
+          - MVR
+          - MRU
+          - MUR
+          - XUA
+          - MXN
+          - MXV
+          - MDL
+          - MNT
+          - MAD
+          - MZN
+          - MMK
+          - NAD
+          - NPR
+          - NIO
+          - NGN
+          - OMR
+          - PKR
+          - PAB
+          - PGK
+          - PYG
+          - PEN
+          - PHP
+          - PLN
+          - QAR
+          - RON
+          - RUB
+          - RWF
+          - WST
+          - STN
+          - SAR
+          - RSD
+          - SCR
+          - SLL
+          - SGD
+          - XSU
+          - SBD
+          - SOS
+          - SSP
+          - LKR
+          - SDG
+          - SRD
+          - SEK
+          - CHE
+          - CHW
+          - SYP
+          - TWD
+          - TJS
+          - THB
+          - TOP
+          - TTD
+          - TND
+          - TRY
+          - TMT
+          - UGX
+          - UAH
+          - AED
+          - USN
+          - UYU
+          - UYI
+          - UYW
+          - UZS
+          - VUV
+          - VES
+          - VND
+          - YER
+          - ZMW
+          - ZWL
+          - XBA
+          - XBB
+          - XBC
+          - XBD
+          - XTS
+          - XXX
+          - XAU
+          - XPD
+          - XPT
+          - XAG
+          - AFA
+          - FIM
+          - ADP
+          - ESP
+          - FRF
+          - AOK
+          - AOR
+          - RUR
+          - ATS
+          - AYM
+          - AZM
+          - BYB
+          - BYR
+          - BEC
+          - BEF
+          - BEL
+          - BAD
+          - BRB
+          - BRR
+          - BGJ
+          - CYP
+          - CSK
+          - ECS
+          - ECV
+          - GQE
+          - EEK
+          - XEU
+          - GEK
+          - DDM
+          - DEM
+          - GHC
+          - GHP
+          - GRD
+          - GWE
+          - ITL
+          - IEP
+          - LVL
+          - ZAL
+          - LTL
+          - LUC
+          - LUF
+          - LUL
+          - MGF
+          - MLF
+          - MTL
+          - MRO
+          - MZE
+          - NLG
+          - PLZ
+          - PTE
+          - ROK
+          - STD
+          - CSD
+          - SKK
+          - SIT
+          - RHD
+          - ESA
+          - ESB
+          - SDD
+          - SRG
+          - TJR
+          - TPE
+          - TRL
+          - TMM
+          - UAK
+          - USS
+          - VEB
+          - VEF
+          - YUD
+          - ZRN
+          - ZMK
+          - ZWN
+          - ZWR
+          example: GBP
+        availableBalance:
+          type: number
+        ledgerBalance:
+          type: number
+        pendingCredits:
+          type: number
       required:
-      - SchemeName
-      - Identification
-      additionalProperties: false
-    OBAccount3:
-      description: Unambiguous identification of the account to which credit and debit entries are made.
+      - currency
+      - availableBalance
+      - ledgerBalance
+      - pendingCredits
+    PartnerValidationFieldError:
       type: object
       properties:
-        AccountId:
-          $ref: '#/components/schemas/AccountId'
-        Currency:
-          description: "Identification of the currency in which the account is held. \nUsage: Currency should only be used in case one and the same account number covers several currencies\nand the initiating party needs to identify which currency needs to be used for settlement on the account."
+        message:
           type: string
-          pattern: ^[A-Z]{3,3}$
-        AccountType:
-          $ref: '#/components/schemas/OBExternalAccountType1Code'
-        AccountSubType:
-          $ref: '#/components/schemas/OBExternalAccountSubType1Code'
-        Description:
-          description: Specifies the description of the account type.
+        path:
+          type:
+          - string
+          - 'null'
+      required:
+      - message
+    PartnerDeleteVirtualAccountRequest:
+      type: object
+      properties:
+        idempotencyKey:
           type: string
-          minLength: 1
-          maxLength: 35
-        Nickname:
-          description: The nickname of the account, assigned by the account owner in order to provide an additional means of identification of the account.
+          format: uuid
+          description: A unique idempotency key to prevent duplicate operations
+        requestedBy:
           type: string
-          minLength: 1
-          maxLength: 70
-        Account:
-          items:
-            $ref: '#/components/schemas/OBCashAccount5'
+        reason:
+          type: string
+        notes:
+          type:
+          - string
+          - 'null'
+      required:
+      - idempotencyKey
+      - requestedBy
+      - reason
+      - notes
+    PartnerPrimaryAccountResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier of the account
+          example: e0cab2dd-739f-43de-b131-3e423e935bf1
+        partnerId:
+          type: string
+          format: uuid
+          description: Partner identifier that owns or manages this account
+          example: 2ecf0e23-3215-462c-97c4-9e5a147656d7
+          deprecated: true
+        externalReference:
+          type: string
+          format: uuid
+          description: External reference
+        primaryAccountId:
+          type:
+          - string
+          - 'null'
+          format: uuid
+          description: Always null for primary accounts
+          example: null
+        currencyCode:
+          type: string
+          enum:
+          - AFN
+          - EUR
+          - ALL
+          - DZD
+          - USD
+          - AOA
+          - XCD
+          - ARS
+          - AMD
+          - AWG
+          - AUD
+          - AZN
+          - BSD
+          - BHD
+          - BDT
+          - BBD
+          - BYN
+          - BZD
+          - XOF
+          - BMD
+          - INR
+          - BTN
+          - BOB
+          - BOV
+          - BAM
+          - BWP
+          - NOK
+          - BRL
+          - BND
+          - BGN
+          - BIF
+          - CVE
+          - KHR
+          - XAF
+          - CAD
+          - KYD
+          - CLP
+          - CLF
+          - CNY
+          - COP
+          - COU
+          - KMF
+          - CDF
+          - NZD
+          - CRC
+          - HRK
+          - CUP
+          - CUC
+          - ANG
+          - CZK
+          - DKK
+          - DJF
+          - DOP
+          - EGP
+          - SVC
+          - ERN
+          - SZL
+          - ETB
+          - FKP
+          - FJD
+          - XPF
+          - GMD
+          - GEL
+          - GHS
+          - GIP
+          - GTQ
+          - GBP
+          - GNF
+          - GYD
+          - HTG
+          - HNL
+          - HKD
+          - HUF
+          - ISK
+          - IDR
+          - XDR
+          - IRR
+          - IQD
+          - ILS
+          - JMD
+          - JPY
+          - JOD
+          - KZT
+          - KES
+          - KPW
+          - KRW
+          - KWD
+          - KGS
+          - LAK
+          - LBP
+          - LSL
+          - ZAR
+          - LRD
+          - LYD
+          - CHF
+          - MOP
+          - MKD
+          - MGA
+          - MWK
+          - MYR
+          - MVR
+          - MRU
+          - MUR
+          - XUA
+          - MXN
+          - MXV
+          - MDL
+          - MNT
+          - MAD
+          - MZN
+          - MMK
+          - NAD
+          - NPR
+          - NIO
+          - NGN
+          - OMR
+          - PKR
+          - PAB
+          - PGK
+          - PYG
+          - PEN
+          - PHP
+          - PLN
+          - QAR
+          - RON
+          - RUB
+          - RWF
+          - WST
+          - STN
+          - SAR
+          - RSD
+          - SCR
+          - SLL
+          - SGD
+          - XSU
+          - SBD
+          - SOS
+          - SSP
+          - LKR
+          - SDG
+          - SRD
+          - SEK
+          - CHE
+          - CHW
+          - SYP
+          - TWD
+          - TJS
+          - THB
+          - TOP
+          - TTD
+          - TND
+          - TRY
+          - TMT
+          - UGX
+          - UAH
+          - AED
+          - USN
+          - UYU
+          - UYI
+          - UYW
+          - UZS
+          - VUV
+          - VES
+          - VND
+          - YER
+          - ZMW
+          - ZWL
+          - XBA
+          - XBB
+          - XBC
+          - XBD
+          - XTS
+          - XXX
+          - XAU
+          - XPD
+          - XPT
+          - XAG
+          - AFA
+          - FIM
+          - ADP
+          - ESP
+          - FRF
+          - AOK
+          - AOR
+          - RUR
+          - ATS
+          - AYM
+          - AZM
+          - BYB
+          - BYR
+          - BEC
+          - BEF
+          - BEL
+          - BAD
+          - BRB
+          - BRR
+          - BGJ
+          - CYP
+          - CSK
+          - ECS
+          - ECV
+          - GQE
+          - EEK
+          - XEU
+          - GEK
+          - DDM
+          - DEM
+          - GHC
+          - GHP
+          - GRD
+          - GWE
+          - ITL
+          - IEP
+          - LVL
+          - ZAL
+          - LTL
+          - LUC
+          - LUF
+          - LUL
+          - MGF
+          - MLF
+          - MTL
+          - MRO
+          - MZE
+          - NLG
+          - PLZ
+          - PTE
+          - ROK
+          - STD
+          - CSD
+          - SKK
+          - SIT
+          - RHD
+          - ESA
+          - ESB
+          - SDD
+          - SRG
+          - TJR
+          - TPE
+          - TRL
+          - TMM
+          - UAK
+          - USS
+          - VEB
+          - VEF
+          - YUD
+          - ZRN
+          - ZMK
+          - ZWN
+          - ZWR
+          example: GBP
+          description: Currency associated with this account
+        createDate:
+          format: date-time
+          type: string
+          description: Date when the account was created
+          example: '2025-01-01'
+        identifiers:
+          description: List of identifiers linked to this account
           type: array
-          description: Provides the details to identify an account.
-        Servicer:
-          $ref: '#/components/schemas/OBBranchAndFinancialInstitutionIdentification5'
-      required:
-      - AccountId
-      - Currency
-      - AccountType
-      - AccountSubType
-      additionalProperties: false
-    OBErrorResponse1:
-      description: An array of detail error codes, and messages, and URLs to documentation to help remediation.
-      type: object
-      properties:
-        Code:
-          description: High level textual error code, to help categorize the errors.
-          type: string
-          minLength: 1
-          maxLength: 40
-        Id:
-          description: A unique reference for the error instance, for audit purposes, in case of unknown/unclassified errors.
-          type: string
-          minLength: 1
-          maxLength: 40
-        Message:
-          description: Brief Error message, e.g., 'There is something wrong with the request parameters provided'
-          type: string
-          minLength: 1
-          maxLength: 500
-        Errors:
           items:
-            $ref: '#/components/schemas/OBError1'
+            $ref: '#/components/schemas/PartnerAccountIdentifierResponse'
+        state:
+          type: string
+          enum:
+          - INITIALIZING
+          - READY
+          - BLOCKED
+          - CLOSED
+          - SUSPENDED
+          description: Current operational state of the account
+          example: READY
+        balance:
+          description: Balance details of the account
+          allOf:
+          - $ref: '#/components/schemas/PartnerAccountBalanceResponse'
+        type:
+          type: string
+          enum:
+          - PRIMARY
+          - VIRTUAL
+          - PROGRAM
+          example: PRIMARY
+          description: Type of account
+        customerId:
+          type: string
+          format: uuid
+          description: Customer identifier associated with this account
+          example: a2b9649e-df7f-4349-adff-1c57283fef10
+      required:
+      - id
+      - partnerId
+      - currencyCode
+      - createDate
+      - identifiers
+      - state
+      - balance
+      - type
+      - customerId
+    PartnerAccountErrorResponse:
+      type: object
+      properties:
+        errorType:
+          type: string
+          enum:
+          - ACCOUNT_NOT_AVAILABLE
+        reason:
+          type:
+          - string
+          - 'null'
+        validationFailures:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PartnerValidationFieldError'
+      required:
+      - errorType
+    PartnerIBANAccount:
+      type: object
+      properties:
+        iban:
+          type: string
+          description: International Bank Account Number (IBAN)
+          example: GB33BUKB20201555555555
+        bic:
+          type: string
+          description: Bank Identifier Code (BIC)
+          example: BUKBGB22
+        currency:
+          type: string
+          description: Currency of the account
+          enum:
+          - AFN
+          - EUR
+          - ALL
+          - DZD
+          - USD
+          - AOA
+          - XCD
+          - ARS
+          - AMD
+          - AWG
+          - AUD
+          - AZN
+          - BSD
+          - BHD
+          - BDT
+          - BBD
+          - BYN
+          - BZD
+          - XOF
+          - BMD
+          - INR
+          - BTN
+          - BOB
+          - BOV
+          - BAM
+          - BWP
+          - NOK
+          - BRL
+          - BND
+          - BGN
+          - BIF
+          - CVE
+          - KHR
+          - XAF
+          - CAD
+          - KYD
+          - CLP
+          - CLF
+          - CNY
+          - COP
+          - COU
+          - KMF
+          - CDF
+          - NZD
+          - CRC
+          - HRK
+          - CUP
+          - CUC
+          - ANG
+          - CZK
+          - DKK
+          - DJF
+          - DOP
+          - EGP
+          - SVC
+          - ERN
+          - SZL
+          - ETB
+          - FKP
+          - FJD
+          - XPF
+          - GMD
+          - GEL
+          - GHS
+          - GIP
+          - GTQ
+          - GBP
+          - GNF
+          - GYD
+          - HTG
+          - HNL
+          - HKD
+          - HUF
+          - ISK
+          - IDR
+          - XDR
+          - IRR
+          - IQD
+          - ILS
+          - JMD
+          - JPY
+          - JOD
+          - KZT
+          - KES
+          - KPW
+          - KRW
+          - KWD
+          - KGS
+          - LAK
+          - LBP
+          - LSL
+          - ZAR
+          - LRD
+          - LYD
+          - CHF
+          - MOP
+          - MKD
+          - MGA
+          - MWK
+          - MYR
+          - MVR
+          - MRU
+          - MUR
+          - XUA
+          - MXN
+          - MXV
+          - MDL
+          - MNT
+          - MAD
+          - MZN
+          - MMK
+          - NAD
+          - NPR
+          - NIO
+          - NGN
+          - OMR
+          - PKR
+          - PAB
+          - PGK
+          - PYG
+          - PEN
+          - PHP
+          - PLN
+          - QAR
+          - RON
+          - RUB
+          - RWF
+          - WST
+          - STN
+          - SAR
+          - RSD
+          - SCR
+          - SLL
+          - SGD
+          - XSU
+          - SBD
+          - SOS
+          - SSP
+          - LKR
+          - SDG
+          - SRD
+          - SEK
+          - CHE
+          - CHW
+          - SYP
+          - TWD
+          - TJS
+          - THB
+          - TOP
+          - TTD
+          - TND
+          - TRY
+          - TMT
+          - UGX
+          - UAH
+          - AED
+          - USN
+          - UYU
+          - UYI
+          - UYW
+          - UZS
+          - VUV
+          - VES
+          - VND
+          - YER
+          - ZMW
+          - ZWL
+          - XBA
+          - XBB
+          - XBC
+          - XBD
+          - XTS
+          - XXX
+          - XAU
+          - XPD
+          - XPT
+          - XAG
+          - AFA
+          - FIM
+          - ADP
+          - ESP
+          - FRF
+          - AOK
+          - AOR
+          - RUR
+          - ATS
+          - AYM
+          - AZM
+          - BYB
+          - BYR
+          - BEC
+          - BEF
+          - BEL
+          - BAD
+          - BRB
+          - BRR
+          - BGJ
+          - CYP
+          - CSK
+          - ECS
+          - ECV
+          - GQE
+          - EEK
+          - XEU
+          - GEK
+          - DDM
+          - DEM
+          - GHC
+          - GHP
+          - GRD
+          - GWE
+          - ITL
+          - IEP
+          - LVL
+          - ZAL
+          - LTL
+          - LUC
+          - LUF
+          - LUL
+          - MGF
+          - MLF
+          - MTL
+          - MRO
+          - MZE
+          - NLG
+          - PLZ
+          - PTE
+          - ROK
+          - STD
+          - CSD
+          - SKK
+          - SIT
+          - RHD
+          - ESA
+          - ESB
+          - SDD
+          - SRG
+          - TJR
+          - TPE
+          - TRL
+          - TMM
+          - UAK
+          - USS
+          - VEB
+          - VEF
+          - YUD
+          - ZRN
+          - ZMK
+          - ZWN
+          - ZWR
+          example: GBP
+        country:
+          type: string
+          description: Country of the account
+          enum:
+          - AFG
+          - ALA
+          - ALB
+          - DZA
+          - ASM
+          - AND
+          - AGO
+          - AIA
+          - ATA
+          - ATG
+          - ARG
+          - ARM
+          - ABW
+          - AUS
+          - AUT
+          - AZE
+          - BHS
+          - BHR
+          - BGD
+          - BRB
+          - BLR
+          - BEL
+          - BLZ
+          - BEN
+          - BMU
+          - BTN
+          - BOL
+          - BES
+          - BIH
+          - BWA
+          - BVT
+          - BRA
+          - IOT
+          - BRN
+          - BGR
+          - BFA
+          - BDI
+          - CPV
+          - KHM
+          - CMR
+          - CAN
+          - CYM
+          - CAF
+          - TCD
+          - CHL
+          - CHN
+          - CXR
+          - CCK
+          - COL
+          - COM
+          - COG
+          - COD
+          - COK
+          - CRI
+          - CIV
+          - HRV
+          - CUB
+          - CUW
+          - CYP
+          - CZE
+          - DNK
+          - DJI
+          - DMA
+          - DOM
+          - ECU
+          - EGY
+          - SLV
+          - GNQ
+          - ERI
+          - EST
+          - SWZ
+          - ETH
+          - FLK
+          - FRO
+          - FJI
+          - FIN
+          - FRA
+          - GUF
+          - PYF
+          - ATF
+          - GAB
+          - GMB
+          - GEO
+          - DEU
+          - GHA
+          - GIB
+          - GRC
+          - GRL
+          - GRD
+          - GLP
+          - GUM
+          - GTM
+          - GGY
+          - GIN
+          - GNB
+          - GUY
+          - HTI
+          - HMD
+          - VAT
+          - HND
+          - HKG
+          - HUN
+          - ISL
+          - IND
+          - IDN
+          - IRN
+          - IRQ
+          - IRL
+          - IMN
+          - ISR
+          - ITA
+          - JAM
+          - JPN
+          - JEY
+          - JOR
+          - KAZ
+          - KEN
+          - KIR
+          - PRK
+          - KOR
+          - KWT
+          - KGZ
+          - LAO
+          - LVA
+          - LBN
+          - LSO
+          - LBR
+          - LBY
+          - LIE
+          - LTU
+          - LUX
+          - MAC
+          - MDG
+          - MWI
+          - MYS
+          - MDV
+          - MLI
+          - MLT
+          - MHL
+          - MTQ
+          - MRT
+          - MUS
+          - MYT
+          - MEX
+          - FSM
+          - MDA
+          - MCO
+          - MNG
+          - MNE
+          - MSR
+          - MAR
+          - MOZ
+          - MMR
+          - NAM
+          - NRU
+          - NPL
+          - NLD
+          - NCL
+          - NZL
+          - NIC
+          - NER
+          - NGA
+          - NIU
+          - NFK
+          - MKD
+          - MNP
+          - NOR
+          - OMN
+          - PAK
+          - PLW
+          - PSE
+          - PAN
+          - PNG
+          - PRY
+          - PER
+          - PHL
+          - PCN
+          - POL
+          - PRT
+          - PRI
+          - QAT
+          - REU
+          - ROU
+          - RUS
+          - RWA
+          - BLM
+          - SHN
+          - KNA
+          - LCA
+          - MAF
+          - SPM
+          - VCT
+          - WSM
+          - SMR
+          - STP
+          - SAU
+          - SEN
+          - SRB
+          - SYC
+          - SLE
+          - SGP
+          - SXM
+          - SVK
+          - SVN
+          - SLB
+          - SOM
+          - ZAF
+          - SGS
+          - SSD
+          - ESP
+          - LKA
+          - SDN
+          - SUR
+          - SJM
+          - SWE
+          - CHE
+          - SYR
+          - TWN
+          - TJK
+          - TZA
+          - THA
+          - TLS
+          - TGO
+          - TKL
+          - TON
+          - TTO
+          - TUN
+          - TUR
+          - TKM
+          - TCA
+          - TUV
+          - UGA
+          - UKR
+          - ARE
+          - GBR
+          - USA
+          - UMI
+          - URY
+          - UZB
+          - VUT
+          - VEN
+          - VNM
+          - VGB
+          - VIR
+          - WLF
+          - ESH
+          - YEM
+          - ZMB
+          - ZWE
+          - XXK
+          - XKX
+          example: GBR
+        type:
+          type: object
+          description: Type of the account
+          example: IBAN
+      required:
+      - iban
+      - bic
+      - currency
+      - country
+      - type
+    PartnerCommonErrorResponse:
+      type: object
+      properties:
+        errorType:
+          type: string
+          enum:
+          - VALIDATION_ERROR
+          - FORBIDDEN
+          - NOT_FOUND
+          - UNAUTHORIZED
+          - PRECONDITION_FAILED
+          - REQUEST_TIMEOUT
+          - SERVICE_UNAVAILABLE
+          - UNIDENTIFIED
+          - TECHNICAL_ERROR
+        reason:
+          type:
+          - string
+          - 'null'
+        validationFailures:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PartnerValidationFieldError'
+      required:
+      - errorType
+    PartnerAccountIdentifierResponse:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - UK_ACCOUNT
+          - IBAN
+          - CUSTODY_ID
+          - OTHER_EXTERNAL
+          - GENERIC_ACCOUNT
+          example: UK_ACCOUNT
+        beneficiary:
+          type: string
+          description: Beneficiary name
+          example: John Doe
+        bankAddress:
+          type: string
+          description: Bank address
+          example: Threadneedle St, London EC2R 8AH, United Kingdom
+        bankName:
+          type: string
+          description: Name of the bank issuing the account identifier
+          example: Barclays Bank PLC
+        data:
+          description: Identifiers including Account Number and Sort Code for UK accounts, IBAN for international accounts, or ACH details for US accounts
+          oneOf:
+          - $ref: '#/components/schemas/PartnerUKAccount'
+          - $ref: '#/components/schemas/PartnerIBANAccount'
+          - $ref: '#/components/schemas/PartnerCustodyIdAccount'
+          - $ref: '#/components/schemas/PartnerOtherExternalAccount'
+          - $ref: '#/components/schemas/PartnerGenericAccount'
+          examples:
+          - type: UK_ACCOUNT
+            sortCode: '010102'
+            accountNumber: '12345678'
+          - type: IBAN
+            iban: GB33BUKB20201555555555
+            bic: BUKBGB22
+            currency: GBP
+            country: GBR
+          - type: CUSTODY_ID
+            id: A0000EXTM
+          - type: OTHER_EXTERNAL
+            bic: BUKBGB22
+            currency: GBP
+            country: GBR
+            descriptor: AMERICAN INTERNATIONAL GROUP UK LTD
+          - type: GENERIC_ACCOUNT
+            routingType: ACH_ROUTING_NUMBER
+            routingNumber: '021000021'
+            accountNumber: 000123456789
+            country: USA
+            currency: USD
+      required:
+      - type
+      - beneficiary
+      - bankAddress
+      - data
+    PartnerGenericAccount:
+      type: object
+      properties:
+        type:
+          type: object
+          description: Type of the account
+          example: GENERIC_ACCOUNT
+        accountNumber:
+          type: string
+          description: Generic bank account number
+          example: 000123456789
+        routingType:
+          type: string
+          description: Type of the routing
+          example: BANK_CODE
+          enum:
+          - ROUTING_CODE
+          - GIRO_ROUTING_CODE
+          - ACH_ROUTING_NUMBER
+          - FAST_ROUTING_CODE
+          - WIRE_ROUTING_NUMBER
+          - MEPS_ROUTING_CODE
+          - ABA_ROUTING_NUMBER
+          - BANK_CODE
+          - BRANCH_CODE
+          - BSB_CODE
+          - CLABE
+          - CNAPS
+          - IFSC
+          - INSTITUTION_NO
+        routingNumber:
+          type: string
+          description: Generic routing number
+          example: '021000021'
+        secondaryRoutingType:
+          type:
+          - string
+          - 'null'
+          description: Type of the routing
+          example: BRANCH_CODE
+          enum:
+          - ROUTING_CODE
+          - GIRO_ROUTING_CODE
+          - ACH_ROUTING_NUMBER
+          - FAST_ROUTING_CODE
+          - WIRE_ROUTING_NUMBER
+          - MEPS_ROUTING_CODE
+          - ABA_ROUTING_NUMBER
+          - BANK_CODE
+          - BRANCH_CODE
+          - BSB_CODE
+          - CLABE
+          - CNAPS
+          - IFSC
+          - INSTITUTION_NO
+        secondaryRoutingNumber:
+          type:
+          - string
+          - 'null'
+          description: Secondary routing number
+          example: '021000021'
+        currency:
+          type: object
+          description: Currency code of the account
+          example: CAD
+        country:
+          type: object
+          description: Country code of the account
+          example: CAN
+        bic:
+          type: string
+          description: Bic of the account
+          example: BOFAUS3N
+      required:
+      - type
+      - accountNumber
+      - routingType
+      - routingNumber
+      - secondaryRoutingType
+      - secondaryRoutingNumber
+      - currency
+      - country
+      - bic
+    PartnerCustodyIdAccount:
+      type: object
+      properties:
+        id:
+          type: string
+          description: External identifier
+          example: A0000EXTM
+        type:
+          type: object
+          description: Type of the account
+          example: CUSTODY_ID
+      required:
+      - id
+      - type
+    PartnerCreateVirtualAccountRequest:
+      type: object
+      properties:
+        customerId:
+          type: string
+          description: Customer ID that will be the account owner.
+          example: a2b9649e-df7f-4349-adff-1c57283fef10
+          format: uuid
+        idempotencyKey:
+          type: string
+          description: A unique idempotency key to prevent duplicate account creation.
+          example: 1483d25d-3f00-4d39-90ce-2379a130becd
+          format: uuid
+        externalReference:
+          type:
+          - string
+          - 'null'
+          description: Reference identifier provided by partner.
+          example: ae588135-0391-42a8-a4e4-e8e7645fa707
+          format: uuid
+        parentAccountId:
+          type: string
+          description: The parent account ID under which the virtual account will be created.
+          example: e0cab2dd-739f-43de-b131-3e423e935bf1
+          format: uuid
+        productCode:
+          type: string
+          description: The product code for the virtual account being created.
+          example: FIAT_ACCOUNT_UK_V1
+        productParameters:
+          type:
+          - object
+          - 'null'
+          description: Product parameters for the virtual account being created.
+      required:
+      - customerId
+      - idempotencyKey
+      - parentAccountId
+      - productCode
+    PartnerVirtualAccountResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier of the account
+          example: e0cab2dd-739f-43de-b131-3e423e935bf1
+        partnerId:
+          type: string
+          format: uuid
+          description: Partner identifier that owns or manages this account
+          example: 2ecf0e23-3215-462c-97c4-9e5a147656d7
+          deprecated: true
+        externalReference:
+          type: string
+          format: uuid
+          description: External reference
+        primaryAccountId:
+          type:
+          - string
+          - 'null'
+          format: uuid
+          description: Primary account identifier
+          example: ae66fcb2-2852-4568-990d-accc78572e4d
+        currencyCode:
+          type: string
+          enum:
+          - AFN
+          - EUR
+          - ALL
+          - DZD
+          - USD
+          - AOA
+          - XCD
+          - ARS
+          - AMD
+          - AWG
+          - AUD
+          - AZN
+          - BSD
+          - BHD
+          - BDT
+          - BBD
+          - BYN
+          - BZD
+          - XOF
+          - BMD
+          - INR
+          - BTN
+          - BOB
+          - BOV
+          - BAM
+          - BWP
+          - NOK
+          - BRL
+          - BND
+          - BGN
+          - BIF
+          - CVE
+          - KHR
+          - XAF
+          - CAD
+          - KYD
+          - CLP
+          - CLF
+          - CNY
+          - COP
+          - COU
+          - KMF
+          - CDF
+          - NZD
+          - CRC
+          - HRK
+          - CUP
+          - CUC
+          - ANG
+          - CZK
+          - DKK
+          - DJF
+          - DOP
+          - EGP
+          - SVC
+          - ERN
+          - SZL
+          - ETB
+          - FKP
+          - FJD
+          - XPF
+          - GMD
+          - GEL
+          - GHS
+          - GIP
+          - GTQ
+          - GBP
+          - GNF
+          - GYD
+          - HTG
+          - HNL
+          - HKD
+          - HUF
+          - ISK
+          - IDR
+          - XDR
+          - IRR
+          - IQD
+          - ILS
+          - JMD
+          - JPY
+          - JOD
+          - KZT
+          - KES
+          - KPW
+          - KRW
+          - KWD
+          - KGS
+          - LAK
+          - LBP
+          - LSL
+          - ZAR
+          - LRD
+          - LYD
+          - CHF
+          - MOP
+          - MKD
+          - MGA
+          - MWK
+          - MYR
+          - MVR
+          - MRU
+          - MUR
+          - XUA
+          - MXN
+          - MXV
+          - MDL
+          - MNT
+          - MAD
+          - MZN
+          - MMK
+          - NAD
+          - NPR
+          - NIO
+          - NGN
+          - OMR
+          - PKR
+          - PAB
+          - PGK
+          - PYG
+          - PEN
+          - PHP
+          - PLN
+          - QAR
+          - RON
+          - RUB
+          - RWF
+          - WST
+          - STN
+          - SAR
+          - RSD
+          - SCR
+          - SLL
+          - SGD
+          - XSU
+          - SBD
+          - SOS
+          - SSP
+          - LKR
+          - SDG
+          - SRD
+          - SEK
+          - CHE
+          - CHW
+          - SYP
+          - TWD
+          - TJS
+          - THB
+          - TOP
+          - TTD
+          - TND
+          - TRY
+          - TMT
+          - UGX
+          - UAH
+          - AED
+          - USN
+          - UYU
+          - UYI
+          - UYW
+          - UZS
+          - VUV
+          - VES
+          - VND
+          - YER
+          - ZMW
+          - ZWL
+          - XBA
+          - XBB
+          - XBC
+          - XBD
+          - XTS
+          - XXX
+          - XAU
+          - XPD
+          - XPT
+          - XAG
+          - AFA
+          - FIM
+          - ADP
+          - ESP
+          - FRF
+          - AOK
+          - AOR
+          - RUR
+          - ATS
+          - AYM
+          - AZM
+          - BYB
+          - BYR
+          - BEC
+          - BEF
+          - BEL
+          - BAD
+          - BRB
+          - BRR
+          - BGJ
+          - CYP
+          - CSK
+          - ECS
+          - ECV
+          - GQE
+          - EEK
+          - XEU
+          - GEK
+          - DDM
+          - DEM
+          - GHC
+          - GHP
+          - GRD
+          - GWE
+          - ITL
+          - IEP
+          - LVL
+          - ZAL
+          - LTL
+          - LUC
+          - LUF
+          - LUL
+          - MGF
+          - MLF
+          - MTL
+          - MRO
+          - MZE
+          - NLG
+          - PLZ
+          - PTE
+          - ROK
+          - STD
+          - CSD
+          - SKK
+          - SIT
+          - RHD
+          - ESA
+          - ESB
+          - SDD
+          - SRG
+          - TJR
+          - TPE
+          - TRL
+          - TMM
+          - UAK
+          - USS
+          - VEB
+          - VEF
+          - YUD
+          - ZRN
+          - ZMK
+          - ZWN
+          - ZWR
+          example: GBP
+          description: Currency associated with this account
+        createDate:
+          format: date-time
+          type: string
+          description: Date when the account was created
+          example: '2025-01-01'
+        identifiers:
+          description: List of identifiers linked to this account
           type: array
-          minItems: 1
+          items:
+            $ref: '#/components/schemas/PartnerAccountIdentifierResponse'
+        state:
+          type: string
+          enum:
+          - INITIALIZING
+          - READY
+          - BLOCKED
+          - CLOSED
+          - SUSPENDED
+          description: Current operational state of the account
+          example: READY
+        balance:
+          description: Balance details of the account
+          allOf:
+          - $ref: '#/components/schemas/PartnerAccountBalanceResponse'
+        type:
+          type: string
+          enum:
+          - PRIMARY
+          - VIRTUAL
+          - PROGRAM
+          example: VIRTUAL
+          description: Type of account
+        customerId:
+          type: string
+          format: uuid
+          description: Customer identifier associated with this account
+          example: a2b9649e-df7f-4349-adff-1c57283fef10
+        productCode:
+          type: string
+          description: The product code for the virtual account
+          enum:
+          - CUBE_BASIC_SAVING
+          - CUBE_EARNING
+          - PRIMARY_RINGFENCE
+          example: CUBE_BASIC_SAVING
       required:
-      - Code
-      - Message
-      - Errors
-      additionalProperties: false
-    OBExternalAccountSubType1Code:
-      description: Specifies the sub type of account (product family group).
-      type: string
-      enum:
-      - ChargeCard
-      - CreditCard
-      - CurrentAccount
-      - EMoney
-      - Loan
-      - Mortgage
-      - PrePaidCard
-      - Savings
-    OBCashAccount5:
-      description: Provides the details to identify the beneficiary account.
+      - id
+      - partnerId
+      - currencyCode
+      - createDate
+      - identifiers
+      - state
+      - balance
+      - type
+      - customerId
+      - productCode
+    PartnerCreatePrimaryAccountRequest:
       type: object
       properties:
-        SchemeName:
-          $ref: '#/components/schemas/OBExternalAccountIdentification4Code'
-        Identification:
-          description: Beneficiary account identification.
+        customerId:
           type: string
-          minLength: 1
-          maxLength: 256
-        Name:
-          description: 'Name of the account, as assigned by the account servicing institution.
-
-            Usage: The account name is the name or names of the account owner(s) represented at an account level. The account name is not the product name or the nickname of the account.'
+          description: Customer ID that will be the account owner.
+          example: a2b9649e-df7f-4349-adff-1c57283fef10
+          format: uuid
+        idempotencyKey:
           type: string
-          minLength: 1
-          maxLength: 70
-        SecondaryIdentification:
-          description: "This is secondary identification of the account, as assigned by the account servicing institution. \nThis can be used by building societies to additionally identify accounts with a roll number (in addition to a sort code and account number combination)."
+          description: A unique idempotency key to prevent duplicate account creation.
+          example: 1483d25d-3f00-4d39-90ce-2379a130becd
+          format: uuid
+        currencyCode:
           type: string
-          minLength: 1
-          maxLength: 34
+          description: ISO 4217 3-letter alpha-numeric currency code for the account.
+          enum:
+          - AFN
+          - EUR
+          - ALL
+          - DZD
+          - USD
+          - AOA
+          - XCD
+          - ARS
+          - AMD
+          - AWG
+          - AUD
+          - AZN
+          - BSD
+          - BHD
+          - BDT
+          - BBD
+          - BYN
+          - BZD
+          - XOF
+          - BMD
+          - INR
+          - BTN
+          - BOB
+          - BOV
+          - BAM
+          - BWP
+          - NOK
+          - BRL
+          - BND
+          - BGN
+          - BIF
+          - CVE
+          - KHR
+          - XAF
+          - CAD
+          - KYD
+          - CLP
+          - CLF
+          - CNY
+          - COP
+          - COU
+          - KMF
+          - CDF
+          - NZD
+          - CRC
+          - HRK
+          - CUP
+          - CUC
+          - ANG
+          - CZK
+          - DKK
+          - DJF
+          - DOP
+          - EGP
+          - SVC
+          - ERN
+          - SZL
+          - ETB
+          - FKP
+          - FJD
+          - XPF
+          - GMD
+          - GEL
+          - GHS
+          - GIP
+          - GTQ
+          - GBP
+          - GNF
+          - GYD
+          - HTG
+          - HNL
+          - HKD
+          - HUF
+          - ISK
+          - IDR
+          - XDR
+          - IRR
+          - IQD
+          - ILS
+          - JMD
+          - JPY
+          - JOD
+          - KZT
+          - KES
+          - KPW
+          - KRW
+          - KWD
+          - KGS
+          - LAK
+          - LBP
+          - LSL
+          - ZAR
+          - LRD
+          - LYD
+          - CHF
+          - MOP
+          - MKD
+          - MGA
+          - MWK
+          - MYR
+          - MVR
+          - MRU
+          - MUR
+          - XUA
+          - MXN
+          - MXV
+          - MDL
+          - MNT
+          - MAD
+          - MZN
+          - MMK
+          - NAD
+          - NPR
+          - NIO
+          - NGN
+          - OMR
+          - PKR
+          - PAB
+          - PGK
+          - PYG
+          - PEN
+          - PHP
+          - PLN
+          - QAR
+          - RON
+          - RUB
+          - RWF
+          - WST
+          - STN
+          - SAR
+          - RSD
+          - SCR
+          - SLL
+          - SGD
+          - XSU
+          - SBD
+          - SOS
+          - SSP
+          - LKR
+          - SDG
+          - SRD
+          - SEK
+          - CHE
+          - CHW
+          - SYP
+          - TWD
+          - TJS
+          - THB
+          - TOP
+          - TTD
+          - TND
+          - TRY
+          - TMT
+          - UGX
+          - UAH
+          - AED
+          - USN
+          - UYU
+          - UYI
+          - UYW
+          - UZS
+          - VUV
+          - VES
+          - VND
+          - YER
+          - ZMW
+          - ZWL
+          - XBA
+          - XBB
+          - XBC
+          - XBD
+          - XTS
+          - XXX
+          - XAU
+          - XPD
+          - XPT
+          - XAG
+          - AFA
+          - FIM
+          - ADP
+          - ESP
+          - FRF
+          - AOK
+          - AOR
+          - RUR
+          - ATS
+          - AYM
+          - AZM
+          - BYB
+          - BYR
+          - BEC
+          - BEF
+          - BEL
+          - BAD
+          - BRB
+          - BRR
+          - BGJ
+          - CYP
+          - CSK
+          - ECS
+          - ECV
+          - GQE
+          - EEK
+          - XEU
+          - GEK
+          - DDM
+          - DEM
+          - GHC
+          - GHP
+          - GRD
+          - GWE
+          - ITL
+          - IEP
+          - LVL
+          - ZAL
+          - LTL
+          - LUC
+          - LUF
+          - LUL
+          - MGF
+          - MLF
+          - MTL
+          - MRO
+          - MZE
+          - NLG
+          - PLZ
+          - PTE
+          - ROK
+          - STD
+          - CSD
+          - SKK
+          - SIT
+          - RHD
+          - ESA
+          - ESB
+          - SDD
+          - SRG
+          - TJR
+          - TPE
+          - TRL
+          - TMM
+          - UAK
+          - USS
+          - VEB
+          - VEF
+          - YUD
+          - ZRN
+          - ZMK
+          - ZWN
+          - ZWR
+          example: GBP
+        productCode:
+          type: string
+          description: The product code for the account being created.
+          example: FIAT_ACCOUNT_UK_V1
       required:
-      - SchemeName
-      - Identification
-      additionalProperties: false
-    Meta:
-      title: MetaData
-      type: object
-      description: Meta Data relevant to the payload
-      properties:
-        TotalPages:
-          type: integer
-          format: int32
-        FirstAvailableDateTime:
-          $ref: '#/components/schemas/ISODateTime'
-        LastAvailableDateTime:
-          $ref: '#/components/schemas/ISODateTime'
-      additionalProperties: false
-    ISODateTime:
-      description: "All dates in the JSON payloads are represented in ISO 8601 date-time format. \nAll date-time fields in responses must include the timezone. An example is below:\n2017-04-05T10:43:07+00:00"
-      type: string
-      format: date-time
-    OBError1:
+      - customerId
+      - idempotencyKey
+      - currencyCode
+      - productCode
+    PartnerProgramAccountResponse:
       type: object
       properties:
-        ErrorCode:
-          description: Low level textual error code, e.g., UK.OBIE.Field.Missing
+        id:
           type: string
-          minLength: 1
-          maxLength: 128
-        Message:
-          description: 'A description of the error that occurred. e.g., ''A mandatory field isn''t supplied'' or ''RequestedExecutionDateTime must be in future''
-
-            OBIE doesn''t standardise this field'
+          format: uuid
+          description: Unique identifier of the account
+          example: e0cab2dd-739f-43de-b131-3e423e935bf1
+        partnerId:
           type: string
-          minLength: 1
-          maxLength: 500
-        Path:
-          description: Recommended but optional reference to the JSON Path of the field with error, e.g., Data.Initiation.InstructedAmount.Currency
+          format: uuid
+          description: Partner identifier that owns or manages this account
+          example: 2ecf0e23-3215-462c-97c4-9e5a147656d7
+          deprecated: true
+        externalReference:
           type: string
-          minLength: 1
-          maxLength: 500
-        Url:
-          description: URL to help remediate the problem, or provide more information, or to API Reference, or help etc
+          format: uuid
+          description: External reference
+        primaryAccountId:
+          type:
+          - string
+          - 'null'
+          format: uuid
+          description: Always null for program accounts
+          example: null
+        currencyCode:
           type: string
+          enum:
+          - AFN
+          - EUR
+          - ALL
+          - DZD
+          - USD
+          - AOA
+          - XCD
+          - ARS
+          - AMD
+          - AWG
+          - AUD
+          - AZN
+          - BSD
+          - BHD
+          - BDT
+          - BBD
+          - BYN
+          - BZD
+          - XOF
+          - BMD
+          - INR
+          - BTN
+          - BOB
+          - BOV
+          - BAM
+          - BWP
+          - NOK
+          - BRL
+          - BND
+          - BGN
+          - BIF
+          - CVE
+          - KHR
+          - XAF
+          - CAD
+          - KYD
+          - CLP
+          - CLF
+          - CNY
+          - COP
+          - COU
+          - KMF
+          - CDF
+          - NZD
+          - CRC
+          - HRK
+          - CUP
+          - CUC
+          - ANG
+          - CZK
+          - DKK
+          - DJF
+          - DOP
+          - EGP
+          - SVC
+          - ERN
+          - SZL
+          - ETB
+          - FKP
+          - FJD
+          - XPF
+          - GMD
+          - GEL
+          - GHS
+          - GIP
+          - GTQ
+          - GBP
+          - GNF
+          - GYD
+          - HTG
+          - HNL
+          - HKD
+          - HUF
+          - ISK
+          - IDR
+          - XDR
+          - IRR
+          - IQD
+          - ILS
+          - JMD
+          - JPY
+          - JOD
+          - KZT
+          - KES
+          - KPW
+          - KRW
+          - KWD
+          - KGS
+          - LAK
+          - LBP
+          - LSL
+          - ZAR
+          - LRD
+          - LYD
+          - CHF
+          - MOP
+          - MKD
+          - MGA
+          - MWK
+          - MYR
+          - MVR
+          - MRU
+          - MUR
+          - XUA
+          - MXN
+          - MXV
+          - MDL
+          - MNT
+          - MAD
+          - MZN
+          - MMK
+          - NAD
+          - NPR
+          - NIO
+          - NGN
+          - OMR
+          - PKR
+          - PAB
+          - PGK
+          - PYG
+          - PEN
+          - PHP
+          - PLN
+          - QAR
+          - RON
+          - RUB
+          - RWF
+          - WST
+          - STN
+          - SAR
+          - RSD
+          - SCR
+          - SLL
+          - SGD
+          - XSU
+          - SBD
+          - SOS
+          - SSP
+          - LKR
+          - SDG
+          - SRD
+          - SEK
+          - CHE
+          - CHW
+          - SYP
+          - TWD
+          - TJS
+          - THB
+          - TOP
+          - TTD
+          - TND
+          - TRY
+          - TMT
+          - UGX
+          - UAH
+          - AED
+          - USN
+          - UYU
+          - UYI
+          - UYW
+          - UZS
+          - VUV
+          - VES
+          - VND
+          - YER
+          - ZMW
+          - ZWL
+          - XBA
+          - XBB
+          - XBC
+          - XBD
+          - XTS
+          - XXX
+          - XAU
+          - XPD
+          - XPT
+          - XAG
+          - AFA
+          - FIM
+          - ADP
+          - ESP
+          - FRF
+          - AOK
+          - AOR
+          - RUR
+          - ATS
+          - AYM
+          - AZM
+          - BYB
+          - BYR
+          - BEC
+          - BEF
+          - BEL
+          - BAD
+          - BRB
+          - BRR
+          - BGJ
+          - CYP
+          - CSK
+          - ECS
+          - ECV
+          - GQE
+          - EEK
+          - XEU
+          - GEK
+          - DDM
+          - DEM
+          - GHC
+          - GHP
+          - GRD
+          - GWE
+          - ITL
+          - IEP
+          - LVL
+          - ZAL
+          - LTL
+          - LUC
+          - LUF
+          - LUL
+          - MGF
+          - MLF
+          - MTL
+          - MRO
+          - MZE
+          - NLG
+          - PLZ
+          - PTE
+          - ROK
+          - STD
+          - CSD
+          - SKK
+          - SIT
+          - RHD
+          - ESA
+          - ESB
+          - SDD
+          - SRG
+          - TJR
+          - TPE
+          - TRL
+          - TMM
+          - UAK
+          - USS
+          - VEB
+          - VEF
+          - YUD
+          - ZRN
+          - ZMK
+          - ZWN
+          - ZWR
+          example: GBP
+          description: Currency associated with this account
+        createDate:
+          format: date-time
+          type: string
+          description: Date when the account was created
+          example: '2025-01-01'
+        identifiers:
+          description: List of identifiers linked to this account
+          type: array
+          items:
+            $ref: '#/components/schemas/PartnerAccountIdentifierResponse'
+        state:
+          type: string
+          enum:
+          - INITIALIZING
+          - READY
+          - BLOCKED
+          - CLOSED
+          - SUSPENDED
+          description: Current operational state of the account
+          example: READY
+        balance:
+          description: Balance details of the account
+          allOf:
+          - $ref: '#/components/schemas/PartnerAccountBalanceResponse'
+        type:
+          type: string
+          enum:
+          - PRIMARY
+          - VIRTUAL
+          - PROGRAM
+          example: PROGRAM
+          description: Type of account
       required:
-      - ErrorCode
-      - Message
-      additionalProperties: false
-      minProperties: 1
-  parameters:
-    x-fapi-interaction-id-Param:
-      in: header
-      name: x-fapi-interaction-id
-      required: false
-      description: An RFC4122 UID used as a correlation id.
-      schema:
-        type: string
-    x-fapi-customer-ip-address-Param:
-      in: header
-      name: x-fapi-customer-ip-address
-      required: false
-      description: The PSU's IP address if the PSU is currently logged in with the TPP.
-      schema:
-        type: string
-    x-customer-user-agent-Param:
-      in: header
-      name: x-customer-user-agent
-      description: Indicates the user-agent that the PSU is using.
-      required: false
-      schema:
-        type: string
-    x-fapi-customer-last-logged-time-Param:
-      in: header
-      name: x-fapi-customer-last-logged-time
-      required: false
-      description: "The time when the PSU last logged in with the TPP. \nAll dates in the HTTP headers are represented as RFC 7231 Full Dates. An example is below: \nSun, 10 Sep 2017 19:43:31 UTC"
-      schema:
-        type: string
-        pattern: ^(Mon|Tue|Wed|Thu|Fri|Sat|Sun), \d{2} (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \d{4} \d{2}:\d{2}:\d{2} (GMT|UTC)$
-    AccountId:
-      name: AccountId
-      in: path
-      description: AccountId
-      required: true
-      schema:
-        type: string
-    x-fapi-financial-id-Param:
-      in: header
-      name: x-fapi-financial-id
-      required: true
-      description: The unique id of the ASPSP to which the request is issued. The unique id will be issued by OB.
-      schema:
-        type: string
-        default: ea01566d-f21d-49af-9d0c-b74fbe36911f
-    AuthorizationParam:
-      in: header
-      name: Authorization
-      required: false
-      description: An Authorisation Token as per https://tools.ietf.org/html/rfc6750 - required for API calls but may be ommited when using Swagger UI where the "Authorize" function has been operated
-      schema:
-        type: string
-  responses:
-    406ErrorResponse:
-      description: Not Acceptable
-    401ErrorResponse:
-      description: Unauthorized
-    500ErrorResponse:
-      description: Internal Server Error
-      content:
-        application/json; charset=utf-8:
-          schema:
-            $ref: '#/components/schemas/OBErrorResponse1'
-    200AccountsRead:
-      description: Accounts Read
-      headers:
-        x-fapi-interaction-id:
-          description: An RFC4122 UID used as a correlation id.
-          schema:
-            type: string
-      content:
-        application/json; charset=utf-8:
-          schema:
-            $ref: '#/components/schemas/OBReadAccount3'
-    405ErrorResponse:
-      description: Method Not Allowed
-    200AccountsAccountIdRead:
-      description: Accounts Read
-      headers:
-        x-fapi-interaction-id:
-          description: An RFC4122 UID used as a correlation id.
-          schema:
-            type: string
-      content:
-        application/json; charset=utf-8:
-          schema:
-            $ref: '#/components/schemas/OBReadAccount3'
-    400ErrorResponse:
-      description: Bad request
-      content:
-        application/json; charset=utf-8:
-          schema:
-            $ref: '#/components/schemas/OBErrorResponse1'
-    429ErrorResponse:
-      description: Too Many Requests
-      headers:
-        Retry-After:
-          description: Number in seconds to wait
-          schema:
-            type: integer
-    403ErrorResponse:
-      description: Forbidden
-    404ErrorResponse:
-      description: Not found
-  securitySchemes:
-    PSUOAuth2Security:
-      type: oauth2
-      flows:
-        authorizationCode:
-          scopes:
-            accounts: Ability to read Accounts information
-          authorizationUrl: https://secure.tell.systems/algbra/auth/oidc/authorize
-          tokenUrl: https://secure.tell.systems/algbra/auth/oidc/token
-      description: OAuth flow, it is required when the PSU needs to perform SCA with the ASPSP when a TPP wants to access an ASPSP resource owned by the PSU
-    TPPOAuth2Security:
-      type: oauth2
-      flows:
-        clientCredentials:
-          scopes:
-            accounts: Ability to read Accounts information
-          tokenUrl: https://secure.tell.systems/algbra/auth/oidc/token
-      description: TPP client credential authorisation flow with the ASPSP
+      - id
+      - partnerId
+      - currencyCode
+      - createDate
+      - identifiers
+      - state
+      - balance
+      - type
+    PartnerOtherExternalAccount:
+      type: object
+      properties:
+        bic:
+          type:
+          - string
+          - 'null'
+          description: Bank Identifier Code (BIC)
+          example: BUKBGB22
+        country:
+          type:
+          - string
+          - 'null'
+          description: Country of the account
+          enum:
+          - AFG
+          - ALA
+          - ALB
+          - DZA
+          - ASM
+          - AND
+          - AGO
+          - AIA
+          - ATA
+          - ATG
+          - ARG
+          - ARM
+          - ABW
+          - AUS
+          - AUT
+          - AZE
+          - BHS
+          - BHR
+          - BGD
+          - BRB
+          - BLR
+          - BEL
+          - BLZ
+          - BEN
+          - BMU
+          - BTN
+          - BOL
+          - BES
+          - BIH
+          - BWA
+          - BVT
+          - BRA
+          - IOT
+          - BRN
+          - BGR
+          - BFA
+          - BDI
+          - CPV
+          - KHM
+          - CMR
+          - CAN
+          - CYM
+          - CAF
+          - TCD
+          - CHL
+          - CHN
+          - CXR
+          - CCK
+          - COL
+          - COM
+          - COG
+          - COD
+          - COK
+          - CRI
+          - CIV
+          - HRV
+          - CUB
+          - CUW
+          - CYP
+          - CZE
+          - DNK
+          - DJI
+          - DMA
+          - DOM
+          - ECU
+          - EGY
+          - SLV
+          - GNQ
+          - ERI
+          - EST
+          - SWZ
+          - ETH
+          - FLK
+          - FRO
+          - FJI
+          - FIN
+          - FRA
+          - GUF
+          - PYF
+          - ATF
+          - GAB
+          - GMB
+          - GEO
+          - DEU
+          - GHA
+          - GIB
+          - GRC
+          - GRL
+          - GRD
+          - GLP
+          - GUM
+          - GTM
+          - GGY
+          - GIN
+          - GNB
+          - GUY
+          - HTI
+          - HMD
+          - VAT
+          - HND
+          - HKG
+          - HUN
+          - ISL
+          - IND
+          - IDN
+          - IRN
+          - IRQ
+          - IRL
+          - IMN
+          - ISR
+          - ITA
+          - JAM
+          - JPN
+          - JEY
+          - JOR
+          - KAZ
+          - KEN
+          - KIR
+          - PRK
+          - KOR
+          - KWT
+          - KGZ
+          - LAO
+          - LVA
+          - LBN
+          - LSO
+          - LBR
+          - LBY
+          - LIE
+          - LTU
+          - LUX
+          - MAC
+          - MDG
+          - MWI
+          - MYS
+          - MDV
+          - MLI
+          - MLT
+          - MHL
+          - MTQ
+          - MRT
+          - MUS
+          - MYT
+          - MEX
+          - FSM
+          - MDA
+          - MCO
+          - MNG
+          - MNE
+          - MSR
+          - MAR
+          - MOZ
+          - MMR
+          - NAM
+          - NRU
+          - NPL
+          - NLD
+          - NCL
+          - NZL
+          - NIC
+          - NER
+          - NGA
+          - NIU
+          - NFK
+          - MKD
+          - MNP
+          - NOR
+          - OMN
+          - PAK
+          - PLW
+          - PSE
+          - PAN
+          - PNG
+          - PRY
+          - PER
+          - PHL
+          - PCN
+          - POL
+          - PRT
+          - PRI
+          - QAT
+          - REU
+          - ROU
+          - RUS
+          - RWA
+          - BLM
+          - SHN
+          - KNA
+          - LCA
+          - MAF
+          - SPM
+          - VCT
+          - WSM
+          - SMR
+          - STP
+          - SAU
+          - SEN
+          - SRB
+          - SYC
+          - SLE
+          - SGP
+          - SXM
+          - SVK
+          - SVN
+          - SLB
+          - SOM
+          - ZAF
+          - SGS
+          - SSD
+          - ESP
+          - LKA
+          - SDN
+          - SUR
+          - SJM
+          - SWE
+          - CHE
+          - SYR
+          - TWN
+          - TJK
+          - TZA
+          - THA
+          - TLS
+          - TGO
+          - TKL
+          - TON
+          - TTO
+          - TUN
+          - TUR
+          - TKM
+          - TCA
+          - TUV
+          - UGA
+          - UKR
+          - ARE
+          - GBR
+          - USA
+          - UMI
+          - URY
+          - UZB
+          - VUT
+          - VEN
+          - VNM
+          - VGB
+          - VIR
+          - WLF
+          - ESH
+          - YEM
+          - ZMB
+          - ZWE
+          - XXK
+          - XKX
+          example: GBR
+        currency:
+          type: string
+          description: Currency of the account
+          enum:
+          - AFN
+          - EUR
+          - ALL
+          - DZD
+          - USD
+          - AOA
+          - XCD
+          - ARS
+          - AMD
+          - AWG
+          - AUD
+          - AZN
+          - BSD
+          - BHD
+          - BDT
+          - BBD
+          - BYN
+          - BZD
+          - XOF
+          - BMD
+          - INR
+          - BTN
+          - BOB
+          - BOV
+          - BAM
+          - BWP
+          - NOK
+          - BRL
+          - BND
+          - BGN
+          - BIF
+          - CVE
+          - KHR
+          - XAF
+          - CAD
+          - KYD
+          - CLP
+          - CLF
+          - CNY
+          - COP
+          - COU
+          - KMF
+          - CDF
+          - NZD
+          - CRC
+          - HRK
+          - CUP
+          - CUC
+          - ANG
+          - CZK
+          - DKK
+          - DJF
+          - DOP
+          - EGP
+          - SVC
+          - ERN
+          - SZL
+          - ETB
+          - FKP
+          - FJD
+          - XPF
+          - GMD
+          - GEL
+          - GHS
+          - GIP
+          - GTQ
+          - GBP
+          - GNF
+          - GYD
+          - HTG
+          - HNL
+          - HKD
+          - HUF
+          - ISK
+          - IDR
+          - XDR
+          - IRR
+          - IQD
+          - ILS
+          - JMD
+          - JPY
+          - JOD
+          - KZT
+          - KES
+          - KPW
+          - KRW
+          - KWD
+          - KGS
+          - LAK
+          - LBP
+          - LSL
+          - ZAR
+          - LRD
+          - LYD
+          - CHF
+          - MOP
+          - MKD
+          - MGA
+          - MWK
+          - MYR
+          - MVR
+          - MRU
+          - MUR
+          - XUA
+          - MXN
+          - MXV
+          - MDL
+          - MNT
+          - MAD
+          - MZN
+          - MMK
+          - NAD
+          - NPR
+          - NIO
+          - NGN
+          - OMR
+          - PKR
+          - PAB
+          - PGK
+          - PYG
+          - PEN
+          - PHP
+          - PLN
+          - QAR
+          - RON
+          - RUB
+          - RWF
+          - WST
+          - STN
+          - SAR
+          - RSD
+          - SCR
+          - SLL
+          - SGD
+          - XSU
+          - SBD
+          - SOS
+          - SSP
+          - LKR
+          - SDG
+          - SRD
+          - SEK
+          - CHE
+          - CHW
+          - SYP
+          - TWD
+          - TJS
+          - THB
+          - TOP
+          - TTD
+          - TND
+          - TRY
+          - TMT
+          - UGX
+          - UAH
+          - AED
+          - USN
+          - UYU
+          - UYI
+          - UYW
+          - UZS
+          - VUV
+          - VES
+          - VND
+          - YER
+          - ZMW
+          - ZWL
+          - XBA
+          - XBB
+          - XBC
+          - XBD
+          - XTS
+          - XXX
+          - XAU
+          - XPD
+          - XPT
+          - XAG
+          - AFA
+          - FIM
+          - ADP
+          - ESP
+          - FRF
+          - AOK
+          - AOR
+          - RUR
+          - ATS
+          - AYM
+          - AZM
+          - BYB
+          - BYR
+          - BEC
+          - BEF
+          - BEL
+          - BAD
+          - BRB
+          - BRR
+          - BGJ
+          - CYP
+          - CSK
+          - ECS
+          - ECV
+          - GQE
+          - EEK
+          - XEU
+          - GEK
+          - DDM
+          - DEM
+          - GHC
+          - GHP
+          - GRD
+          - GWE
+          - ITL
+          - IEP
+          - LVL
+          - ZAL
+          - LTL
+          - LUC
+          - LUF
+          - LUL
+          - MGF
+          - MLF
+          - MTL
+          - MRO
+          - MZE
+          - NLG
+          - PLZ
+          - PTE
+          - ROK
+          - STD
+          - CSD
+          - SKK
+          - SIT
+          - RHD
+          - ESA
+          - ESB
+          - SDD
+          - SRG
+          - TJR
+          - TPE
+          - TRL
+          - TMM
+          - UAK
+          - USS
+          - VEB
+          - VEF
+          - YUD
+          - ZRN
+          - ZMK
+          - ZWN
+          - ZWR
+          example: GBP
+        descriptor:
+          type: string
+          description: Descriptor of the account
+          example: AMERICAN INTERNATIONAL GROUP UK LTD
+        type:
+          type: object
+          description: Type of the account
+          example: OTHER_EXTERNAL
+      required:
+      - currency
+      - descriptor
+      - type
+    Pagination:
+      type: object
+      properties: {}
