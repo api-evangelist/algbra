@@ -2549,3 +2549,9 @@ components:
       required:
       - firstName
       - lastName
+x-provenance:
+  method: harvested
+  publisher: Algbra
+  source: https://openapi.gitbook.com/o/9IJ2beFKIxLmw3fw1HZm/spec/algbra-api.json
+  note: split by refine-openapis from the provider's own published document, verified by fetch (openapi/_original/*.fetch.json);
+    stamped by stamp-openapi-provenance.py (roadmap#793)
