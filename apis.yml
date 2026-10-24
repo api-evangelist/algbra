@@ -266,6 +266,8 @@ apis:
   humanURL: https://developer.algbralabs.com/open-banking-uk/introduction
   baseURL: https://secure.tell.systems/algbra/open-banking/v3.1/pisp
   tags:
+  - Investment
+  tags_raw:
   - Investments
   properties:
   - type: OpenAPI
@@ -322,6 +324,8 @@ apis:
   humanURL: https://developer.algbralabs.com/open-banking-uk/introduction
   baseURL: https://secure.tell.systems/algbra/open-banking/v3.1/pisp
   tags:
+  - Partners
+  tags_raw:
   - Partner
   properties:
   - type: OpenAPI
