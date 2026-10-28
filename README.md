@@ -1,4 +1,4 @@
-# Algbra (algbra)
+# Algbra
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -64,122 +64,139 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Algbra is a UK values-based, sustainability-focused fintech operated by Algbra FS UK Limited (company number 12629086), an electronic money institution authorised by the Financial Conduct Authority under the Electronic Money Regulations 2011 (FRN 952360); its parent, Algbra Group Limited, is a certified B Corporation. As a non-CMA9 challenger provider it offers ethical multi-currency accounts, cards, savings and Banking-as-a-Service infrastructure, and through the Algbra Labs developer platform it exposes a first-party Partner Banking (BaaS) API alongside a UK Open Banking dedicated interface conformant to the OBIE Read/Write Standard v3.1.8 (delivered via the Tell Money / Tell Connect platform).
+Algbra is a UK values-based, sustainability-focused fintech operated by Algbra FS UK Limited (company number 12629086), an electronic money institution authorised by the Financial Conduct Authority under the Electronic Money Regulations 2011 (FRN 952360); its parent, Algbra Group Limited, is a certified B Corporation. Rather than a licensed clearing bank or building society, Algbra is a challenger provider of ethical multi-currency accounts, cards, savings and Banking-as-a-Service infrastructure. Through the Algbra Labs developer platform it exposes two API surfaces - a first-party Partner Banking (BaaS) API for onboarding, accounts, cards, payments and transactions, and a UK Open Banking dedicated interface conformant to the Open Banking Implementation Entity (OBIE) Read/Write Standard v3.1.8 covering Account & Transaction Information (AIS), Payment Initiation (PIS) and Confirmation of Funds (CBPII), delivered via the Tell Money (Tell Connect) platform. As a non-CMA9 ASPSP it meets PSD2 access-to-account obligations, securing the interface with FAPI-grade OAuth2/OIDC, mutual-TLS using OBIE OBWAC/OBSEAL eIDAS certificates, PS256 request-object signing, Dynamic Client Registration (DCR v3.2) and PSD2 strong customer authentication.
 
-**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/algbra/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/algbra/refs/heads/main/apis.yml)
+**Areas:** Financial Services · Banking · Open Banking · PSD2 · OBIE · United Kingdom · Payments · Account Information · Fintech · Ethical Finance · Banking as a Service
 
-## Tags
+## Algbra on APIs.io
 
-- Financial Services
-- Banking
-- Open Banking
-- PSD2
-- OBIE
-- United Kingdom
-- Payments
-- Account Information
-- Fintech
-- Ethical Finance
-- Banking as a Service
+Everything profiled for Algbra is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/algbra/](https://apis.io/providers/algbra/)** — or go straight to one of the APIs or properties below.
 
-## Timestamps
+### APIs (8)
 
-- **Created:** 2026-07-23
-- **Modified:** 2026-07-23
+- [Algbra Payment Initiation API (PIS)](https://apis.io/apis/algbra/algbra-payment-initiation-api/) — Algbra's UK Open Banking Payment Initiation (PIS) dedicated interface under the OBIE Read/Write Standard v3.1.8, allowing authorised PISP Third Party…
+- [Algbra Confirmation of Funds API (CBPII)](https://apis.io/apis/algbra/algbra-confirmation-of-funds-api/) — Algbra's UK Open Banking Confirmation of Funds (CBPII) dedicated interface under the OBIE Read/Write Standard v3.1.8, allowing authorised CBPII Third Party…
+- [Algbra Partner Banking API](https://apis.io/apis/algbra/algbra-partner-banking-api/) — Algbra Labs' first-party Partner Banking (Banking-as-a-Service) API for B2B partners, covering customer onboarding and compliance checks, primary and…
+- [Algbra Account Access API](https://apis.io/apis/algbra/algbra-account-access-api/) — The Account Access API from Algbra — 2 operation(s) for account access.
+- [Algbra Accounts API](https://apis.io/apis/algbra/algbra-accounts-api/) — The Accounts API from Algbra — 2 operation(s) for accounts.
+- [Algbra Balances API](https://apis.io/apis/algbra/algbra-balances-api/) — The Balances API from Algbra — 1 operation(s) for balances.
+- [Algbra Beneficiaries API](https://apis.io/apis/algbra/algbra-beneficiaries-api/) — The Beneficiaries API from Algbra — 1 operation(s) for beneficiaries.
+- [Algbra Transactions API](https://apis.io/apis/algbra/algbra-transactions-api/) — The Transactions API from Algbra — 1 operation(s) for transactions.
 
-## APIs
+### Published properties
 
-### Algbra Account and Transaction Information API (AIS)
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-Algbra's UK Open Banking Account & Transaction Information (AIS) dedicated interface, conformant to the OBIE Read/Write Standard v3.1, enabling authorised AISP Third Party Providers to create account-access consents and read accounts, balances, beneficiaries and transactions with the customer's consent. Secured with FAPI OAuth2/OIDC, mTLS and PSD2 SCA.
+#### Arazzo workflows (1)
 
-- **Human URL:** [https://developer.algbralabs.com/open-banking-uk/introduction](https://developer.algbralabs.com/open-banking-uk/introduction)
-- **Base URL:** `https://secure.tell.systems/algbra/open-banking/v3.1/aisp`
+Multi-step workflows that chain operations into a business task.
 
-#### Tags
+- [Algbra OBIE account-access and read](https://apis.io/arazzos/algbra/algbra-account-access-flow/)
 
-- Account Information
-- Open Banking
-- AIS
+#### AsyncAPI (1)
 
-#### Properties
+Event-driven and webhook contracts.
 
-- [OpenAPI](openapi/algbra-account-transaction-api-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Documentation](https://developer.algbralabs.com/open-banking-uk/introduction)
-- [API Reference](https://developer.algbralabs.com/open-banking-uk/api-reference)
+- [Algbra Partner Banking Webhooks](https://apis.io/asyncapis/algbra/algbra-partner-banking-webhooks/)
 
-### Algbra Payment Initiation API (PIS)
+#### Agentic access (1)
 
-Algbra's UK Open Banking Payment Initiation (PIS) dedicated interface under the OBIE Read/Write Standard v3.1.8, allowing authorised PISP Third Party Providers to initiate payments on a customer's behalf (scope `payments`).
+Which operations an agent can call, which act, and which need a human in the loop.
 
-- **Human URL:** [https://developer.algbralabs.com/open-banking-uk/introduction](https://developer.algbralabs.com/open-banking-uk/introduction)
-- **Base URL:** `https://secure.tell.systems/algbra/open-banking/v3.1/pisp`
+- [Algbra Agentic Access](https://apis.io/agentic-access/algbra/algbra-agentic-access/)
 
-#### Tags
+#### Collections (1)
 
-- Payments
-- Open Banking
-- PIS
+Postman and Open Collection request collections.
 
-#### Properties
+- [Account and Transaction API Specification](https://apis.io/collections/algbra/open-algbra-account-transaction-api/)
 
-- [Documentation](https://developer.algbralabs.com/open-banking-uk/introduction)
-- [API Reference](https://openbankinguk.github.io/read-write-api-site3/v3.1.8/profiles/)
+#### Overlays (1)
 
-### Algbra Confirmation of Funds API (CBPII)
+OpenAPI overlays, including conversational phrasing for each operation.
 
-Algbra's UK Open Banking Confirmation of Funds (CBPII) dedicated interface under the OBIE Read/Write Standard v3.1.8, allowing authorised CBPII Third Party Providers to confirm the availability of funds (scope `fundsconfirmations`).
+- [Algbra Account Transaction Api Overlay](https://apis.io/overlays/algbra/algbra-account-transaction-api-overlay/)
 
-- **Human URL:** [https://developer.algbralabs.com/open-banking-uk/introduction](https://developer.algbralabs.com/open-banking-uk/introduction)
-- **Base URL:** `https://secure.tell.systems/algbra/open-banking/v3.1/cbpii`
+#### Security (3)
 
-#### Tags
+Authentication, trust centre, and vulnerability disclosure.
 
-- Confirmation of Funds
-- Open Banking
-- CBPII
+- [Algbra Authentication](https://apis.io/security/algbra/algbra-authentication/)
+- [Algbra Domain Security](https://apis.io/security/algbra/algbra-domain-security/)
+- [Algbra Vulnerability Disclosure](https://apis.io/security/algbra/algbra-vulnerability-disclosure/)
 
-#### Properties
+#### OAuth scopes (1)
 
-- [Documentation](https://developer.algbralabs.com/open-banking-uk/introduction)
-- [API Reference](https://openbankinguk.github.io/read-write-api-site3/v3.1.8/profiles/)
+The permissions the API asks for.
 
-### Algbra Partner Banking API
+- [Algbra Scopes](https://apis.io/scopes/algbra/algbra-scopes/)
 
-Algbra Labs' first-party Partner Banking (Banking-as-a-Service) API for B2B partners, covering customer onboarding and compliance checks, primary and virtual accounts, card issuing, internal/inbound/outbound and automated payments, counterparty validation, transactions, activity feeds, investments and webhooks. Secured with API keys, mTLS and payload signing over IP-whitelisted hosts.
+## Where to find this API
 
-- **Human URL:** [https://developer.algbralabs.com/partner-banking/introduction](https://developer.algbralabs.com/partner-banking/introduction)
-- **Base URL:** `https://horizon-link.algbralabs.com`
-
-#### Tags
-
-- Banking as a Service
-- Payments
-- Accounts
-
-#### Properties
-
-- [Documentation](https://developer.algbralabs.com/partner-banking/introduction)
-- [Getting Started](https://developer.algbralabs.com/partner-banking/getting-started)
-- [Authentication](https://developer.algbralabs.com/partner-banking/getting-started/authentication)
-- [API Hosts](https://developer.algbralabs.com/partner-banking/getting-started/api-hosts)
-- [Webhooks](https://developer.algbralabs.com/partner-banking/concepts/webhooks)
-
-## Common Properties
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
 
 - [Website](https://www.algbra.com/)
-- [Developer Portal](https://developer.algbralabs.com/home)
 - [Documentation](https://developer.algbralabs.com/open-banking-uk/introduction)
-- [Sign Up / Partner Onboarding](https://developer.algbralabs.com/partner-banking/getting-started/partner-onboarding)
-- [Blog](https://www.algbra.com/news/category/blog/)
-- [Pricing (Fees and Charges)](https://www.algbra.com/fees-and-charges/)
-- [Terms of Service](https://www.algbra.com/terms-and-conditions/)
-- [Privacy Policy](https://www.algbra.com/privacy-policy/)
+- [Getting started](https://developer.algbralabs.com/partner-banking/getting-started)
+- [Pricing](https://www.algbra.com/fees-and-charges/)
+- [Sign up](https://developer.algbralabs.com/partner-banking/getting-started/partner-onboarding)
 - [Support](https://www.algbra.com/help/)
-- [Vulnerability Disclosure (Responsible Disclosure)](https://www.algbra.com/responsible-disclosure/)
-- [LinkedIn](https://algbra.com/socials/linkedin)
+- [Blog](https://www.algbra.com/news/category/blog/)
+- [Security](https://www.algbra.com/responsible-disclosure/)
+- [Terms of service](https://www.algbra.com/terms-and-conditions/)
+- [Privacy policy](https://www.algbra.com/privacy-policy/)
 
-## Maintainers
+## API Evangelist rating
 
-**FN:** Kin Lane
-**Email:** kin@apievangelist.com
+**Kin Score 48.7** — developing · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 73.2 |
+| Contract quality | 47.2 |
+| Contract governance | 4.5 |
+| Operational transparency | 18.4 |
+| Developer ergonomics | 66.1 |
+| Access clarity | 44.7 |
+
+**Agent readiness 37.2** — agent-ready
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | verified |
+| Error Semantics | verified |
+| OpenAPI Examples | partial |
+| Rate Limit Signal | — |
+| Event Surface Described | yes |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | — |
+| Operation Distinctiveness | distinct |
+
+**Regulatory alignment 55.1** — Banking & Open Finance
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/algbra/](https://apis.io/providers/algbra/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Algbra: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/algbra/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
